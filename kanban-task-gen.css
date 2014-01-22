@@ -1,0 +1,154 @@
+/* texts are on the bottom of this file */
+html, body {
+	margin: 0;
+	padding: 0;
+	font-family: Arial, sans-serif;
+}
+
+#post-its {
+	width: 800px;
+	width: 800px;
+	margin: 0 auto;
+}
+
+.post-it {
+	float: left;
+	width: 45%;
+	border: 1px solid #000;
+}
+
+.page-end {
+	margin-bottom: 10px;
+	page-break-after: always;
+}
+
+.col {
+	float: left;
+	border-right: 1px solid #000;
+}
+
+.col1 {
+	width: 49.44%;
+}
+
+.col2, .col3 {
+	width: 25%;
+}
+
+.col3 {
+	border-right: 0;
+}
+
+.id, .priority, .speciality {
+	display: block;
+	float: left;
+	height: 50px;
+	line-height: 50px;
+	border-bottom: 1px solid #000;
+}
+
+.id, .priority {
+	width: 50%;
+}
+
+.id {
+	font-weight: bold;
+	font-size: 18px;
+	text-indent: 5px;
+}
+
+.speciality {
+	width: 100%;
+	text-align: center;
+}
+
+.name, .time {
+	display: block;
+	height: 177px;
+	clear: both;
+	padding: 5px;
+}
+
+.name {
+	font-size: 20px;
+}
+
+.time {
+	border-left: 1px solid #000;
+	margin-left: 15px;
+	font-size: 11px;
+	line-height: 17px;
+}
+
+.time-number {
+	display: block;
+	height: 17px;
+	line-height: 17px;
+}
+
+.time:before {
+	display: block;
+	text-align: center;
+	word-spacing: 6px;
+	font-size: 10px;
+	height: 11px;
+	line-height: 11px;
+	border-bottom: 1px solid #000;
+	margin: 0 -5px 0 -20px;
+	white-space: nowrap;
+	font-weight: bold;
+	text-indent: 15px;
+}
+
+.time hr {
+	border: solid #000;
+	border-width: 1px 0 0 0;
+	margin: 0 -5px 16px -20px;
+}
+
+.bottom {
+	clear: both;
+	height: 10px;
+	line-height: 10px;
+	font-size: 12px;
+	border-top: 1px solid #000;
+	padding: 5px;
+}
+
+.bug, .extra {
+	float: left;
+	border: 1px solid #000;
+	width: 10px;
+	height: 10px;
+	margin-right: 30px;
+	text-indent: 15px;
+}
+
+.sprint {
+	float: right;
+}
+
+/* TEXT */
+.id:before {
+	content: '#: ';
+}
+
+.priority:before {
+	content: 'Prior: ';
+}
+
+.time:before {
+	content: 'Falta Gasto';
+}
+
+.extra:after {
+	content: 'extra';
+}
+
+.bug:after {
+	content: 'bug';
+}
+
+.sprint:before {
+	content: 'sprint: ';
+}
