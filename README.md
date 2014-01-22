@@ -1,4 +1,4 @@
 kanban-task-gen
 ===============
 
-Kanban Tasks Generator - Gerador de "PostI-Its" do time
+Kanban Task Generator - Gerador de "Post-Its" do time.

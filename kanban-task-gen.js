@@ -1,4 +1,4 @@
-console.log('post it generator v0.1');
+console.log('Kanban Task Gen v0.1');
 
 $(function() {
 	postIts = new PostIts();
