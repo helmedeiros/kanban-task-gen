@@ -9,11 +9,16 @@
 </head>
 
 <body>
-    <input type="file" id="fileinput" multiple />    
-    <div id = "post-its" >
-    </div>
-	
-	<script type="text/javascript" src="jquery.js "></script>
+    <header class="header">
+        <div class="container">
+            <div class="submit-box"><input type="file" id="fileinput" multiple /></div>
+            <h1 class="logo"><a href="http://rbsdev.github.io/kanban-task-gen/">Kanban Task Generator</a></h1>
+        </div>
+    </header>
+
+    <div id="post-its"></div>
+
+    <script type="text/javascript" src="jquery.js "></script>
     <script type="text/javascript" src="kanban-task-gen.js"></script>
     <script type="text/javascript" src="kanban-file-load.js"></script>
 </body>

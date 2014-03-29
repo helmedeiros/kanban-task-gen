@@ -5,6 +5,69 @@ html, body {
 	font-family: Arial, sans-serif;
 }
 
+.header {
+	background-color: rgba(31, 31, 31, 0.95);
+	padding: 15px 0;
+	position: fixed;
+	top: 0;
+	z-index: 1;
+	width: 100%;
+}
+
+.header .container {
+	position: relative;
+}
+
+/** LOGO **/
+.logo {
+	text-align: center;
+	width: 50%;
+	margin: auto;
+}
+
+.logo a {
+	display: block;
+	text-align: center;
+	text-indent: -9999px;
+	overflow: hidden;
+	background: url(img/logo-header.png) no-repeat center;
+	background-size: contain;
+	height: 30px;
+}
+
+/** submit **/
+.submit-box{
+	position: absolute;
+	left: 95px;
+	padding: 0 10px;
+}
+
+
+.submit-box input[type="file"]::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.submit-box input[type="file"]::before {
+  content: 'Select some files';
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+.submit-box input[type="file"] :hover::before {
+  border-color: black;
+}
+.submit-box input[type="file"] :active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+}
+
 #post-its {
 	width: 800px;
 	width: 800px;
