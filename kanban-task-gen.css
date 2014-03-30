@@ -68,6 +68,69 @@
     background-size: contain;
     height: 30px;
 }
+
+/** FROM TABLE and FROM JSON **/
+.island {
+    margin-top: 1em;
+    margin-bottom: 1.5em;
+    padding: .6em;
+    border-radius: .3em;
+    background-color: #dee2e6;
+}
+.grid {
+    margin-left: -1em;
+    margin-bottom: 0;
+    list-style: none;
+}
+.grid:before, .grid:after {
+    content:" ";
+    display:table
+}
+.grid:after {
+    clear:both
+}
+input[type="file"] {    
+	width: 24em;
+    margin-left: 4.3em;    
+    cursor: pointer;
+}
+input[type="file"]::-webkit-file-upload-button {
+    visibility: hidden;
+}
+#jsonFile::before{
+	content:'JSON';
+}
+#tableFile::before{
+	content:'TABLE';
+}
+input[type="file"]::before {    
+    display: inline-block;
+    color: #fff;
+    background-color: #fff;
+    padding: 11em 10em;
+    margin: 0;
+    display: inline-block;
+    border-radius: .25em;
+    border: 2px dashed #ddd;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+}
+
+pre[class*="language-"] {
+	background: #34383B;
+}
+
+code[class *= "language-"],
+pre[class*="language-"] {
+    color: #f8f8f2;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+    font-family: Consolas,Monaco,'Andale Mono',monospace;
+    direction: ltr;
+    text-align: left;
+    white-space: pre;
+    hyphens: none
+}
 #showPostIts {
     margin-top: 70px;
 }
