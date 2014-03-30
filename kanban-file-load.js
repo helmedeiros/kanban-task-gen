@@ -8,10 +8,10 @@ function readMultipleFiles(evt) {
             var r = new FileReader();
             r.onload = (function(f) {
                 return function(e) {
+                    $('#blablabla').hide();
 
                     var contents = JSON.parse(e.target.result);
                     var page = new Page();
-
                     page.parseStories(contents);
 
                 };
@@ -26,4 +26,5 @@ function readMultipleFiles(evt) {
     }
 }
 
-document.getElementById('fileinput').addEventListener('change', readMultipleFiles, false);
+document.getElementById('jsonFile').addEventListener('change', readMultipleFiles, false);
+document.getElementById('tableFile').addEventListener('change', readMultipleFiles, false);
