@@ -118,7 +118,7 @@ height: 30px;
 }
 
 /** OVERVIEW **/
-.tour .holder {
+.tour {
 width: 940px;
 padding: 80px 0 50px;
 margin: auto;
@@ -126,7 +126,7 @@ margin: auto;
 
 .tour .text-copy {
 width: 43%;
-display: inline-block;
+display: inline-block important!;
 vertical-align: middle;
 margin: 0 3%;
 }
