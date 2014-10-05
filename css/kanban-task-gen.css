@@ -117,6 +117,41 @@ height: 30px;
   height: 30px;
 }
 
+/** OVERVIEW **/
+.tour .holder {
+width: 940px;
+padding: 80px 0 50px;
+margin: auto;
+}
+
+.tour .text-copy {
+width: 43%;
+display: inline-block;
+vertical-align: middle;
+margin: 0 3%;
+}
+
+.tour h2 {
+text-align: left;
+font: 300 2.4em/1.2em 'Open Sans', Arial, Helvetica, sans-serif;
+margin-bottom: 25px;
+color: #4E9ACD;
+}
+
+.tour p {
+text-align: left;
+width: auto;
+margin: 10px auto 30px;
+}
+
+.tour .img-holder {
+width: 400px;
+height: auto;
+margin: 0 20px 20px;
+display: inline-block;
+vertical-align: middle;
+}
+
 /** FROM TABLE and FROM JSON **/
 .island {
   margin-top: 1em;
