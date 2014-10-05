@@ -11,7 +11,7 @@ a {
   color: #4E9ACD;
 }
 .container {
-  max-width: 41em;
+  max-width: 42em;
   margin: 0 auto;
   padding: 0 1.5em;
 }
@@ -119,9 +119,10 @@ height: 30px;
 
 /** OVERVIEW **/
 .tour {
-width: 940px;
-padding: 0 0 50px;
-margin: auto;
+  width: 940px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 30px;
 }
 
 .tour .text-copy {
