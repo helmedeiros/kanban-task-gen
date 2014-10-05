@@ -120,13 +120,13 @@ height: 30px;
 /** OVERVIEW **/
 .tour {
 width: 940px;
-padding: 80px 0 50px;
+padding: 0 0 50px;
 margin: auto;
 }
 
 .tour .text-copy {
 width: 43%;
-display: inline-block important!;
+display: inline-block;
 vertical-align: middle;
 margin: 0 3%;
 }
