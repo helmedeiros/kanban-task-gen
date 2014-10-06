@@ -1,4 +1,16 @@
-/* texts are on the bottom of this file */
+@charset"UTF-8";
+
+@font-face {
+    font-family:'octicons';
+    src:url("../fonts/octicons.eot");
+    src:url("../fonts/octicons.eot#iefix") format("embedded-opentype"), url("../fonts/octicons.woff") format("woff"), url("../fonts/octicons.ttf") format("truetype"), url("../fonts/octicons.svg#octicons") format("svg");
+    font-weight:normal;
+    font-style:normal;
+}
+.octicon:before {
+    content:'\f00a';
+}
+
 html, body {
   margin: 0;
   padding: 0;
@@ -119,12 +131,12 @@ a {
 
 /** PROMO **/
 .promo {
-  padding-top: 70px;
+  padding-top: 0px;
   background: #000 url(../img/promo.jpg) no-repeat center;
-  margin: 0;
+  margin-top: 76px;
   position: relative;
   width: 100%;
-  height: 509px;
+  height: 579px;
   color: #fff;
 }
 
@@ -205,6 +217,56 @@ a {
   outline: 0;
   cursor: pointer;
   -webkit-text-stroke: 0;
+}
+
+/** Bllocks **/
+.intro {
+  background-color:#0073C0;
+  padding:3em 0 2em 0;
+  text-align:center
+}
+
+.intro .blocks {
+  margin: 0 auto;
+  overflow: hidden;
+  width: 64em;
+}
+
+.intro .blocks .block {
+  width: 230px;
+  padding: 76px 35px 0;
+  float: left;
+  margin-left: 20px;
+  text-align: center;
+  background: url(../img/sprite.png) no-repeat 128px -469px;
+}
+
+.intro .blocks .time-block {
+  background-position: -325px -700px;
+}
+
+.intro .blocks .octicon-block {
+  background: none;
+  padding-top: 0;
+}
+
+.octicon {
+  font: normal normal 59px octicons;
+  color: #fff;
+  line-height: 76px;
+}
+
+.intro .blocks h2 {
+  font-size: 1.5em;
+  line-height: 1.167em;
+  margin: 0 0 8px;
+  font-weight: normal;
+  color: #fff;
+}
+
+.intro .blocks p {
+  margin-bottom: 27px;
+  color: #fff;
 }
 
 /** OVERVIEW **/
