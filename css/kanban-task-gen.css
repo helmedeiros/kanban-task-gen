@@ -137,7 +137,7 @@ a {
   position: relative;
   width: 100%;
   height: 579px;
-  color: #fff;
+  color: #300F0F;
 }
 
 .promo .container {
@@ -255,7 +255,7 @@ margin-right: -50%;
 }
 
 .signup-with .horizontal-bar:before, .signup-with .horizontal-bar:after {
-background-color: #eae8d8;
+background-color: #300F0F;
 content: "";
 display: inline-block;
 height: 1px;
