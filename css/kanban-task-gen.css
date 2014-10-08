@@ -407,6 +407,14 @@ line-height: 17px;
   vertical-align: middle;
 }
 
+.tour .action-holder {
+  width: 400px;
+  height: auto;
+  margin: 45px 20px 20px;
+  display: inline-block;
+  vertical-align: top;
+}
+
 /** FROM TABLE and FROM JSON **/
 .island {
   margin-top: 1em;
@@ -441,11 +449,12 @@ input[type="file"]::-webkit-file-upload-button {
 #tableFile::before{
   content:'TABLE';
 }
+
 input[type="file"]::before {
   display: inline-block;
   color: #fff;
   background-color: #fff;
-  padding: 11em 10em;
+  padding: 183px 110px;
   margin: 0;
   display: inline-block;
   border-radius: .25em;
@@ -467,7 +476,9 @@ pre[class*="language-"] {
   direction: ltr;
   text-align: left;
   white-space: pre;
-  hyphens: none
+  font-size: 10px;
+  width: 400px;
+  height: 250px;
 }
 #showPostIts {
   margin-top: 70px;
