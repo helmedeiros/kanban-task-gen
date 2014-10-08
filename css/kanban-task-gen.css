@@ -1,14 +1,14 @@
 @charset"UTF-8";
 
 @font-face {
-    font-family:'octicons';
-    src:url("../fonts/octicons.eot");
-    src:url("../fonts/octicons.eot#iefix") format("embedded-opentype"), url("../fonts/octicons.woff") format("woff"), url("../fonts/octicons.ttf") format("truetype"), url("../fonts/octicons.svg#octicons") format("svg");
-    font-weight:normal;
-    font-style:normal;
+  font-family:'octicons';
+  src:url("../fonts/octicons.eot");
+  src:url("../fonts/octicons.eot#iefix") format("embedded-opentype"), url("../fonts/octicons.woff") format("woff"), url("../fonts/octicons.ttf") format("truetype"), url("../fonts/octicons.svg#octicons") format("svg");
+  font-weight:normal;
+  font-style:normal;
 }
 .octicon:before {
-    content:'\f00a';
+  content:'\f00a';
 }
 
 html, body {
@@ -137,7 +137,7 @@ a {
   position: relative;
   width: 100%;
   height: 579px;
-  color: #fff;
+  color: #300F0F;
 }
 
 .promo .container {
@@ -177,6 +177,7 @@ a {
   max-width: 400px;
   margin: 0;
   padding: 0;
+  border-right: 0px;
 }
 
 .promo .form-frame .text-input {
@@ -210,7 +211,7 @@ a {
   font: 14px/14px 'Open Sans', Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
-  background: #eb3e35;
+  background: #53B313;
   color: #fff;
   border: 0;
   margin: 0;
@@ -218,6 +219,107 @@ a {
   cursor: pointer;
   -webkit-text-stroke: 0;
 }
+
+.promo .signup-with {
+  text-align: left;
+}
+
+.signup-with {
+  font-size: 12px;
+  text-align: center;
+}
+
+.promo .signup-with .horizontal-bar {
+  margin-left: 77%;
+  width: 154%;
+  text-align: left;
+  font-family: Georgia, Times, serif;
+  font-style: italic;
+  opacity: .5;
+  text-transform: capitalize;
+}
+
+.signup-with .horizontal-bar {
+  text-transform: uppercase;
+  margin: 20px 0 15px 0;
+}
+
+.signup-with .horizontal-bar:before {
+  right: 1em;
+  margin-left: -50%;
+}
+
+.signup-with .horizontal-bar:after {
+left: 1em;
+margin-right: -50%;
+}
+
+.signup-with .horizontal-bar:before, .signup-with .horizontal-bar:after {
+background-color: #300F0F;
+content: "";
+display: inline-block;
+height: 1px;
+position: relative;
+vertical-align: middle;
+width: 30%;
+}
+
+.promo .form-frame .btn-signup-github {
+display: inline-block;
+border-radius: 5px;
+min-height: 30px;
+line-height: 30px;
+position: relative;
+}
+
+.form-frame .btn-log {
+background: #53B313;
+color: #fff;
+border: 0;
+margin: 0;
+outline: 0;
+cursor: pointer;
+-webkit-text-stroke: 0;
+}
+
+.btn-signup-github .icon-github {
+position: absolute;
+top: 50%;
+height: 10px;
+margin-top: -5px;
+margin-left: 8px;
+left: 0;
+}
+
+.icon {
+display: inline-block;
+font: normal normal 59px octicons;
+font-size: inherit;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-lg {
+font-size: 1.3333333333em;
+line-height: 0.75em;
+vertical-align: -15%;
+}
+
+.icon-github:before {
+  content:'\f00a';
+}
+
+.signup-with .btn-signup-github span {
+display: block;
+padding: 7px 15px 6px 7px;
+border-left: solid 1px #53B313;
+margin-left: 30px;
+line-height: 17px;
+-webkit-font-smoothing: antialiased;
+}
+
+
 
 /** Bllocks **/
 .intro {
