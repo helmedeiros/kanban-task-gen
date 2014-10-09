@@ -6,6 +6,7 @@
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <title>Kanban Task Generator v0.2</title>
     <link rel="stylesheet" href="../css/kanban-task-gen.css" />
+    <script src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
 </head>
 
 <body>
@@ -62,6 +63,39 @@
             </div>
             <div class="action-holder grid"><span><input type="file" id="jsonFile" multiple /></span></div>
         </div>
+        <div class="container--wide tour block main" role="main">
+            <div class="action-holder grid">
+              <form id="postit-form" role="form">
+                <div class="form-group">
+                  <label for="name">Task name</label>
+                  <input type="text" class="form-control" id="name" placeholder="Task name">
+                </div>
+                <div class="form-group">
+                  <label for="priority">Priority</label>
+                  <input type="text" class="form-control" id="priority" placeholder="1">
+                </div>
+                <div class="form-group">
+                  <label for="sprint">Sprint</label>
+                  <input type="text" class="form-control" id="sprint" placeholder="1">
+                  <!-- <p class="help-block">Example block-level help text here.</p> -->
+                </div>
+                <div class="form-group">
+                  <label for="specialist1">Specialist</label>
+                  <input type="text" class="form-control" id="specialist1" placeholder="DBA">
+                </div>
+                <div class="form-group">
+                  <label for="time1">Time</label>
+                  <input type="text" class="form-control" id="time1" placeholder="1h">
+                </div>
+
+                <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+            </div>
+            <div class="text-copy">
+              <h2>Post-its filling out a form</h2>
+              <p>Check it out! There is another way to create post-its. Fill out the form and see your post-its getting form.</p>
+            </div>
+        </div>
     </article>
     <article id="showPostIts">
     	<div id="post-its"></div>
@@ -70,6 +104,7 @@
     <script type="text/javascript" src="../js/jquery.js "></script>
     <script type="text/javascript" src="../js/kanban-task-gen.js"></script>
     <script type="text/javascript" src="../js/kanban-file-load.js"></script>
+    <script type="text/javascript" src="../js/kanban-form.js"></script>
 </body>
 
 </html>

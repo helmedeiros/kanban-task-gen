@@ -377,6 +377,7 @@ line-height: 17px;
   margin: 0 auto;
   overflow: hidden;
   padding: 30px;
+  border-bottom: 1px solid #eee;
 }
 
 .tour .text-copy {
