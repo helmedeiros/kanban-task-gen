@@ -7,7 +7,7 @@
     <title>Kanban Task Generator v0.2</title>
     <link rel="stylesheet" href="../css/kanban-task-gen.css" />
     <script src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
-</head>
+    </head>
 
 <body>
     <header class="header">
@@ -36,34 +36,37 @@
             </div>
         </header>
         <div class="container--wide tour block main" role="main">
-            <div class="text-copy">
-              <h2>Post-its using a JSON</h2>
-              <p>Check above the JSON path definition to generate post-its.
-              <pre class="language-markup">
-                <code class=" language-markup">
-                  <span class="token comment" spellcheck="true">
-      {
-        "tasks" : {
-          "task1" : {
-            "name" : "Titulo da história",
-            "id" : "17",
-            "priority" : "17",
-            "sprint" : "3",
-            "specialist1" : "FE",
-            "time1" : "2",
-            "specialist2" : "",
-            "time2" : ""
+            <div class="holder">
+              <div class="text-copy">
+                <h2>Post-its using a JSON</h2>
+                <p>Check above the JSON path definition to generate post-its.
+                <pre class="language-markup">
+                  <code class=" language-markup">
+                    <span class="token comment" spellcheck="true">
+        {
+          "tasks" : {
+            "task1" : {
+              "name" : "Titulo da história",
+              "id" : "17",
+              "priority" : "17",
+              "sprint" : "3",
+              "specialist1" : "FE",
+              "time1" : "2",
+              "specialist2" : "",
+              "time2" : ""
+            }
           }
         }
-      }
-                  </span>
-                </code>
-              </pre>
-              </p>
+                    </span>
+                  </code>
+                </pre>
+                </p>
+              </div>
+              <div class="action-holder grid"><span><input type="file" id="jsonFile" multiple /></span></div>
             </div>
-            <div class="action-holder grid"><span><input type="file" id="jsonFile" multiple /></span></div>
         </div>
         <div class="container--wide tour block main" role="main">
+          <div class="holder">
             <div class="action-holder grid">
               <form id="postit-form" role="form">
                 <div class="form-group">
@@ -95,6 +98,7 @@
               <h2>Post-its filling out a form</h2>
               <p>Check it out! There is another way to create post-its. Fill out the form and see your post-its getting form.</p>
             </div>
+          </div>
         </div>
     </article>
     <article id="showPostIts">
