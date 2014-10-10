@@ -1,0 +1,465 @@
+{	
+	"tasks" : {
+		"task1" : {
+			"name" : "Titulo da primeira historia",
+			"id" : "1",
+			"priority" : "1",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "FE",
+			"time2" : "2"
+		},
+	
+		"task2" : {
+			"name" : "Titulo da primeira tarefa da primeira historia",
+			"id" : "1.1",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "QA",
+			"time2" : "2"
+		},
+		
+		"task3" : {
+			"name" : "Titulo da segunda tarefa da primeira historia",
+			"id" : "1.2",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task4" : {
+			"name" : "Titulo da segunda historia",
+			"id" : "2",
+			"priority" : "2",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "QA",
+			"time2" : "2"
+		},
+		
+		"task5" : {
+			"name" : "Titulo da primeira tarefa da segunda historia",
+			"id" : "2.1",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task6" : {
+			"name" : "Titulo da segunda tarefa da segunda historia",
+			"id" : "2.2",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task7" : {
+			"name" : "Titulo da terceira tarefa da segunda historia",
+			"id" : "2.3",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "4",
+			"specialist2" : "FE",
+			"time2" : "2"
+		},
+		
+		"task8" : {
+			"name" : "Titulo da quarta tarefa da segunda historia",
+			"id" : "2.4",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "6",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task9" : {
+			"name" : "Titulo da terceira historia",
+			"id" : "3",
+			"priority" : "3",
+			"sprint" : "3",
+			"specialist1" : "SEO",
+			"time1" : "6",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task10" : {
+			"name" : "Titulo da primeira tarefa da terceira historia",
+			"id" : "3.1",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task11" : {
+			"name" : "Titulo da segunda tarefa da terceira historia",
+			"id" : "3.2",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "4",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task12" : {
+			"name" : "Titulo da terceira tarefa da terceira historia",
+			"id" : "3.3",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task13" : {
+			"name" : "Titulo da quarta historia",
+			"id" : "4",
+			"priority" : "4",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "6.5",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task14" : {
+			"name" : "Titulo da primeira tarefa da quarta historia",
+			"id" : "4.1",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task15" : {
+			"name" : "Titulo da segunda tarefa da quarta historia",
+			"id" : "4.2",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "19.5",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task16" : {
+			"name" : "Titulo da terceira tarefa da quarta historia",
+			"id" : "4.3",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "2",
+			"specialist2" : "FE",
+			"time2" : "2"
+		},
+		
+		"task17" : {
+			"name" : "Titulo da quarta tarefa da quarta historia",
+			"id" : "4.4",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "1",
+			"specialist2" : "SEO",
+			"time2" : "1"
+		},
+		
+		"task18" : {
+			"name" : "Titulo da quinta tarefa da quarta historia",
+			"id" : "4.5",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task19" : {
+			"name" : "Titulo da quinta historia",
+			"id" : "5",
+			"priority" : "5",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "4",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task20" : {
+			"name" : "Titulo da sexta historia",
+			"id" : "6",
+			"priority" : "6",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task21" : {
+			"name" : "Titulo da setima historia",
+			"id" : "7",
+			"priority" : "7",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task22" : {
+			"name" : "Titulod a oitava historia",
+			"id" : "8",
+			"priority" : "8",
+			"sprint" : "3",
+			"specialist1" : "UX",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task23" : {
+			"name" : "Titulo da nona historia",
+			"id" : "9",
+			"priority" : "9",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task24" : {
+			"name" : "Titulo da decima historia",
+			"id" : "10",
+			"priority" : "10",
+			"sprint" : "3",
+			"specialist1" : "SEO",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task25" : {
+			"name" : "Titulo da primeira tarefa da decima historia",
+			"id" : "10.1",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "4",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task26" : {
+			"name" : "Titulo da segunda tarefa da decima historia",
+			"id" : "10.2",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "6.5",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task27" : {
+			"name" : "Titulo da terceira tarefa da decima historia",
+			"id" : "10.3",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task28" : {
+			"name" : "Titulo da quarta tarefa da decima historia",
+			"id" : "10.4",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "8",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task29" : {
+			"name" : "Titulo da quinta tarefa da decima historia",
+			"id" : "10.5",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task30" : {
+			"name" : "Titulo da sexta tarefa da decima historia",
+			"id" : "10.6",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "1",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task31" : {
+			"name" : "Titulo da setima tarefa da decima historia",
+			"id" : "10.7",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task32" : {
+			"name" : "Titulo da oitava tarefa da decima historia",
+			"id" : "10.8",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task33" : {
+			"name" : "Titulo da nona tarefa da decima historia",
+			"id" : "10.9",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task34" : {
+			"name" : "Titulo da decima tarefa da decima historia",
+			"id" : "10.10",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "11",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task35" : {
+			"name" : "Titulo da decima-primeira tarefa da decima historia",
+			"id" : "10.11",
+			"priority" : "",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task36" : {
+			"name" : "Titulo da decima-primeira historia",
+			"id" : "11",
+			"priority" : "11",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task37" : {
+			"name" : "Titulo da decima-segunda historia",
+			"id" : "12",
+			"priority" : "12",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task38" : {
+			"name" : "Titulo da decima-terceira historia",
+			"id" : "13",
+			"priority" : "13",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task39" : {
+			"name" : "Titulo da decima-quarta historia",
+			"id" : "14",
+			"priority" : "14",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "3",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task40" : {
+			"name" : "Titulo da decima-quinta historia",
+			"id" : "15",
+			"priority" : "15",
+			"sprint" : "3",
+			"specialist1" : "BE",
+			"time1" : "4",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task41" : {
+			"name" : "Titulo da decima-sexta historia",
+			"id" : "16",
+			"priority" : "16",
+			"sprint" : "3",
+			"specialist1" : "QA",
+			"time1" : "15",
+			"specialist2" : "",
+			"time2" : ""
+		},
+		
+		"task42" : {
+			"name" : "Titulo da decima-setima historia",
+			"id" : "17",
+			"priority" : "17",
+			"sprint" : "3",
+			"specialist1" : "FE",
+			"time1" : "2",
+			"specialist2" : "",
+			"time2" : ""
+		}
+	}
+}
