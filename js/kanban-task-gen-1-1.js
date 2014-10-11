@@ -33,6 +33,8 @@ console.log('Kanban Task Gen v1.1');
 
     var alertBox = $('#alert');
 
+    var menu = $('#nav');
+
     var count = 0;
 
     function routeTo(route) {
@@ -162,6 +164,7 @@ console.log('Kanban Task Gen v1.1');
     ////////////////////////////////////////
 
     controllers.home = function (form) {
+        
 
         // Form submission for logging in
         form.on('submit', function (e) {
@@ -277,6 +280,9 @@ console.log('Kanban Task Gen v1.1');
 
         // set the new form as the active form
         activeForm = upcomingForm;
+
+        menu.find('li').removeClass('active');
+        menu.find('.' + formRoute.controller).addClass("active");
 
         // invoke the controller
         controllers[formRoute.controller](activeForm);
