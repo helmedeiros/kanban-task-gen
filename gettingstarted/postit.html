@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pt-br" dir="ltr">
+
+<head>
+
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <title>Kanban Task Generator v0.2</title>
+    <link rel="stylesheet" href="../css/kanban-task-gen.css" />
+    <!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="container container--wide">
+            <h1 class="logo"><a href="http://rbsdev.github.io/kanban-task-gen/">Kanban Task Generator</a></h1>
+        </div>
+    </header>
+    <header class="feature">
+        <div class="container container--wide">
+            <h1 class="feature__title">wanna kanban post-its</h1>
+        </div>
+    </header>
+    <div class="container block main" role="main">
+    	<h2>Generate it!</h2>
+    	<div class="island">
+		    <div class="">
+		    	<form id="postit-form" role="form">
+		    		<div class="form-group">
+		    			<label for="name">Task name</label>
+		    			<input type="text" class="form-control" id="name" placeholder="Task name">
+		    		</div>
+		    		<div class="form-group">
+		    			<label for="priority">Priority</label>
+		    			<input type="text" class="form-control" id="priority" placeholder="1">
+		    		</div>
+		    		<div class="form-group">
+		    			<label for="sprint">Sprint</label>
+		    			<input type="text" class="form-control" id="sprint" placeholder="1">
+		    			<!-- <p class="help-block">Example block-level help text here.</p> -->
+		    		</div>
+		    		<div class="form-group">
+		    			<label for="specialist1">Specialist</label>
+		    			<input type="text" class="form-control" id="specialist1" placeholder="DBA">
+		    		</div>
+		    		<div class="form-group">
+		    			<label for="time1">Time</label>
+		    			<input type="text" class="form-control" id="time1" placeholder="1h">
+		    		</div>
+
+		    		<button type="submit" class="btn btn-default">Submit</button>
+		    	</form>
+		    </div>
+		</div>
+		<div id="post-its"></div>
+    </div>
+    <script type="text/javascript" src="../js/kanban-task-gen.js"></script>
+    <script type="text/javascript" src="../js/kanban-form.js"></script>
+</body>
+</html>
