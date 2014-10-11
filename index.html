@@ -5,21 +5,31 @@
 
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
   <title>Kanban Task Generator v0.2</title>
-  <link rel="stylesheet" href="css/kanban-task-gen.css" />
+  <link rel="stylesheet" href="/css/kanban-task-gen.css" />
+
+  
+
+  <script type='text/javascript' src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script type="text/javascript" src="https://cdn.firebase.com/js/client/1.1.0/firebase.js"></script>
+  <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.0.0/jquery.serialize-object.compiled.js"></script>
+  <script type='text/javascript' src="//cdnjs.cloudflare.com/ajax/libs/path.js/0.8.4/path.min.js"></script>
   <script type="text/javascript" src="js/kissmetrics.js"></script>
+
   <link rel="icon" type="image/x-icon" href="./img/favicon.ico">
+
 </head>
 
 <body>
+
   <header class="header">
     <div class="container container--wide">
       <h1 class="logo"><a href="https://github.com/helmedeiros/kanban-task-gen">Kanban Task Generator</a></h1>
 
       <nav id="nav" class="main-nav">
         <ul>
-          <li class="active"><a href="./">Home</a></li>
-          <li class=""><a href="./overview">Overview</a></li>
-          <li class=""><a href="./gettingstarted">Getting started</a></li>
+          <li class="home"><a href="#/">Home</a></li>
+          <li class="overview"><a href="#/overview">Overview</a></li>
+          <li class="gettingStarted"><a href="#/gettingstarted">Getting started</a></li>
           <li><a href="http://heliomedeiros.com/blog/" target="_blank">Blog</a></li>
         </ul>
         <div class="login">
@@ -30,51 +40,156 @@
       </div>
     </header>
     <article id="blablabla">
-      <div class="promo">
-        <div class="container container--wide">
-          <h2>Over 5k post-its already generated and printed.</h2>
-          <p>Join the fast lane. Help track the status of your projects and tasks in real-time. Boost your teams' productivity.</p>
-          <div class="form-frame">
-            <div class="col">
-              <div class="text-input">
-                <div class="text">
-                  <input autocomplete="email" class="enterprise_email" id="enterprise_email" maxlength="100" name="enterprise_email" placeholder="Work e-mail" required="required" type="email">
-                  <button class="btn-start-now" id="submit_create_account" name="submit_create_account" type="submit">
-                    <span>Get Started!</span>
-                  </button>
+      
+      <!-- HOME -->
+      <form id="frmHome" role="form">
+
+        <div class="promo">
+          <div class="container container--wide">
+            <h2>Over 5k post-its already generated and printed.</h2>
+            <p>Join the fast lane. Help track the status of your projects and tasks in real-time. Boost your teams' productivity.</p>
+            <div class="form-frame">
+              <div class="col">
+                <div class="text-input">
+                  <div class="text">
+                      <input autocomplete="email" class="enterprise_email" id="enterprise_email" maxlength="100" name="enterprise_email" placeholder="Work e-mail" required="required" type="email">
+                      <button class="btn-start-now" id="submit_create_account" name="submit_create_account" type="submit">
+                        <span>Get Started!</span>
+                      </button>
+                  </div>
+                </div>
+                <div class="signup-with">
+                  <div class="horizontal-bar">or</div>
+                  <a href="#" class="bt-social btn-signup-github btn-log" data-provider="github">
+                    <i class="icon icon-github icon-lg"></i>
+                    <span>Sign Up Using GitHub</span>
+                  </a>
                 </div>
               </div>
-              <div class="signup-with">
-                <div class="horizontal-bar">or</div>
-                <a href="" class="btn-signup-github btn-log">
-                  <i class="icon icon-github icon-lg"></i>
-                  <span>Sign Up Using GitHub</span>
-                </a>
+            </div>
+          </div>
+        </div>
+        <div class="intro">
+          <div class="container container--wide">
+            <div class="blocks">
+              <div class="block">
+                <h2>Tasks</h2>
+                <p>Create and print tasks</p>
+              </div>
+              <div class="block time-block">
+                <h2>Time</h2>
+                <p>Avoid losing time</p>
+              </div>
+              <div class="block octicon-block octicon-mark-github">
+                <span class="octicon octicon-mark-github"></span>
+                <h2>GitHub</h2>
+                <p>Create issues from your post-its</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="intro">
-        <div class="container container--wide">
-          <div class="blocks">
-            <div class="block">
-              <h2>Tasks</h2>
-              <p>Create and print tasks</p>
+      </form>
+      <!-- /HOME -->
+
+      <!-- OVERVIEW -->
+      <form id="frmOverview" role="form">
+        <header class="feature">
+            <div class="container container--wide">
+                <h1 class="feature__title">Meet kanban-task-gen</h1>
+                <p class="feature__subtitle">We simplify task management within your team and make it easier to generate, print and put it at your walls!</p>
             </div>
-            <div class="block time-block">
-              <h2>Time</h2>
-              <p>Avoid losing time</p>
+        </header>
+
+        <div class="container--wide tour block main" role="main">
+            <div class="text-copy">
+              <h2>Create post-it notes with ease</h2>
+              <p>You create as many post-its as you wish, assign them to any number of specialities, identify release/sprint numbers and ETA. This way, you keep your kanban organaside. <a href="/overview#create_account">Create your free account!</a></p>
             </div>
-            <div class="block octicon-block octicon-mark-github">
-              <span class="octicon octicon-mark-github"></span>
-              <h2>GitHub</h2>
-              <p>Create issues from your post-its</p>
+            <div class="img-holder "><img alt="Tour-Generated-Post-It" src="../img/tour-1.png"></div>
+        </div>
+      </form>
+      <!-- /OVERVIEW -->
+
+
+      <!-- GETTING STARTED -->
+      <form id="frmGettingStarted" role="form">
+        <header class="feature">
+            <div class="container container--wide">
+                <h1 class="feature__title">wanna kanban post-its</h1>
+                <p class="feature__subtitle">We can help you generate, print and put it at your walls!</p>
+            </div>
+        </header>
+        <div class="container--wide tour block main" role="main">
+            <div class="holder">
+              <div class="text-copy">
+                <h2>Post-its using a JSON</h2>
+                <p>Check above the JSON path definition to generate post-its.
+                <pre class="language-markup">
+                  <code class=" language-markup">
+                    <span class="token comment" spellcheck="true">
+  {
+    "tasks" : {
+      "task1" : {
+        "name" : "Titulo da história",
+        "id" : "17",
+        "priority" : "17",
+        "sprint" : "3",
+        "specialist1" : "FE",
+        "time1" : "2",
+        "specialist2" : "",
+        "time2" : ""
+      }
+    }
+  }
+                    </span>
+                  </code>
+                </pre>
+                </p>
+              </div>
+              <div class="action-holder grid"><span><input type="file" id="jsonFile" multiple /></span></div>
+            </div>
+        </div>
+        <div class="container--wide tour block main" role="main">
+          <div class="holder">
+            <div class="action-holder grid">
+                <div class="form-group">
+                  <label for="name">Task name</label>
+                  <input type="text" class="form-control" id="name" name="name" placeholder="Task name">
+                </div>
+                <div class="form-group">
+                  <label for="priority">Priority</label>
+                  <input type="text" class="form-control" id="priority" name="priority" placeholder="1">
+                </div>
+                <div class="form-group">
+                  <label for="sprint">Sprint</label>
+                  <input type="text" class="form-control" id="sprint" name="sprint" placeholder="1">
+                  <!-- <p class="help-block">Example block-level help text here.</p> -->
+                </div>
+                <div class="form-group">
+                  <label for="specialist1">Specialist</label>
+                  <input type="text" class="form-control" id="specialist1" name="specialist1" placeholder="DBA">
+                </div>
+                <div class="form-group">
+                  <label for="time1">Time</label>
+                  <input type="text" class="form-control" id="time1" name="time1" placeholder="1h">
+                </div>
+
+                <button type="submit" class="btn btn-default submit-task">Submit</button>
+            </div>
+            <div class="text-copy">
+              <h2>Post-its filling out a form</h2>
+              <p>Check it out! There is another way to create post-its. Fill out the form and see your post-its getting form.</p>
             </div>
           </div>
         </div>
-      </div>
+        <div id="post-its"></div>
+      </form>
+      <!-- /GETTING STARTED -->
+
+
     </article>
+    <script type="text/javascript" src="../js/kanban-task-gen.js"></script>
+    <script type="text/javascript" src="../js/kanban-task-gen-1-1.js"></script>
   </body>
 
   </html>
