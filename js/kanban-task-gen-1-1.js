@@ -102,6 +102,13 @@ console.log('Kanban Task Gen v1.1');
     function createUserAndLogin(userObj) {
         return createUser(userObj)
             .then(function () {
+
+            // Create event Signed Up
+            _kmq.push(['record', 'Signed Up']);
+
+            // Alias the current user to email
+            _kmq.push(['alias', KM.i(), userObj.email ]);
+
             return authWithPassword(userObj);
         });
     }
@@ -131,6 +138,8 @@ console.log('Kanban Task Gen v1.1');
         $.when(promise)
             .then(function (authData) {
 
+                console.log(authData);
+
             // route
             routeTo(route);
 
@@ -151,8 +160,6 @@ console.log('Kanban Task Gen v1.1');
         var title = opts.title;
         var detail = opts.detail;
         var className = 'alert ' + opts.className;
-
-
         
 
         alertBox.removeClass().addClass(className);
@@ -168,10 +175,15 @@ console.log('Kanban Task Gen v1.1');
 
         // Form submission for logging in
         form.on('submit', function (e) {
-
-            var user = $(this).serializeObject();
-            var loginPromise = authWithPassword(userAndPass);
             e.preventDefault();
+
+            var userAndPass = $(this).serializeObject();
+            
+            // set a default password
+            userAndPass.password = '12345';
+
+            var loginPromise = createUserAndLogin(userAndPass);
+            
 
             handleAuthResponse(loginPromise, 'gettingstarted');
 
@@ -252,7 +264,9 @@ console.log('Kanban Task Gen v1.1');
         var formRoute = routeMap[path];
         var currentUser = rootRef.getAuth();
 
-        
+        _kmq.push(['record', 'Visited ' + formRoute.controller + ' Page']);
+
+
         // if authentication is required and there is no
         // current user then go to the register page and
         // stop executing
