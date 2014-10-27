@@ -21,7 +21,7 @@ console.log('Kanban Task Gen v1.1');
             '#/gettingstarted': {
             form: 'frmGettingStarted',
             controller: 'gettingStarted',
-            authRequired: true // must be logged in to get here
+            authRequired: false // must be logged in to get here
         },
     };
 
@@ -52,8 +52,6 @@ console.log('Kanban Task Gen v1.1');
             }
 
             if (user) {
-                _kmq.push(['record', 'Signed In', {'provider':provider}]);
-
                 deferred.resolve(user);
             }
         });
@@ -103,12 +101,6 @@ console.log('Kanban Task Gen v1.1');
         return createUser(userObj)
             .then(function () {
 
-            // Create event Signed Up
-            _kmq.push(['record', 'Signed Up']);
-
-            // Alias the current user to email
-            _kmq.push(['alias', KM.i(), userObj.email ]);
-
             return authWithPassword(userObj);
         });
     }
@@ -137,8 +129,6 @@ console.log('Kanban Task Gen v1.1');
     function handleAuthResponse(promise, route) {
         $.when(promise)
             .then(function (authData) {
-
-                console.log(authData);
 
             // route
             routeTo(route);
@@ -264,9 +254,6 @@ console.log('Kanban Task Gen v1.1');
         var formRoute = routeMap[path];
         var currentUser = rootRef.getAuth();
 
-        _kmq.push(['record', 'Visited ' + formRoute.controller + ' Page']);
-
-
         // if authentication is required and there is no
         // current user then go to the register page and
         // stop executing
@@ -333,8 +320,6 @@ console.log('Kanban Task Gen v1.1');
 
             if (authData) {
                 $('#post-its').empty();
-
-                _kmq.push(['identify', authData.uid]);
 
                 // Load user info
                 userRef = rootRef.child('users').child(authData.uid);
