@@ -21,7 +21,7 @@ console.log('Kanban Task Gen v1.1');
             '#/gettingstarted': {
             form: 'frmGettingStarted',
             controller: 'gettingStarted',
-            authRequired: false // must be logged in to get here
+            authRequired: false // if 'true', must be logged in to get here
         },
     };
 
