@@ -14,15 +14,18 @@ console.log('Kanban Task Gen v1.1');
             form: 'frmHome',
             controller: 'home'
         },
-            '#/overview': {
+        
+        '#/overview': {
             form: 'frmOverview',
             controller: 'overview'
         },
-            '#/gettingstarted': {
+        
+        '#/gettingstarted': {
             form: 'frmGettingStarted',
             controller: 'gettingStarted',
             authRequired: false // if 'true', must be logged in to get here
         },
+
     };
 
     // create the object to store our controllers
@@ -36,10 +39,6 @@ console.log('Kanban Task Gen v1.1');
     var menu = $('#nav');
 
     var count = 0;
-
-    function routeTo(route) {
-        window.location.href = '#/' + route;
-    }
 
     // Handle third party login providers
     // returns a promise
@@ -155,7 +154,9 @@ console.log('Kanban Task Gen v1.1');
         alertBox.removeClass().addClass(className);
         alertBox.children('#alert-title').text(title);
         alertBox.children('#alert-detail').text(detail);
+        alertBox.fadeIn(2000).fadeOut(4000);
     }
+
 
     /// Controllers
     ////////////////////////////////////////
@@ -182,31 +183,23 @@ console.log('Kanban Task Gen v1.1');
         // Social buttons
         form.find('.bt-social').on('click', function (e) {
 
+            e.preventDefault();
+
             var $currentButton = $(this);
             var provider = $currentButton.data('provider');
             var socialLoginPromise;
-            e.preventDefault();
-
+            
             socialLoginPromise = thirdPartyLogin(provider);
+            
             handleAuthResponse(socialLoginPromise, '');
 
         });
 
-        form.find('#btAnon').on('click', function (e) {
-            e.preventDefault();
-            handleAuthResponse(authAnonymously(), 'profilex');
-        });
-
-    };
-
-    // logout immediately when the controller is invoked
-    controllers.logout = function (form) {
-        rootRef.unauth();
     };
 
     controllers.overview = function (form) {
 
-        
+        // no action, so far
 
     };
 
@@ -215,13 +208,47 @@ console.log('Kanban Task Gen v1.1');
         // Check the current user
         var user = rootRef.getAuth();
         
-        // If no current user send to register page
+        // If no current user authenticate anonymously
         if (!user) {
-            routeTo('home');
-            return;
+            //authAnonymously();
+            // pop up error
+            showAlert({
+                title: '',
+                detail: 'Log in to store your post-its',
+                className: 'alert-info'
+            });
         }
 
-        // Save user's info to Firebase
+        $('#jsonFile')[0].addEventListener('change', function(evt) {
+            //Retrieve all the files from the FileList object
+            var files = evt.target.files;
+
+            if (files) {
+                for (var i = 0, f; f = files[i]; i++) {
+                    console.log("Entrou loop");
+                    var r = new FileReader();
+                    r.onload = (function(f) {
+                        return function(e) {
+                            
+
+                            var contents = JSON.parse(e.target.result);
+                            var page = new Page();
+                            page.parseStories(contents);
+
+                            $("body").scrollTop( $('#post-its').position().top );
+                        };
+                    })(f);
+
+                    r.readAsText(f);
+                    console.log("loop");
+                }
+                console.log("saiu loop");
+            } else {
+                alert("Failed to load files");
+            }
+        }, false);
+
+        // Save userInfo to Firebase
         form.on('submit', function (e) {
             e.preventDefault();
             var userInfo = $(this).serializeObject();
@@ -245,8 +272,19 @@ console.log('Kanban Task Gen v1.1');
 
     };
 
+
+    // logout immediately when the controller is invoked
+    controllers.logout = function (form) {
+        rootRef.unauth();
+    };
+
+
     /// Routing
     ////////////////////////////////////////
+
+    function routeTo(route) {
+        window.location.href = '#/' + route;
+    }
 
     // Handle transitions between routes
     function transitionRoute(path) {
@@ -274,7 +312,7 @@ console.log('Kanban Task Gen v1.1');
 
         // hide old form and show new form
         activeForm.hide();
-        upcomingForm.show().hide().fadeIn(750);
+        upcomingForm.show().hide().fadeIn(500);
 
         // remove any listeners on the soon to be switched form
         activeForm.off();
@@ -343,12 +381,7 @@ console.log('Kanban Task Gen v1.1');
 
                 });
 
-            } else {
-                showAlert({
-                    title: 'You are not logged in',
-                    detail: '',
-                    className: 'alert-info'
-                });
+           
             }
 
         });
