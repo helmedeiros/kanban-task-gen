@@ -51,6 +51,14 @@ console.log('Kanban Task Gen v1.1');
             }
 
             if (user) {
+                 _kmq.push(['record', 'Signed In', {'provider':provider}]);
+
+                 if (provider == 'github') {
+                    
+                    // Identify the current user to username
+                    _kmq.push(['identify', provider + ':' + user.github.username]);
+                 }
+
                 deferred.resolve(user);
             }
         });
@@ -99,6 +107,12 @@ console.log('Kanban Task Gen v1.1');
     function createUserAndLogin(userObj) {
         return createUser(userObj)
             .then(function () {
+
+            // Identify the current user to email
+            _kmq.push(['identify', userObj.email]);
+
+            // Create event Signed Up
+            _kmq.push(['record', 'Signed Up']);
 
             return authWithPassword(userObj);
         });
@@ -154,7 +168,7 @@ console.log('Kanban Task Gen v1.1');
         alertBox.removeClass().addClass(className);
         alertBox.children('#alert-title').text(title);
         alertBox.children('#alert-detail').text(detail);
-        alertBox.fadeIn(2000).fadeOut(4000);
+        alertBox.show().delay(3000).fadeOut();
     }
 
 
@@ -242,7 +256,12 @@ console.log('Kanban Task Gen v1.1');
                     r.readAsText(f);
                     console.log("loop");
                 }
-                console.log("saiu loop");
+                
+                // Tracking Generated Post-its
+                _kmq.push(['record', 'Generated Post-its',{
+                    'generate-method':'upload'
+                }]);
+
             } else {
                 alert("Failed to load files");
             }
@@ -258,6 +277,11 @@ console.log('Kanban Task Gen v1.1');
             userInfo.specialist2 = '';
             userInfo.time2 = '';
 
+            // Tracking Generated Post-its
+            _kmq.push(['record', 'Generated Post-its',{
+                'generate-method':'form'
+            }]);
+
             userRef.push(userInfo, function onComplete() {
 
                 // show the message if write is successful
@@ -268,6 +292,8 @@ console.log('Kanban Task Gen v1.1');
                 });
 
             });
+
+            $(this)[0].reset();
         });
 
     };
@@ -291,6 +317,9 @@ console.log('Kanban Task Gen v1.1');
         // grab the config object to get the form element and controller
         var formRoute = routeMap[path];
         var currentUser = rootRef.getAuth();
+
+        // Track Visited Page
+        _kmq.push(['record', 'Visited ' + formRoute.controller + ' Page']);
 
         // if authentication is required and there is no
         // current user then go to the register page and
