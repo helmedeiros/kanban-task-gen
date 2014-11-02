@@ -51,12 +51,24 @@ console.log('Kanban Task Gen v1.1');
             }
 
             if (user) {
-                 _kmq.push(['record', 'Signed In', {'provider':provider}]);
+                
+                // Track with KissMetrics
+                _kmq.push(['record', 'Signed In', {'provider':provider}]);
+                
+                // Track with Mixpanel
+                mixpanel.track('Signed In', {'provider':provider});
 
                  if (provider == 'github') {
                     
                     // Identify the current user to username
                     _kmq.push(['identify', provider + ':' + user.github.username]);
+
+                    // Track with Mixpanel
+                    mixpanel.identify(provider + ':' + user.github.username);
+                    mixpanel.people.set({
+                        "$name": user.github.displayName,
+                        "$email": user.github.email
+                    });
                  }
 
                 deferred.resolve(user);
@@ -113,6 +125,14 @@ console.log('Kanban Task Gen v1.1');
 
             // Create event Signed Up
             _kmq.push(['record', 'Signed Up']);
+
+            // Track with Mixpanel
+            mixpanel.identify(userObj.email);
+            mixpanel.people.set({
+                "$email": userObj.email
+            });
+
+            mixpanel.track('Signed Up');
 
             return authWithPassword(userObj);
         });
@@ -262,6 +282,11 @@ console.log('Kanban Task Gen v1.1');
                     'generate-method':'upload'
                 }]);
 
+                // Track with Mixpanel
+                mixpanel.track('Generated Post-its',{
+                    'generate-method':'upload'
+                });
+
             } else {
                 alert("Failed to load files");
             }
@@ -281,6 +306,11 @@ console.log('Kanban Task Gen v1.1');
             _kmq.push(['record', 'Generated Post-its',{
                 'generate-method':'form'
             }]);
+
+            // Track with Mixpanel
+            mixpanel.track('Generated Post-its',{
+                'generate-method':'form'
+            });
 
             userRef.push(userInfo, function onComplete() {
 
@@ -320,6 +350,9 @@ console.log('Kanban Task Gen v1.1');
 
         // Track Visited Page
         _kmq.push(['record', 'Visited ' + formRoute.controller + ' Page']);
+
+        // Track with Mixpanel
+        mixpanel.track('Visited ' + formRoute.controller + ' Page');
 
         // if authentication is required and there is no
         // current user then go to the register page and
