@@ -1,4 +1,4 @@
-console.log('Kanban Task Gen v0.1');
+console.log('Page');
 
 function Page() {}
 
