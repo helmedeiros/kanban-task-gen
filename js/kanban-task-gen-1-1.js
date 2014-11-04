@@ -51,13 +51,11 @@ console.log('Kanban Task Gen v1.1');
             }
 
             if (user) {
-                 _kmq.push(['record', 'Signed In', {'provider':provider}]);
-
-                 if (provider == 'github') {
-                    
-                    // Identify the current user to username
-                    _kmq.push(['identify', provider + ':' + user.github.username]);
-                 }
+                // Tracking Signed In
+                 
+                  
+                // Identify the current user to username
+                 
 
                 deferred.resolve(user);
             }
@@ -111,7 +109,7 @@ console.log('Kanban Task Gen v1.1');
             // Identify the current user to email
             _kmq.push(['identify', userObj.email]);
 
-            // Create event Signed Up
+            // Tracking Signed Up
             _kmq.push(['record', 'Signed Up']);
 
             return authWithPassword(userObj);
@@ -205,7 +203,7 @@ console.log('Kanban Task Gen v1.1');
             
             socialLoginPromise = thirdPartyLogin(provider);
             
-            handleAuthResponse(socialLoginPromise, '');
+            handleAuthResponse(socialLoginPromise, 'gettingstarted');
 
         });
 
@@ -257,7 +255,7 @@ console.log('Kanban Task Gen v1.1');
                     console.log("loop");
                 }
                 
-                // Tracking Generated Post-its
+                // Tracking Generated Post-its - upload
                 _kmq.push(['record', 'Generated Post-its',{
                     'generate-method':'upload'
                 }]);
@@ -277,7 +275,7 @@ console.log('Kanban Task Gen v1.1');
             userInfo.specialist2 = '';
             userInfo.time2 = '';
 
-            // Tracking Generated Post-its
+            // Tracking Generated Post-its - form
             _kmq.push(['record', 'Generated Post-its',{
                 'generate-method':'form'
             }]);
@@ -318,8 +316,10 @@ console.log('Kanban Task Gen v1.1');
         var formRoute = routeMap[path];
         var currentUser = rootRef.getAuth();
 
+        var pageName = formRoute.controller;
+        
         // Track Visited Page
-        _kmq.push(['record', 'Visited ' + formRoute.controller + ' Page']);
+        _kmq.push(['record', 'Visited ' + pageName + ' Page']);
 
         // if authentication is required and there is no
         // current user then go to the register page and
