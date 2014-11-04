@@ -225,7 +225,9 @@ console.log('Kanban Task Gen v1.1');
         
         // If no current user authenticate anonymously
         if (!user) {
-            //authAnonymously();
+            
+            authAnonymously();
+            
             // pop up error
             showAlert({
                 title: '',
