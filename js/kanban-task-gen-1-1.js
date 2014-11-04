@@ -51,6 +51,11 @@ console.log('Kanban Task Gen v1.1');
             }
 
             if (user) {
+                // Tracking Signed In
+
+                // Identify the current user to username
+
+
                 deferred.resolve(user);
             }
         });
@@ -99,6 +104,11 @@ console.log('Kanban Task Gen v1.1');
     function createUserAndLogin(userObj) {
         return createUser(userObj)
             .then(function () {
+
+            // Identify the current user to email
+
+
+            // Tracking Signed Up
 
             return authWithPassword(userObj);
         });
@@ -191,7 +201,7 @@ console.log('Kanban Task Gen v1.1');
             
             socialLoginPromise = thirdPartyLogin(provider);
             
-            handleAuthResponse(socialLoginPromise, '');
+            handleAuthResponse(socialLoginPromise, 'gettingstarted');
 
         });
 
@@ -242,7 +252,9 @@ console.log('Kanban Task Gen v1.1');
                     r.readAsText(f);
                     console.log("loop");
                 }
-                console.log("saiu loop");
+                
+                // Tracking Generated Post-its - upload
+
             } else {
                 alert("Failed to load files");
             }
@@ -258,6 +270,9 @@ console.log('Kanban Task Gen v1.1');
             userInfo.specialist2 = '';
             userInfo.time2 = '';
 
+            // Tracking Generated Post-its - form
+
+
             userRef.push(userInfo, function onComplete() {
 
                 // show the message if write is successful
@@ -268,6 +283,8 @@ console.log('Kanban Task Gen v1.1');
                 });
 
             });
+
+            $(this)[0].reset();
         });
 
     };
@@ -291,6 +308,10 @@ console.log('Kanban Task Gen v1.1');
         // grab the config object to get the form element and controller
         var formRoute = routeMap[path];
         var currentUser = rootRef.getAuth();
+        
+        var pageName = formRoute.controller;
+
+        // Track Visited Page
 
         // if authentication is required and there is no
         // current user then go to the register page and
