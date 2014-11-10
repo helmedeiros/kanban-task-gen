@@ -1,0 +1,16 @@
+{
+  "name": "kanban-task-gen",
+  "version": "0.1.0",
+  "description": "Kanban Task Generator - generates printable post-its for kanban boards.",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/helmedeiros/kanban-task-gen.git"
+  },
+  "author": "helmedeiros",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/helmedeiros/kanban-task-gen/issues"
+  },
+  "homepage": "https://github.com/helmedeiros/kanban-task-gen"
+}
