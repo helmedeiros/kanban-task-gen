@@ -1,20 +1,17 @@
-describe("PostIts", function() {
-  var postIts;
+describe("Page", function() {
+  var page;
   var configuration;
-                          
 
   beforeEach(function() {
-    postIts = new PostIts();
+    page = new Page();
   });
 
   it("should make an AJAX request to the correct URL", function() {
-  	configuration = { url: "fixtures/one-task.json",
-  						remainingCallTime: 30000 
-                        };
+    configuration = { url: "fixtures/one-task.json" };
 
-  	spyOn($, "ajax");
-  	postIts.catchPostIts(configuration);
-	expect($.ajax.mostRecentCall.args[0]["url"]).toEqual(configuration.url);
+    spyOn($, "ajax");
+    page.catchPostIts(configuration);
+    expect($.ajax.calls.mostRecent().args[0].url).toEqual(configuration.url);
   });
 
 });
