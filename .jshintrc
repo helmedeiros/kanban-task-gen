@@ -1,0 +1,12 @@
+{
+  "browser": true,
+  "jquery": true,
+  "devel": true,
+  "jasmine": true,
+  "predef": ["Firebase", "Path", "Page"],
+  "smarttabs": true,
+  "loopfunc": true,
+  "expr": true,
+  "boss": true,
+  "validthis": true
+}
