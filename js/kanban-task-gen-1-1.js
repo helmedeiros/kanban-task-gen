@@ -61,7 +61,7 @@ console.log('Kanban Task Gen v1.1');
         });
 
         return deferred.promise();
-    };
+    }
 
     // Handle Email/Password login
     // returns a promise
@@ -411,4 +411,4 @@ console.log('Kanban Task Gen v1.1');
 
     });
 
-}(window.jQuery, window.Firebase, window.Path))
+}(window.jQuery, window.Firebase, window.Path));
