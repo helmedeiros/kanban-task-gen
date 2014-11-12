@@ -103,7 +103,8 @@ form {
 .feature__subtitle {
   line-height:1.25;
   font-size:1.25em;
-  font-weight:normal color:#292f36;
+  font-weight:normal;
+  color:#292f36;
   margin:0
 }
 
