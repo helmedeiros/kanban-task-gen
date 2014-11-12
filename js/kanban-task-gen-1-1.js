@@ -1,5 +1,3 @@
-console.log('Kanban Task Gen v1.1');
-
 (function (jQuery, Firebase, Path) {
     "use strict";
 
@@ -237,12 +235,9 @@ console.log('Kanban Task Gen v1.1');
 
             if (files) {
                 for (var i = 0, f; f = files[i]; i++) {
-                    console.log("Entrou loop");
                     var r = new FileReader();
                     r.onload = (function(f) {
                         return function(e) {
-                            
-
                             var contents = JSON.parse(e.target.result);
                             var page = new Page();
                             page.parseStories(contents);
@@ -252,7 +247,6 @@ console.log('Kanban Task Gen v1.1');
                     })(f);
 
                     r.readAsText(f);
-                    console.log("loop");
                 }
                 
                 // Tracking Generated Post-its - upload

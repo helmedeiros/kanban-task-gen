@@ -1,5 +1,3 @@
-console.log('Page');
-
 function Page() {}
 
 
