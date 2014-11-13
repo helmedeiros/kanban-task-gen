@@ -44,7 +44,7 @@ form {
 
 .main-nav ul {
   float: left;
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 .main-nav li {
@@ -137,7 +137,7 @@ form {
 
 /** PROMO **/
 .promo {
-  padding-top: 0px;
+  padding-top: 0;
   background: #000 url(../img/promo.jpg) no-repeat center;
   margin-top: 76px;
   position: relative;
@@ -183,7 +183,7 @@ form {
   max-width: 400px;
   margin: 0;
   padding: 0;
-  border-right: 0px;
+  border-right: 0;
 }
 
 .promo .form-frame .text-input {
@@ -387,7 +387,7 @@ line-height: 17px;
 
 .tour .holder {
 background: url(../img/bg-tour.png) no-repeat 50% 100%;
-padding: 0px 0 30px;
+padding: 0 0 30px;
 margin: auto;
 }
 
