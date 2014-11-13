@@ -18,6 +18,33 @@ Page.prototype = {
         });
     },
 
+    buildPostIt: function(story) {
+        var postIt = $('<div class="post-it"></div>');
+        var column1 = $('<div class="col col1"></div>');
+        var column2 = $('<div class="col col2"></div>');
+        var column3 = $('<div class="col col3"></div>');
+        var bottom = $('<div class="bottom"><span class="bug"></span><span class="extra"></span></div>');
+
+        column1.append($('<span class="id">' + story.id + '</span>'));
+        column1.append($('<span class="priority">' + story.priority + '</span>'));
+        column1.append($('<span class="name">' + story.name + '</span>'));
+
+        column2.append($('<span class="speciality">' + story.specialist1 + '</span>'));
+        column2.append($('<span class="time"><span class="time-number">' + story.time1 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+
+        column3.append($('<span class="speciality">' + story.specialist2 + '</span>'));
+        column3.append($('<span class="time"><span class="time-number">' + story.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+
+        bottom.append($('<span class="sprint">' + story.sprint + '</span>'));
+
+        postIt.append(column1);
+        postIt.append(column2);
+        postIt.append(column3);
+        postIt.append(bottom);
+
+        return postIt;
+    },
+
     parseStories: function(_data) {
         var thePostIt = $('<div class="post-it"></div>');
         var column1 = $('<div class="col col1"></div>');
