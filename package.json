@@ -14,9 +14,12 @@
   },
   "homepage": "https://github.com/helmedeiros/kanban-task-gen",
   "scripts": {
-    "lint": "jshint ."
+    "lint:js": "jshint .",
+    "lint:css": "csslint css/",
+    "lint": "npm run lint:js && npm run lint:css"
   },
   "devDependencies": {
+    "csslint": "0.10.0",
     "jshint": "2.5.11"
   }
 }
