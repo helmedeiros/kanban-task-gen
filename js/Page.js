@@ -45,6 +45,17 @@ Page.prototype = {
         return postIt;
     },
 
+    parseStorySet: function(rawJson) {
+        var stories = [];
+        var tasks = (rawJson && rawJson.tasks) || {};
+        for (var key in tasks) {
+            if (tasks.hasOwnProperty(key)) {
+                stories.push(tasks[key]);
+            }
+        }
+        return stories;
+    },
+
     parseStories: function(_data) {
         var cont = 0;
 
