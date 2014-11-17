@@ -50,4 +50,27 @@ describe("Page", function() {
     });
   });
 
+  describe("parseStorySet", function() {
+
+    it("returns an empty array when tasks are missing", function() {
+      expect(page.parseStorySet({})).toEqual([]);
+      expect(page.parseStorySet(null)).toEqual([]);
+      expect(page.parseStorySet()).toEqual([]);
+    });
+
+    it("returns each story from the tasks map", function() {
+      var rawJson = {
+        tasks: {
+          task1: { id: "1", name: "First" },
+          task2: { id: "2", name: "Second" }
+        }
+      };
+      var stories = page.parseStorySet(rawJson);
+      expect(stories.length).toEqual(2);
+      expect(stories[0].id).toEqual("1");
+      expect(stories[1].id).toEqual("2");
+    });
+
+  });
+
 });
