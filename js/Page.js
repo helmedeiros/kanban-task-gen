@@ -18,24 +18,24 @@ Page.prototype = {
         });
     },
 
-    buildPostIt: function(story) {
+    buildPostIt: function(card) {
         var postIt = $('<div class="post-it"></div>');
         var column1 = $('<div class="col col1"></div>');
         var column2 = $('<div class="col col2"></div>');
         var column3 = $('<div class="col col3"></div>');
         var bottom = $('<div class="bottom"><span class="bug"></span><span class="extra"></span></div>');
 
-        column1.append($('<span class="id">' + story.id + '</span>'));
-        column1.append($('<span class="priority">' + story.priority + '</span>'));
-        column1.append($('<span class="name">' + story.name + '</span>'));
+        column1.append($('<span class="id">' + card.id + '</span>'));
+        column1.append($('<span class="priority">' + card.priority + '</span>'));
+        column1.append($('<span class="name">' + card.name + '</span>'));
 
-        column2.append($('<span class="speciality">' + story.specialist1 + '</span>'));
-        column2.append($('<span class="time"><span class="time-number">' + story.time1 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+        column2.append($('<span class="speciality">' + card.specialist1 + '</span>'));
+        column2.append($('<span class="time"><span class="time-number">' + card.time1 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
 
-        column3.append($('<span class="speciality">' + story.specialist2 + '</span>'));
-        column3.append($('<span class="time"><span class="time-number">' + story.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+        column3.append($('<span class="speciality">' + card.specialist2 + '</span>'));
+        column3.append($('<span class="time"><span class="time-number">' + card.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
 
-        bottom.append($('<span class="sprint">' + story.sprint + '</span>'));
+        bottom.append($('<span class="sprint">' + card.sprint + '</span>'));
 
         postIt.append(column1);
         postIt.append(column2);
@@ -45,25 +45,25 @@ Page.prototype = {
         return postIt;
     },
 
-    parseStorySet: function(rawJson) {
-        var stories = [];
+    parseCardSet: function(rawJson) {
+        var cards = [];
         var tasks = (rawJson && rawJson.tasks) || {};
         for (var key in tasks) {
             if (tasks.hasOwnProperty(key)) {
-                stories.push(tasks[key]);
+                cards.push(tasks[key]);
             }
         }
-        return stories;
+        return cards;
     },
 
     parseStories: function(_data) {
-        var stories = this.parseStorySet(_data);
+        var cards = this.parseCardSet(_data);
         var cont = 0;
 
-        for (var i = 0; i < stories.length; i++) {
+        for (var i = 0; i < cards.length; i++) {
             cont += 1;
 
-            var postIt = this.buildPostIt(stories[i]);
+            var postIt = this.buildPostIt(cards[i]);
 
             if ((cont === 7) || (cont === 8)) {
                 postIt.addClass('page-end');

@@ -15,13 +15,13 @@ describe("Page", function() {
   });
 
   describe("buildPostIt", function() {
-    var sampleStory;
+    var sampleCard;
 
     beforeEach(function() {
-      sampleStory = {
+      sampleCard = {
         id: "42",
         priority: "1",
-        name: "Sample story",
+        name: "Sample card",
         specialist1: "BE",
         time1: "3",
         specialist2: "FE",
@@ -31,44 +31,44 @@ describe("Page", function() {
     });
 
     it("returns a .post-it element", function() {
-      expect(page.buildPostIt(sampleStory).hasClass("post-it")).toBe(true);
+      expect(page.buildPostIt(sampleCard).hasClass("post-it")).toBe(true);
     });
 
-    it("renders id, priority, name and sprint from the story", function() {
-      var postIt = page.buildPostIt(sampleStory);
-      expect(postIt.find(".id").text()).toEqual(sampleStory.id);
-      expect(postIt.find(".priority").text()).toEqual(sampleStory.priority);
-      expect(postIt.find(".name").text()).toEqual(sampleStory.name);
-      expect(postIt.find(".sprint").text()).toEqual(sampleStory.sprint);
+    it("renders id, priority, name and sprint from the card", function() {
+      var postIt = page.buildPostIt(sampleCard);
+      expect(postIt.find(".id").text()).toEqual(sampleCard.id);
+      expect(postIt.find(".priority").text()).toEqual(sampleCard.priority);
+      expect(postIt.find(".name").text()).toEqual(sampleCard.name);
+      expect(postIt.find(".sprint").text()).toEqual(sampleCard.sprint);
     });
 
     it("renders both specialities", function() {
-      var specialities = page.buildPostIt(sampleStory).find(".speciality");
+      var specialities = page.buildPostIt(sampleCard).find(".speciality");
       expect(specialities.length).toEqual(2);
-      expect($(specialities[0]).text()).toEqual(sampleStory.specialist1);
-      expect($(specialities[1]).text()).toEqual(sampleStory.specialist2);
+      expect($(specialities[0]).text()).toEqual(sampleCard.specialist1);
+      expect($(specialities[1]).text()).toEqual(sampleCard.specialist2);
     });
   });
 
-  describe("parseStorySet", function() {
+  describe("parseCardSet", function() {
 
     it("returns an empty array when tasks are missing", function() {
-      expect(page.parseStorySet({})).toEqual([]);
-      expect(page.parseStorySet(null)).toEqual([]);
-      expect(page.parseStorySet()).toEqual([]);
+      expect(page.parseCardSet({})).toEqual([]);
+      expect(page.parseCardSet(null)).toEqual([]);
+      expect(page.parseCardSet()).toEqual([]);
     });
 
-    it("returns each story from the tasks map", function() {
+    it("returns each card from the tasks map", function() {
       var rawJson = {
         tasks: {
           task1: { id: "1", name: "First" },
           task2: { id: "2", name: "Second" }
         }
       };
-      var stories = page.parseStorySet(rawJson);
-      expect(stories.length).toEqual(2);
-      expect(stories[0].id).toEqual("1");
-      expect(stories[1].id).toEqual("2");
+      var cards = page.parseCardSet(rawJson);
+      expect(cards.length).toEqual(2);
+      expect(cards[0].id).toEqual("1");
+      expect(cards[1].id).toEqual("2");
     });
 
   });
