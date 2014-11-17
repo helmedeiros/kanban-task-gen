@@ -57,12 +57,13 @@ Page.prototype = {
     },
 
     parseStories: function(_data) {
+        var stories = this.parseStorySet(_data);
         var cont = 0;
 
-        for (var a in _data.tasks) {
+        for (var i = 0; i < stories.length; i++) {
             cont += 1;
 
-            var postIt = this.buildPostIt(_data.tasks[a]);
+            var postIt = this.buildPostIt(stories[i]);
 
             if ((cont === 7) || (cont === 8)) {
                 postIt.addClass('page-end');
