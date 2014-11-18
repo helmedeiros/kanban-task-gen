@@ -73,4 +73,26 @@ describe("Page", function() {
 
   });
 
+  describe("parseStories", function() {
+
+    it("calls buildPostIt once per card", function() {
+      spyOn(page, "buildPostIt").and.returnValue($('<div></div>'));
+      page.parseStories({
+        tasks: {
+          a: { id: "1" },
+          b: { id: "2" },
+          c: { id: "3" }
+        }
+      });
+      expect(page.buildPostIt.calls.count()).toEqual(3);
+    });
+
+    it("does nothing when there are no cards", function() {
+      spyOn(page, "buildPostIt");
+      page.parseStories({});
+      expect(page.buildPostIt).not.toHaveBeenCalled();
+    });
+
+  });
+
 });
