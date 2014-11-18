@@ -57,6 +57,7 @@ Page.prototype = {
     },
 
     parseStories: function(_data) {
+        var CARDS_PER_PAGE = 8;
         var cards = this.parseCardSet(_data);
         var cont = 0;
 
@@ -65,10 +66,10 @@ Page.prototype = {
 
             var postIt = this.buildPostIt(cards[i]);
 
-            if ((cont === 7) || (cont === 8)) {
+            if ((cont === CARDS_PER_PAGE - 1) || (cont === CARDS_PER_PAGE)) {
                 postIt.addClass('page-end');
 
-                if (cont === 8) {
+                if (cont === CARDS_PER_PAGE) {
                     cont = 0;
                 }
             }
