@@ -1,3 +1,42 @@
+describe("PostItRenderer", function() {
+  var renderer;
+  var sampleCard;
+
+  beforeEach(function() {
+    renderer = new PostItRenderer();
+    sampleCard = {
+      id: "42",
+      priority: "1",
+      name: "Sample card",
+      specialist1: "BE",
+      time1: "3",
+      specialist2: "FE",
+      time2: "2",
+      sprint: "7"
+    };
+  });
+
+  it("renders a .post-it element", function() {
+    expect(renderer.render(sampleCard).hasClass("post-it")).toBe(true);
+  });
+
+  it("places id, priority, name and sprint in the card", function() {
+    var postIt = renderer.render(sampleCard);
+    expect(postIt.find(".id").text()).toEqual(sampleCard.id);
+    expect(postIt.find(".priority").text()).toEqual(sampleCard.priority);
+    expect(postIt.find(".name").text()).toEqual(sampleCard.name);
+    expect(postIt.find(".sprint").text()).toEqual(sampleCard.sprint);
+  });
+
+  it("places both specialities in the card", function() {
+    var specialities = renderer.render(sampleCard).find(".speciality");
+    expect(specialities.length).toEqual(2);
+    expect($(specialities[0]).text()).toEqual(sampleCard.specialist1);
+    expect($(specialities[1]).text()).toEqual(sampleCard.specialist2);
+  });
+
+});
+
 describe("Page", function() {
   var page;
   var configuration;
