@@ -1,4 +1,6 @@
-function Page() {}
+function Page(renderer) {
+    this.renderer = renderer || new PostItRenderer();
+}
 
 
 Page.prototype = {
@@ -19,30 +21,7 @@ Page.prototype = {
     },
 
     buildPostIt: function(card) {
-        var postIt = $('<div class="post-it"></div>');
-        var column1 = $('<div class="col col1"></div>');
-        var column2 = $('<div class="col col2"></div>');
-        var column3 = $('<div class="col col3"></div>');
-        var bottom = $('<div class="bottom"><span class="bug"></span><span class="extra"></span></div>');
-
-        column1.append($('<span class="id">' + card.id + '</span>'));
-        column1.append($('<span class="priority">' + card.priority + '</span>'));
-        column1.append($('<span class="name">' + card.name + '</span>'));
-
-        column2.append($('<span class="speciality">' + card.specialist1 + '</span>'));
-        column2.append($('<span class="time"><span class="time-number">' + card.time1 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
-
-        column3.append($('<span class="speciality">' + card.specialist2 + '</span>'));
-        column3.append($('<span class="time"><span class="time-number">' + card.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
-
-        bottom.append($('<span class="sprint">' + card.sprint + '</span>'));
-
-        postIt.append(column1);
-        postIt.append(column2);
-        postIt.append(column3);
-        postIt.append(bottom);
-
-        return postIt;
+        return this.renderer.render(card);
     },
 
     parseCardSet: function(rawJson) {

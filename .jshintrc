@@ -3,7 +3,7 @@
   "jquery": true,
   "devel": true,
   "jasmine": true,
-  "predef": ["Firebase", "Path", "Page"],
+  "predef": ["Firebase", "Path", "Page", "PostItRenderer"],
   "smarttabs": true,
   "loopfunc": true,
   "expr": true,
