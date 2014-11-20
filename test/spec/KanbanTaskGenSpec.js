@@ -20,6 +20,10 @@ describe("PostItRenderer", function() {
     expect(renderer.render(sampleCard).hasClass("post-it")).toBe(true);
   });
 
+  it("tags the root with data-card-id", function() {
+    expect(renderer.render(sampleCard).attr("data-card-id")).toEqual(sampleCard.id);
+  });
+
   it("places id, priority, name and sprint in the card", function() {
     var postIt = renderer.render(sampleCard);
     expect(postIt.find(".id").text()).toEqual(sampleCard.id);
