@@ -53,42 +53,6 @@ describe("Page", function() {
     expect($.ajax.calls.mostRecent().args[0].url).toEqual(configuration.url);
   });
 
-  describe("buildPostIt", function() {
-    var sampleCard;
-
-    beforeEach(function() {
-      sampleCard = {
-        id: "42",
-        priority: "1",
-        name: "Sample card",
-        specialist1: "BE",
-        time1: "3",
-        specialist2: "FE",
-        time2: "2",
-        sprint: "7"
-      };
-    });
-
-    it("returns a .post-it element", function() {
-      expect(page.buildPostIt(sampleCard).hasClass("post-it")).toBe(true);
-    });
-
-    it("renders id, priority, name and sprint from the card", function() {
-      var postIt = page.buildPostIt(sampleCard);
-      expect(postIt.find(".id").text()).toEqual(sampleCard.id);
-      expect(postIt.find(".priority").text()).toEqual(sampleCard.priority);
-      expect(postIt.find(".name").text()).toEqual(sampleCard.name);
-      expect(postIt.find(".sprint").text()).toEqual(sampleCard.sprint);
-    });
-
-    it("renders both specialities", function() {
-      var specialities = page.buildPostIt(sampleCard).find(".speciality");
-      expect(specialities.length).toEqual(2);
-      expect($(specialities[0]).text()).toEqual(sampleCard.specialist1);
-      expect($(specialities[1]).text()).toEqual(sampleCard.specialist2);
-    });
-  });
-
   describe("parseCardSet", function() {
 
     it("returns an empty array when tasks are missing", function() {
@@ -114,8 +78,8 @@ describe("Page", function() {
 
   describe("parseStories", function() {
 
-    it("calls buildPostIt once per card", function() {
-      spyOn(page, "buildPostIt").and.returnValue($('<div></div>'));
+    it("renders one post-it per card", function() {
+      spyOn(page.renderer, "render").and.returnValue($('<div></div>'));
       page.parseStories({
         tasks: {
           a: { id: "1" },
@@ -123,13 +87,13 @@ describe("Page", function() {
           c: { id: "3" }
         }
       });
-      expect(page.buildPostIt.calls.count()).toEqual(3);
+      expect(page.renderer.render.calls.count()).toEqual(3);
     });
 
     it("does nothing when there are no cards", function() {
-      spyOn(page, "buildPostIt");
+      spyOn(page.renderer, "render");
       page.parseStories({});
-      expect(page.buildPostIt).not.toHaveBeenCalled();
+      expect(page.renderer.render).not.toHaveBeenCalled();
     });
 
   });
