@@ -20,10 +20,6 @@ Page.prototype = {
         });
     },
 
-    buildPostIt: function(card) {
-        return this.renderer.render(card);
-    },
-
     parseCardSet: function(rawJson) {
         var cards = [];
         var tasks = (rawJson && rawJson.tasks) || {};
@@ -43,7 +39,7 @@ Page.prototype = {
         for (var i = 0; i < cards.length; i++) {
             cont += 1;
 
-            var postIt = this.buildPostIt(cards[i]);
+            var postIt = this.renderer.render(cards[i]);
 
             if ((cont === CARDS_PER_PAGE - 1) || (cont === CARDS_PER_PAGE)) {
                 postIt.addClass('page-end');
