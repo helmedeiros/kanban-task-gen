@@ -1,3 +1,35 @@
+describe("Card", function() {
+
+  it("copies fields from the raw object", function() {
+    var raw = {
+      id: "7",
+      priority: "2",
+      name: "Title",
+      specialist1: "BE",
+      time1: "3",
+      specialist2: "FE",
+      time2: "1",
+      sprint: "4"
+    };
+    var card = new Card(raw);
+    expect(card.id).toEqual(raw.id);
+    expect(card.priority).toEqual(raw.priority);
+    expect(card.name).toEqual(raw.name);
+    expect(card.specialist1).toEqual(raw.specialist1);
+    expect(card.time1).toEqual(raw.time1);
+    expect(card.specialist2).toEqual(raw.specialist2);
+    expect(card.time2).toEqual(raw.time2);
+    expect(card.sprint).toEqual(raw.sprint);
+  });
+
+  it("tolerates a missing raw object", function() {
+    var card = new Card();
+    expect(card.id).toBeUndefined();
+    expect(card.name).toBeUndefined();
+  });
+
+});
+
 describe("PostItRenderer", function() {
   var renderer;
   var sampleCard;
