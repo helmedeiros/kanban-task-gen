@@ -25,7 +25,7 @@ Page.prototype = {
         var tasks = (rawJson && rawJson.tasks) || {};
         for (var key in tasks) {
             if (tasks.hasOwnProperty(key)) {
-                cards.push(tasks[key]);
+                cards.push(new Card(tasks[key]));
             }
         }
         return cards;
