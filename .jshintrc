@@ -5,8 +5,6 @@
   "jasmine": true,
   "predef": ["Firebase", "Path", "Page", "PostItRenderer", "Card"],
   "smarttabs": true,
-  "loopfunc": true,
   "expr": true,
-  "boss": true,
   "validthis": true
 }
