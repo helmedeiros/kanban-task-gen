@@ -229,26 +229,25 @@
             });
         }
 
+        function readJsonFile(file) {
+            var r = new FileReader();
+            r.onload = function(e) {
+                var contents = JSON.parse(e.target.result);
+                var page = new Page();
+                page.parseStories(contents);
+                $("body").scrollTop($('#post-its').position().top);
+            };
+            r.readAsText(file);
+        }
+
         $('#jsonFile')[0].addEventListener('change', function(evt) {
-            //Retrieve all the files from the FileList object
             var files = evt.target.files;
 
             if (files) {
-                for (var i = 0, f; f = files[i]; i++) {
-                    var r = new FileReader();
-                    r.onload = (function(f) {
-                        return function(e) {
-                            var contents = JSON.parse(e.target.result);
-                            var page = new Page();
-                            page.parseStories(contents);
-
-                            $("body").scrollTop( $('#post-its').position().top );
-                        };
-                    })(f);
-
-                    r.readAsText(f);
+                for (var i = 0; i < files.length; i++) {
+                    readJsonFile(files[i]);
                 }
-                
+
                 // Tracking Generated Post-its - upload
 
             } else {
