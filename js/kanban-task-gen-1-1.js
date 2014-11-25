@@ -39,54 +39,11 @@
 
     var count = 0;
 
-    // Handle Email/Password login
-    // returns a promise
-    function authWithPassword(userObj) {
-        var deferred = $.Deferred();
-        
-        rootRef.authWithPassword(userObj, function onAuth(err, user) {
-            if (err) {
-                deferred.reject(err);
-            }
-
-            if (user) {
-                deferred.resolve(user);
-            }
-
-        });
-
-        return deferred.promise();
-    }
-
-    // create a user but not login
-    // returns a promsie
-    function createUser(userObj) {
-        var deferred = $.Deferred();
-        rootRef.createUser(userObj, function (err) {
-
-            if (!err) {
-                deferred.resolve();
-            } else {
-                deferred.reject(err);
-            }
-
-        });
-
-        return deferred.promise();
-    }
-
-    // Create a user and then login in
+    // Create a user and then sign them in
     // returns a promise
     function createUserAndLogin(userObj) {
-        return createUser(userObj)
-            .then(function () {
-
-            // Identify the current user to email
-
-
-            // Tracking Signed Up
-
-            return authWithPassword(userObj);
+        return authService.createUser(userObj).then(function () {
+            return authService.signInWithPassword(userObj);
         });
     }
 
