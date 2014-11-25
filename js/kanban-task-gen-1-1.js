@@ -3,6 +3,7 @@
 
     // the main firebase reference
     var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
+    var authService = new AuthService(rootRef);
 
     var userRef;
 
