@@ -39,29 +39,6 @@
 
     var count = 0;
 
-    // Handle third party login providers
-    // returns a promise
-    function thirdPartyLogin(provider) {
-        var deferred = $.Deferred();
-
-        rootRef.authWithOAuthPopup(provider, function (err, user) {
-            if (err) {
-                deferred.reject(err);
-            }
-
-            if (user) {
-                // Tracking Signed In
-
-                // Identify the current user to username
-
-
-                deferred.resolve(user);
-            }
-        });
-
-        return deferred.promise();
-    }
-
     // Handle Email/Password login
     // returns a promise
     function authWithPassword(userObj) {
@@ -198,7 +175,7 @@
             var provider = $currentButton.data('provider');
             var socialLoginPromise;
             
-            socialLoginPromise = thirdPartyLogin(provider);
+            socialLoginPromise = authService.signInWith(provider);
             
             handleAuthResponse(socialLoginPromise, 'gettingstarted');
 
