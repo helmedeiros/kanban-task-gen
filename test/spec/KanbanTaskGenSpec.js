@@ -7,7 +7,10 @@ describe("AuthService", function() {
       authWithOAuthPopup: jasmine.createSpy("authWithOAuthPopup"),
       authWithPassword: jasmine.createSpy("authWithPassword"),
       authAnonymously: jasmine.createSpy("authAnonymously"),
-      createUser: jasmine.createSpy("createUser")
+      createUser: jasmine.createSpy("createUser"),
+      getAuth: jasmine.createSpy("getAuth").and.returnValue({ uid: "u-1" }),
+      unauth: jasmine.createSpy("unauth"),
+      onAuth: jasmine.createSpy("onAuth")
     };
     auth = new AuthService(rootRef);
   });
@@ -55,6 +58,21 @@ describe("AuthService", function() {
       expect(err.code).toEqual("DENIED");
       done();
     });
+  });
+
+  it("returns the current user from getAuth", function() {
+    expect(auth.currentUser().uid).toEqual("u-1");
+  });
+
+  it("signs out by calling unauth", function() {
+    auth.signOut();
+    expect(rootRef.unauth).toHaveBeenCalled();
+  });
+
+  it("subscribes to auth changes via onAuth", function() {
+    var listener = function() {};
+    auth.onChange(listener);
+    expect(rootRef.onAuth).toHaveBeenCalledWith(listener);
   });
 
 });

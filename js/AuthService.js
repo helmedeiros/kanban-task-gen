@@ -53,5 +53,17 @@ AuthService.prototype = {
             }
         });
         return deferred.promise();
+    },
+
+    currentUser: function() {
+        return this.rootRef.getAuth();
+    },
+
+    signOut: function() {
+        this.rootRef.unauth();
+    },
+
+    onChange: function(callback) {
+        this.rootRef.onAuth(callback);
     }
 };
