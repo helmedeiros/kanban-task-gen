@@ -1,3 +1,64 @@
+describe("AuthService", function() {
+  var rootRef;
+  var auth;
+
+  beforeEach(function() {
+    rootRef = {
+      authWithOAuthPopup: jasmine.createSpy("authWithOAuthPopup"),
+      authWithPassword: jasmine.createSpy("authWithPassword"),
+      authAnonymously: jasmine.createSpy("authAnonymously"),
+      createUser: jasmine.createSpy("createUser")
+    };
+    auth = new AuthService(rootRef);
+  });
+
+  it("delegates signInWith to authWithOAuthPopup", function() {
+    auth.signInWith("github");
+    expect(rootRef.authWithOAuthPopup).toHaveBeenCalled();
+    expect(rootRef.authWithOAuthPopup.calls.mostRecent().args[0]).toEqual("github");
+  });
+
+  it("delegates signInWithPassword to authWithPassword", function() {
+    var creds = { email: "a@b.com", password: "secret" };
+    auth.signInWithPassword(creds);
+    expect(rootRef.authWithPassword).toHaveBeenCalled();
+    expect(rootRef.authWithPassword.calls.mostRecent().args[0]).toBe(creds);
+  });
+
+  it("delegates signInAnonymously to authAnonymously", function() {
+    auth.signInAnonymously();
+    expect(rootRef.authAnonymously).toHaveBeenCalled();
+  });
+
+  it("delegates createUser to rootRef.createUser", function() {
+    var creds = { email: "a@b.com", password: "secret" };
+    auth.createUser(creds);
+    expect(rootRef.createUser).toHaveBeenCalled();
+    expect(rootRef.createUser.calls.mostRecent().args[0]).toBe(creds);
+  });
+
+  it("resolves signInWith when Firebase yields a user", function(done) {
+    rootRef.authWithOAuthPopup = function(provider, cb) {
+      cb(null, { uid: "u-1" });
+    };
+    auth.signInWith("github").then(function(user) {
+      expect(user.uid).toEqual("u-1");
+      done();
+    });
+  });
+
+  it("rejects signInWith when Firebase yields an error", function(done) {
+    rootRef.authWithOAuthPopup = function(provider, cb) {
+      cb({ code: "DENIED" });
+    };
+    auth.signInWith("github").fail(function(err) {
+      expect(err.code).toEqual("DENIED");
+      done();
+    });
+  });
+
+});
+
 describe("Card", function() {
 
   it("copies fields from the raw object", function() {
