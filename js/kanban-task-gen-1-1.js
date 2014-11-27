@@ -286,7 +286,7 @@
         Path.listen();
 
         // whenever authentication happens send a popup
-        rootRef.onAuth(function globalOnAuth(authData) {
+        authService.onChange(function globalOnAuth(authData) {
 
             if (authData) {
                 $('#post-its').empty();
