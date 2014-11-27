@@ -203,7 +203,7 @@
 
     // logout immediately when the controller is invoked
     controllers.logout = function (form) {
-        rootRef.unauth();
+        authService.signOut();
     };
 
 
