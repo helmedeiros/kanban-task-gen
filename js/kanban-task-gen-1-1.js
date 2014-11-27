@@ -130,7 +130,7 @@
     controllers.gettingStarted = function (form) {
         
         // Check the current user
-        var user = rootRef.getAuth();
+        var user = authService.currentUser();
         
         // If no current user authenticate anonymously
         if (!user) {
@@ -218,7 +218,7 @@
     function transitionRoute(path) {
         // grab the config object to get the form element and controller
         var formRoute = routeMap[path];
-        var currentUser = rootRef.getAuth();
+        var currentUser = authService.currentUser();
         
         var pageName = formRoute.controller;
 
