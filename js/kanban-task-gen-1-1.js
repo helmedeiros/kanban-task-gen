@@ -185,7 +185,7 @@
             // Tracking Generated Post-its - form
 
 
-            userRef.push(userInfo, function onComplete() {
+            boardRepository.add(userInfo).then(function onComplete() {
 
                 // show the message if write is successful
                 showAlert({
