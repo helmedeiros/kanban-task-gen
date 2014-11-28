@@ -6,6 +6,7 @@
     var authService = new AuthService(rootRef);
 
     var userRef;
+    var boardRepository;
 
     // pair our routes to our form elements and controller
     var routeMap = {
@@ -293,6 +294,7 @@
 
                 // Load user info
                 userRef = rootRef.child('users').child(authData.uid);
+                boardRepository = new BoardRepository(userRef);
                 userRef.once('value', function (snap) {
                     var user = snap.val();
                     if (!user) {
