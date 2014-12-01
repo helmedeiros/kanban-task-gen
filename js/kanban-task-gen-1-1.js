@@ -295,27 +295,13 @@
                 // Load user info
                 userRef = rootRef.child('users').child(authData.uid);
                 boardRepository = new BoardRepository(userRef);
-                userRef.once('value', function (snap) {
-                    var user = snap.val();
-                    if (!user) {
-                        return;
-                    }
-                });
 
-                userRef.on('child_added', function(snapshot) {
-                    var data = snapshot.val();
-
+                boardRepository.onCardAdded(function(data) {
                     count = data.id;
-
                     var page = new Page();
                     page.parseStories({'tasks' : [data]});
-
-                }, function (errorObject){
-                    console.log('The read failed: ' + errorObject.code);
-
                 });
 
-           
             }
 
         });
