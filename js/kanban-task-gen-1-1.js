@@ -5,7 +5,6 @@
     var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
     var authService = new AuthService(rootRef);
 
-    var userRef;
     var boardRepository;
 
     // pair our routes to our form elements and controller
@@ -292,9 +291,9 @@
             if (authData) {
                 $('#post-its').empty();
 
-                // Load user info
-                userRef = rootRef.child('users').child(authData.uid);
-                boardRepository = new BoardRepository(userRef);
+                boardRepository = new BoardRepository(
+                    rootRef.child('users').child(authData.uid)
+                );
 
                 boardRepository.onCardAdded(function(data) {
                     count = data.id;
