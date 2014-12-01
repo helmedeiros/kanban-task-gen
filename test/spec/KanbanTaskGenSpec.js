@@ -1,3 +1,46 @@
+describe("BoardRepository", function() {
+  var userRef;
+  var repo;
+
+  beforeEach(function() {
+    userRef = {
+      push: jasmine.createSpy("push"),
+      on: jasmine.createSpy("on"),
+      once: jasmine.createSpy("once")
+    };
+    repo = new BoardRepository(userRef);
+  });
+
+  it("delegates add to userRef.push", function() {
+    var card = { id: 1, name: "First" };
+    repo.add(card);
+    expect(userRef.push).toHaveBeenCalled();
+    expect(userRef.push.calls.mostRecent().args[0]).toBe(card);
+  });
+
+  it("subscribes onCardAdded via child_added", function() {
+    repo.onCardAdded(function() {});
+    expect(userRef.on).toHaveBeenCalled();
+    expect(userRef.on.calls.mostRecent().args[0]).toEqual('child_added');
+  });
+
+  it("delivers each new card's value to onCardAdded callbacks", function() {
+    var seen;
+    userRef.on = function(event, cb) {
+      cb({ val: function() { return { id: "9" }; } });
+    };
+    repo.onCardAdded(function(value) { seen = value; });
+    expect(seen.id).toEqual("9");
+  });
+
+  it("delegates getAll to userRef.once value", function() {
+    repo.getAll();
+    expect(userRef.once).toHaveBeenCalled();
+    expect(userRef.once.calls.mostRecent().args[0]).toEqual('value');
+  });
+
+});
+
 describe("AuthService", function() {
   var rootRef;
   var auth;
