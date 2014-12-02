@@ -39,13 +39,6 @@
 
     var count = 0;
 
-    // Create a user and then sign them in
-    // returns a promise
-    function createUserAndLogin(userObj) {
-        return authService.createUser(userObj).then(function () {
-            return authService.signInWithPassword(userObj);
-        });
-    }
 
     // route to the specified route if sucessful
     // if there is an error, show the alert
@@ -97,7 +90,7 @@
             // set a default password
             userAndPass.password = '12345';
 
-            var loginPromise = createUserAndLogin(userAndPass);
+            var loginPromise = authService.signUpAndSignIn(userAndPass);
             
 
             handleAuthResponse(loginPromise, 'gettingstarted');
