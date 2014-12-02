@@ -118,6 +118,16 @@ describe("AuthService", function() {
     expect(rootRef.onAuth).toHaveBeenCalledWith(listener);
   });
 
+  it("creates a user then signs them in with the same credentials", function(done) {
+    var creds = { email: "a@b.com", password: "secret" };
+    rootRef.createUser = function(c, cb) { cb(null); };
+    rootRef.authWithPassword = function(c, cb) { cb(null, { uid: "u-9" }); };
+    auth.signUpAndSignIn(creds).then(function(user) {
+      expect(user.uid).toEqual("u-9");
+      done();
+    });
+  });
+
 });
 
 describe("Card", function() {

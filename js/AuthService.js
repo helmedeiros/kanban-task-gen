@@ -65,5 +65,12 @@ AuthService.prototype = {
 
     onChange: function(callback) {
         this.rootRef.onAuth(callback);
+    },
+
+    signUpAndSignIn: function(credentials) {
+        var self = this;
+        return this.createUser(credentials).then(function() {
+            return self.signInWithPassword(credentials);
+        });
     }
 };
