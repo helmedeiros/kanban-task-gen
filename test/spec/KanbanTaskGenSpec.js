@@ -1,3 +1,45 @@
+describe("AlertView", function() {
+  var box;
+  var titleEl;
+  var detailEl;
+  var view;
+
+  beforeEach(function() {
+    titleEl = { text: jasmine.createSpy("titleText") };
+    detailEl = { text: jasmine.createSpy("detailText") };
+    box = {
+      removeClass: jasmine.createSpy("removeClass"),
+      addClass: jasmine.createSpy("addClass"),
+      children: jasmine.createSpy("children").and.callFake(function(selector) {
+        return selector === "#alert-title" ? titleEl : detailEl;
+      }),
+      fadeIn: jasmine.createSpy("fadeIn"),
+      fadeOut: jasmine.createSpy("fadeOut")
+    };
+    box.removeClass.and.returnValue(box);
+    box.fadeIn.and.returnValue(box);
+    view = new AlertView(box);
+  });
+
+  it("paints the box class from opts.className", function() {
+    view.show({ title: "T", detail: "D", className: "alert-info" });
+    expect(box.addClass).toHaveBeenCalledWith("alert alert-info");
+  });
+
+  it("places title and detail text into their children", function() {
+    view.show({ title: "Hello", detail: "World", className: "alert-info" });
+    expect(titleEl.text).toHaveBeenCalledWith("Hello");
+    expect(detailEl.text).toHaveBeenCalledWith("World");
+  });
+
+  it("fades in then out", function() {
+    view.show({ title: "T", detail: "D", className: "alert-info" });
+    expect(box.fadeIn).toHaveBeenCalled();
+    expect(box.fadeOut).toHaveBeenCalled();
+  });
+
+});
+
 describe("BoardRepository", function() {
   var userRef;
   var repo;
