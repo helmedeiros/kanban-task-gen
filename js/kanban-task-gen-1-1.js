@@ -143,8 +143,6 @@
                     readJsonFile(files[i]);
                 }
 
-                // Tracking Generated Post-its - upload
-
             } else {
                 alert("Failed to load files");
             }
@@ -159,9 +157,6 @@
             userInfo.id = count;
             userInfo.specialist2 = '';
             userInfo.time2 = '';
-
-            // Tracking Generated Post-its - form
-
 
             boardRepository.add(userInfo).then(function onComplete() {
 
@@ -200,8 +195,6 @@
         var currentUser = authService.currentUser();
         
         var pageName = formRoute.controller;
-
-        // Track Visited Page
 
         // if authentication is required and there is no
         // current user then go to the register page and
