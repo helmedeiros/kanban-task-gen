@@ -33,7 +33,7 @@
     // store the active form shown on the page
     var activeForm = null;
 
-    var alertBox = $('#alert');
+    var alertView = new AlertView($('#alert'));
 
     var menu = $('#nav');
 
@@ -52,7 +52,7 @@
         }, function (err) {
             console.log(err);
             // pop up error
-            showAlert({
+            alertView.show({
                 title: err.code,
                 detail: err.message,
                 className: 'alert-danger'
@@ -60,20 +60,6 @@
 
         });
     }
-
-    // options for showing the alert box
-    function showAlert(opts) {
-        var title = opts.title;
-        var detail = opts.detail;
-        var className = 'alert ' + opts.className;
-        
-
-        alertBox.removeClass().addClass(className);
-        alertBox.children('#alert-title').text(title);
-        alertBox.children('#alert-detail').text(detail);
-        alertBox.fadeIn(2000).fadeOut(4000);
-    }
-
 
     /// Controllers
     ////////////////////////////////////////
@@ -131,7 +117,7 @@
             authService.signInAnonymously();
 
             // pop up error
-            showAlert({
+            alertView.show({
                 title: '',
                 detail: 'Log in to store your post-its',
                 className: 'alert-info'
@@ -180,7 +166,7 @@
             boardRepository.add(userInfo).then(function onComplete() {
 
                 // show the message if write is successful
-                showAlert({
+                alertView.show({
                     title: 'Successfully saved!',
                     detail: 'You are still logged in',
                     className: 'alert-success'
