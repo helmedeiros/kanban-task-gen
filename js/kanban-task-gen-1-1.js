@@ -193,8 +193,6 @@
         // grab the config object to get the form element and controller
         var formRoute = routeMap[path];
         var currentUser = authService.currentUser();
-        
-        var pageName = formRoute.controller;
 
         // if authentication is required and there is no
         // current user then go to the register page and
