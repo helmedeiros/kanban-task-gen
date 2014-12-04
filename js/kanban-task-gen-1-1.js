@@ -30,12 +30,14 @@
     // create the object to store our controllers
     var controllers = {};
 
-    // store the active form shown on the page
-    var activeForm = null;
-
     var alertView = new AlertView($('#alert'));
 
-    var menu = $('#nav');
+    var router = new Router({
+        routeMap: routeMap,
+        menu: $('#nav'),
+        controllers: controllers,
+        authService: authService
+    });
 
     var count = 0;
 
@@ -47,7 +49,7 @@
             .then(function (authData) {
 
             // route
-            routeTo(route);
+            router.routeTo(route);
 
         }, function (err) {
             console.log(err);
@@ -184,62 +186,10 @@
     /// Routing
     ////////////////////////////////////////
 
-    function routeTo(route) {
-        window.location.href = '#/' + route;
-    }
-
-    // Handle transitions between routes
-    function transitionRoute(path) {
-        // grab the config object to get the form element and controller
-        var formRoute = routeMap[path];
-        var currentUser = authService.currentUser();
-
-        // if authentication is required and there is no
-        // current user then go to the register page and
-        // stop executing
-        if (formRoute.authRequired && !currentUser) {
-            routeTo('home');
-            return;
-        }
-
-        // wrap the upcoming form in jQuery
-        var upcomingForm = $('#' + formRoute.form);
-
-
-        // if there is no active form then make the current one active
-        if (!activeForm) {
-            activeForm = upcomingForm;
-        }
-
-
-        // hide old form and show new form
-        activeForm.hide();
-        upcomingForm.show().hide().fadeIn(500);
-
-        // remove any listeners on the soon to be switched form
-        activeForm.off();
-
-        // set the new form as the active form
-        activeForm = upcomingForm;
-
-        menu.find('li').removeClass('active');
-        menu.find('.' + formRoute.controller).addClass("active");
-
-        // invoke the controller
-        controllers[formRoute.controller](activeForm);
-    }
-
-    // Set up the transitioning of the route
     function prepRoute() {
-        transitionRoute(this.path);
+        router.transitionTo(this.path);
     }
 
-
-    /// Routes
-    ///  #/         - Home
-    //   #/overview - Overview
-    //   #/gettingstarted - Getting started
-    
     Path.map("#/").to(prepRoute);
     Path.map("#/overview").to(prepRoute);
     Path.map("#/gettingstarted").to(prepRoute);
