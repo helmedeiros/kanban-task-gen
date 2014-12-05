@@ -40,6 +40,7 @@
     });
 
     var count = 0;
+    var page = new Page();
 
 
     // route to the specified route if sucessful
@@ -130,7 +131,6 @@
             var r = new FileReader();
             r.onload = function(e) {
                 var contents = JSON.parse(e.target.result);
-                var page = new Page();
                 page.parseStories(contents);
                 $("body").scrollTop($('#post-its').position().top);
             };
@@ -217,7 +217,6 @@
 
                 boardRepository.onCardAdded(function(data) {
                     count = data.id;
-                    var page = new Page();
                     page.parseStories({'tasks' : [data]});
                 });
 
