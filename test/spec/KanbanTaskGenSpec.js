@@ -1,3 +1,58 @@
+describe("Router", function() {
+  var router;
+  var controllers;
+  var authService;
+  var menu;
+  var routeMap;
+
+  beforeEach(function() {
+    routeMap = {
+      '#/home': { form: 'frmHome', controller: 'home' },
+      '#/secret': { form: 'frmSecret', controller: 'secret', authRequired: true }
+    };
+    controllers = {
+      home: jasmine.createSpy('homeController'),
+      secret: jasmine.createSpy('secretController')
+    };
+    authService = { currentUser: jasmine.createSpy('currentUser').and.returnValue(null) };
+    menu = $('<div><ul><li class="home">H</li><li class="secret">S</li></ul></div>');
+
+    $('body').append($(
+      '<form id="frmHome"></form>' +
+      '<form id="frmSecret"></form>'
+    ));
+
+    router = new Router({
+      routeMap: routeMap,
+      menu: menu,
+      controllers: controllers,
+      authService: authService
+    });
+  });
+
+  afterEach(function() {
+    $('#frmHome, #frmSecret').remove();
+  });
+
+  it("redirects to home when an authRequired route has no current user", function() {
+    spyOn(router, 'routeTo');
+    router.transitionTo('#/secret');
+    expect(router.routeTo).toHaveBeenCalledWith('home');
+    expect(controllers.secret).not.toHaveBeenCalled();
+  });
+
+  it("invokes the matching controller for the route", function() {
+    router.transitionTo('#/home');
+    expect(controllers.home).toHaveBeenCalled();
+  });
+
+  it("marks the route's menu item as active", function() {
+    router.transitionTo('#/home');
+    expect(menu.find('.home').hasClass('active')).toBe(true);
+  });
+
+});
+
 describe("AlertView", function() {
   var box;
   var titleEl;
