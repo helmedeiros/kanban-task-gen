@@ -216,7 +216,7 @@
                 );
 
                 boardRepository.onCardAdded(function(data) {
-                    count = data.id;
+                    count = Math.max(count, Number(data.id) || 0);
                     page.parseStories({'tasks' : [data]});
                 });
 
