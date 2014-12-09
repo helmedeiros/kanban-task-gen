@@ -6,5 +6,7 @@
   "predef": ["Firebase", "Path", "Page", "PostItRenderer", "Card", "AuthService", "BoardRepository", "AlertView", "Router"],
   "smarttabs": true,
   "expr": true,
-  "validthis": true
+  "validthis": true,
+  "forin": true,
+  "unused": true
 }

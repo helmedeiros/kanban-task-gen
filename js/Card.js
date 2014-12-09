@@ -1,3 +1,4 @@
+/* exported Card */
 function Card(rawCard) {
     var data = rawCard || {};
     this.id = data.id;
