@@ -47,7 +47,7 @@
     // if there is an error, show the alert
     function handleAuthResponse(promise, route) {
         $.when(promise)
-            .then(function (authData) {
+            .then(function () {
 
             // route
             router.routeTo(route);
@@ -103,7 +103,7 @@
 
     };
 
-    controllers.overview = function (form) {
+    controllers.overview = function () {
 
         // no action, so far
 
@@ -178,7 +178,7 @@
 
 
     // logout immediately when the controller is invoked
-    controllers.logout = function (form) {
+    controllers.logout = function () {
         authService.signOut();
     };
 
