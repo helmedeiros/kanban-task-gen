@@ -465,11 +465,9 @@ input[type="file"]::-webkit-file-upload-button {
 
 input[type="file"]::before {
   display: inline-block;
-  color: #fff;
   background-color: #fff;
   padding: 183px 117px;
   margin: 0;
-  display: inline-block;
   border-radius: .25em;
   border: 2px dashed #ddd;
   text-decoration: none;
@@ -497,7 +495,6 @@ pre[class*="language-"] {
   margin-top: 70px;
 }
 #post-its {
-  width: 800px;
   width: 800px;
   margin: 0 auto;
 }
