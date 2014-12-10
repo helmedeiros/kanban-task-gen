@@ -459,9 +459,6 @@ input[type="file"]::-webkit-file-upload-button {
 #jsonFile::before{
   content:'JSON';
 }
-#tableFile::before{
-  content:'TABLE';
-}
 
 input[type="file"]::before {
   display: inline-block;
