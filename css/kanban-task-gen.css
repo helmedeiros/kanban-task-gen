@@ -195,7 +195,6 @@ form {
   width: 70%;
   height: 38px;
   margin: 0;
-  outline: none;
   padding: 10px 12px;
   font-size: 15px;
   border: 1px solid #ccc;
@@ -221,7 +220,6 @@ form {
   color: #fff;
   border: 0;
   margin: 0;
-  outline: 0;
   cursor: pointer;
   -webkit-text-stroke: 0;
 }
@@ -283,7 +281,6 @@ background: #53B313;
 color: #fff;
 border: 0;
 margin: 0;
-outline: 0;
 cursor: pointer;
 -webkit-text-stroke: 0;
 }
