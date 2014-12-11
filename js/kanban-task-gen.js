@@ -42,6 +42,16 @@
     var count = 0;
     var page = new Page();
 
+    function readJsonFile(file) {
+        var r = new FileReader();
+        r.onload = function(e) {
+            var contents = JSON.parse(e.target.result);
+            page.parseStories(contents);
+            $("body").scrollTop($('#post-its').position().top);
+        };
+        r.readAsText(file);
+    }
+
 
     // route to the specified route if sucessful
     // if there is an error, show the alert
@@ -125,16 +135,6 @@
                 detail: 'Log in to store your post-its',
                 className: 'alert-info'
             });
-        }
-
-        function readJsonFile(file) {
-            var r = new FileReader();
-            r.onload = function(e) {
-                var contents = JSON.parse(e.target.result);
-                page.parseStories(contents);
-                $("body").scrollTop($('#post-its').position().top);
-            };
-            r.readAsText(file);
         }
 
         $('#jsonFile')[0].addEventListener('change', function(evt) {
