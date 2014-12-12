@@ -5,21 +5,6 @@ function Page(renderer) {
 
 Page.prototype = {
 
-    catchPostIts: function(configuration) {
-        $.ajax({
-            type: 'GET',
-            url: configuration.url,
-            dataType: 'json',
-            contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-            success: function(_data) {
-                this.data = _data;
-            },
-            error: function(_data) {
-                console.log('error', _data);
-            }
-        });
-    },
-
     parseCardSet: function(rawJson) {
         var cards = [];
         var tasks = (rawJson && rawJson.tasks) || {};
