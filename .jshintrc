@@ -10,5 +10,9 @@
   "forin": true,
   "unused": true,
   "eqeqeq": true,
-  "latedef": "nofunc"
+  "latedef": "nofunc",
+  "noempty": true,
+  "nonbsp": true,
+  "freeze": true,
+  "undef": true
 }
