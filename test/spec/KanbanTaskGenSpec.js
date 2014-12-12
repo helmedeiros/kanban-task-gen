@@ -265,7 +265,7 @@ describe("PostItRenderer", function() {
 
   beforeEach(function() {
     renderer = new PostItRenderer();
-    sampleCard = {
+    sampleCard = new Card({
       id: "42",
       priority: "1",
       name: "Sample card",
@@ -274,7 +274,7 @@ describe("PostItRenderer", function() {
       specialist2: "FE",
       time2: "2",
       sprint: "7"
-    };
+    });
   });
 
   it("renders a .post-it element", function() {
