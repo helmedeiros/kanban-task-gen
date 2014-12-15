@@ -1,13 +1,11 @@
 (function (jQuery, Firebase, Path) {
     "use strict";
 
-    // the main firebase reference
     var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
     var authService = new AuthService(rootRef);
 
     var boardRepository;
 
-    // pair our routes to our form elements and controller
     var routeMap = {
         '#/': {
             form: 'frmHome',
@@ -27,7 +25,6 @@
 
     };
 
-    // create the object to store our controllers
     var controllers = {};
 
     var alertView = new AlertView($('#alert'));
@@ -53,18 +50,14 @@
     }
 
 
-    // route to the specified route if sucessful
-    // if there is an error, show the alert
     function handleAuthResponse(promise, route) {
         $.when(promise)
             .then(function () {
 
-            // route
             router.routeTo(route);
 
         }, function (err) {
             console.log(err);
-            // pop up error
             alertView.show({
                 title: err.code,
                 detail: err.message,
@@ -78,25 +71,21 @@
     ////////////////////////////////////////
 
     controllers.home = function (form) {
-        
 
-        // Form submission for logging in
         form.on('submit', function (e) {
             e.preventDefault();
 
             var userAndPass = $(this).serializeObject();
-            
-            // set a default password
+
+            // hard-coded default; e-mail sign-up never asks for a password
             userAndPass.password = '12345';
 
             var loginPromise = authService.signUpAndSignIn(userAndPass);
-            
 
             handleAuthResponse(loginPromise, 'gettingstarted');
 
         });
 
-        // Social buttons
         form.find('.bt-social').on('click', function (e) {
 
             e.preventDefault();
@@ -120,16 +109,12 @@
     };
 
     controllers.gettingStarted = function (form) {
-        
-        // Check the current user
+
         var user = authService.currentUser();
-        
-        // If no current user authenticate anonymously
+
         if (!user) {
-            
             authService.signInAnonymously();
 
-            // pop up error
             alertView.show({
                 title: '',
                 detail: 'Log in to store your post-its',
@@ -150,7 +135,6 @@
             }
         }, false);
 
-        // Save userInfo to Firebase
         form.on('submit', function (e) {
             e.preventDefault();
             var userInfo = $(this).serializeObject();
@@ -161,8 +145,6 @@
             userInfo.time2 = '';
 
             boardRepository.add(userInfo).then(function onComplete() {
-
-                // show the message if write is successful
                 alertView.show({
                     title: 'Successfully saved!',
                     detail: 'You are still logged in',
@@ -177,7 +159,6 @@
     };
 
 
-    // logout immediately when the controller is invoked
     controllers.logout = function () {
         authService.signOut();
     };
@@ -202,10 +183,8 @@
 
     $(function () {
 
-        // Start the router
         Path.listen();
 
-        // whenever authentication happens send a popup
         authService.onChange(function globalOnAuth(authData) {
 
             if (authData) {
