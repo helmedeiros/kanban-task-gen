@@ -1,5 +1,6 @@
-function Page(renderer) {
+function Page(renderer, target) {
     this.renderer = renderer || new PostItRenderer();
+    this.target = target || $('#post-its');
 }
 
 
@@ -34,7 +35,7 @@ Page.prototype = {
                 }
             }
 
-            $('#post-its').append(postIt);
+            this.target.append(postIt);
         }
     }
 };
