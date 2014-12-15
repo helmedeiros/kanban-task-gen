@@ -333,6 +333,12 @@ describe("Page", function() {
   });
 
   describe("parseStories", function() {
+    var target;
+
+    beforeEach(function() {
+      target = $('<div></div>');
+      page = new Page(undefined, target);
+    });
 
     it("renders one post-it per card", function() {
       spyOn(page.renderer, "render").and.returnValue($('<div></div>'));
@@ -346,10 +352,21 @@ describe("Page", function() {
       expect(page.renderer.render.calls.count()).toEqual(3);
     });
 
+    it("appends rendered post-its to its target", function() {
+      page.parseStories({
+        tasks: {
+          a: { id: "1", name: "First" },
+          b: { id: "2", name: "Second" }
+        }
+      });
+      expect(target.children('.post-it').length).toEqual(2);
+    });
+
     it("does nothing when there are no cards", function() {
       spyOn(page.renderer, "render");
       page.parseStories({});
       expect(page.renderer.render).not.toHaveBeenCalled();
+      expect(target.children().length).toEqual(0);
     });
 
   });
