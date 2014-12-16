@@ -51,6 +51,42 @@ describe("Router", function() {
     expect(menu.find('.home').hasClass('active')).toBe(true);
   });
 
+  describe("afterAuth", function() {
+    var alertView;
+
+    beforeEach(function() {
+      alertView = { show: jasmine.createSpy('show') };
+      router = new Router({
+        routeMap: routeMap,
+        menu: menu,
+        controllers: controllers,
+        authService: authService,
+        alertView: alertView
+      });
+      spyOn(router, 'routeTo');
+    });
+
+    it("routes to the destination when the promise resolves", function() {
+      var deferred = $.Deferred();
+      router.afterAuth(deferred.promise(), 'home');
+      deferred.resolve({ uid: 'u-1' });
+      expect(router.routeTo).toHaveBeenCalledWith('home');
+      expect(alertView.show).not.toHaveBeenCalled();
+    });
+
+    it("shows the alert when the promise rejects", function() {
+      var deferred = $.Deferred();
+      router.afterAuth(deferred.promise(), 'home');
+      deferred.reject({ code: 'DENIED', message: 'nope' });
+      expect(alertView.show).toHaveBeenCalled();
+      var opts = alertView.show.calls.mostRecent().args[0];
+      expect(opts.title).toEqual('DENIED');
+      expect(opts.className).toEqual('alert-danger');
+      expect(router.routeTo).not.toHaveBeenCalled();
+    });
+
+  });
+
 });
 
 describe("AlertView", function() {
