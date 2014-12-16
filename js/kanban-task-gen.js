@@ -33,7 +33,8 @@
         routeMap: routeMap,
         menu: $('#nav'),
         controllers: controllers,
-        authService: authService
+        authService: authService,
+        alertView: alertView
     });
 
     var count = 0;
