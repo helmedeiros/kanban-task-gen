@@ -51,23 +51,6 @@
     }
 
 
-    function handleAuthResponse(promise, route) {
-        $.when(promise)
-            .then(function () {
-
-            router.routeTo(route);
-
-        }, function (err) {
-            console.log(err);
-            alertView.show({
-                title: err.code,
-                detail: err.message,
-                className: 'alert-danger'
-            });
-
-        });
-    }
-
     /// Controllers
     ////////////////////////////////////////
 
@@ -83,7 +66,7 @@
 
             var loginPromise = authService.signUpAndSignIn(userAndPass);
 
-            handleAuthResponse(loginPromise, 'gettingstarted');
+            router.afterAuth(loginPromise, 'gettingstarted');
 
         });
 
@@ -97,7 +80,7 @@
             
             socialLoginPromise = authService.signInWith(provider);
             
-            handleAuthResponse(socialLoginPromise, 'gettingstarted');
+            router.afterAuth(socialLoginPromise, 'gettingstarted');
 
         });
 
