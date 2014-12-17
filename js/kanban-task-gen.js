@@ -20,7 +20,7 @@
         '#/gettingstarted': {
             form: 'frmGettingStarted',
             controller: 'gettingStarted',
-            authRequired: false // if 'true', must be logged in to get here
+            authRequired: false
         },
 
     };
@@ -51,9 +51,6 @@
     }
 
 
-    /// Controllers
-    ////////////////////////////////////////
-
     controllers.home = function (form) {
 
         form.on('submit', function (e) {
@@ -61,7 +58,6 @@
 
             var userAndPass = $(this).serializeObject();
 
-            // hard-coded default; e-mail sign-up never asks for a password
             userAndPass.password = '12345';
 
             var loginPromise = authService.signUpAndSignIn(userAndPass);
@@ -87,9 +83,6 @@
     };
 
     controllers.overview = function () {
-
-        // no action, so far
-
     };
 
     controllers.gettingStarted = function (form) {
@@ -148,9 +141,6 @@
     };
 
 
-    /// Routing
-    ////////////////////////////////////////
-
     function prepRoute() {
         router.transitionTo(this.path);
     }
@@ -161,9 +151,6 @@
     Path.map("#/logout").to(prepRoute);
 
     Path.root("#/");
-
-    /// Initialize
-    ////////////////////////////////////////
 
     $(function () {
 
