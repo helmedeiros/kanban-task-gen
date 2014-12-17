@@ -87,7 +87,6 @@ form {
   margin-bottom: 1.5em;
 }
 
-/** FEATURE **/
 .feature {
   background-color:#4E9ACD;
   padding:5em 0 2em 0;
@@ -108,7 +107,6 @@ form {
   margin:0
 }
 
-/** HEADER **/
 .header {
   background-color: rgba(31, 31, 31, 0.95);
   padding: 15px 0;
@@ -118,7 +116,6 @@ form {
   width: 100%;
 }
 
-/** LOGO **/
 .logo {
   text-align: left;
   width: 200px;
@@ -135,7 +132,6 @@ form {
   height: 30px;
 }
 
-/** PROMO **/
 .promo {
   padding-top: 0;
   background: #000 url(../img/promo.jpg) no-repeat center;
@@ -324,7 +320,6 @@ line-height: 17px;
 
 
 
-/** Bllocks **/
 .intro {
   background-color:#0073C0;
   padding:3em 0 2em 0;
@@ -374,7 +369,6 @@ line-height: 17px;
   color: #fff;
 }
 
-/** OVERVIEW **/
 .tour {
   width: 940px;
   margin: 0 auto;
@@ -424,7 +418,6 @@ margin: auto;
   vertical-align: top;
 }
 
-/** FROM TABLE and FROM JSON **/
 .island {
   margin-top: 1em;
   margin-bottom: 1.5em;
@@ -590,7 +583,6 @@ pre[class*="language-"] {
 .sprint {
   float: right;
 }
-/* TEXT */
 .id:before {
   content:'#: ';
 }
@@ -610,7 +602,6 @@ pre[class*="language-"] {
   content:'sprint: ';
 }
 
-/** FORM **/
 #posit-form {
   box-sizing: border-box;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -688,7 +679,6 @@ border: 1px solid transparent;
 border-radius: 4px;
 }
 
-/** FORM from bootstrap **/
 .form-group {
   margin-bottom: 15px;
 }
@@ -743,7 +733,6 @@ label {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
-  /* border-radius: 4px; */
   display: block;
   position: fixed;
   top: 0;
