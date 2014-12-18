@@ -263,6 +263,39 @@ describe("AuthService", function() {
 
 });
 
+describe("Counter", function() {
+  var counter;
+
+  beforeEach(function() {
+    counter = new Counter();
+  });
+
+  it("starts at zero and bumps one per next call", function() {
+    expect(counter.next()).toEqual(1);
+    expect(counter.next()).toEqual(2);
+    expect(counter.next()).toEqual(3);
+  });
+
+  it("observe sets value to the max seen", function() {
+    counter.observe(5);
+    expect(counter.next()).toEqual(6);
+    counter.observe(2);
+    expect(counter.next()).toEqual(7);
+  });
+
+  it("observe tolerates string ids", function() {
+    counter.observe("9");
+    expect(counter.next()).toEqual(10);
+  });
+
+  it("observe ignores non-numeric input", function() {
+    counter.observe("nope");
+    counter.observe(undefined);
+    expect(counter.next()).toEqual(1);
+  });
+
+});
+
 describe("Card", function() {
 
   it("copies fields from the raw object", function() {
