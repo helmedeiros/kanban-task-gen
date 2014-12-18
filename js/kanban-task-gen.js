@@ -37,7 +37,7 @@
         alertView: alertView
     });
 
-    var count = 0;
+    var counter = new Counter();
     var page = new Page();
 
     function readJsonFile(file) {
@@ -116,8 +116,7 @@
             e.preventDefault();
             var userInfo = $(this).serializeObject();
 
-            count++;
-            userInfo.id = count;
+            userInfo.id = counter.next();
             userInfo.specialist2 = '';
             userInfo.time2 = '';
 
@@ -166,7 +165,7 @@
                 );
 
                 boardRepository.onCardAdded(function(data) {
-                    count = Math.max(count, Number(data.id) || 0);
+                    counter.observe(data.id);
                     page.parseStories({'tasks' : [data]});
                 });
 
