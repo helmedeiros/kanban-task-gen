@@ -19,10 +19,13 @@
         
         '#/gettingstarted': {
             form: 'frmGettingStarted',
-            controller: 'gettingStarted',
-            authRequired: false
+            controller: 'gettingStarted'
         },
 
+        '#/logout': {
+            form: 'frmHome',
+            controller: 'logout'
+        }
     };
 
     var controllers = {};
