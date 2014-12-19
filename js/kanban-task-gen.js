@@ -70,17 +70,12 @@
         });
 
         form.find('.bt-social').on('click', function (e) {
-
             e.preventDefault();
 
-            var $currentButton = $(this);
-            var provider = $currentButton.data('provider');
-            var socialLoginPromise;
-            
-            socialLoginPromise = authService.signInWith(provider);
-            
-            router.afterAuth(socialLoginPromise, 'gettingstarted');
+            var provider = $(this).data('provider');
+            var socialLoginPromise = authService.signInWith(provider);
 
+            router.afterAuth(socialLoginPromise, 'gettingstarted');
         });
 
     };
