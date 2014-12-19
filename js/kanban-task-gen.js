@@ -147,10 +147,11 @@
         router.transitionTo(this.path);
     }
 
-    Path.map("#/").to(prepRoute);
-    Path.map("#/overview").to(prepRoute);
-    Path.map("#/gettingstarted").to(prepRoute);
-    Path.map("#/logout").to(prepRoute);
+    for (var hash in routeMap) {
+        if (routeMap.hasOwnProperty(hash)) {
+            Path.map(hash).to(prepRoute);
+        }
+    }
 
     Path.root("#/");
 
