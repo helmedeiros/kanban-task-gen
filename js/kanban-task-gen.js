@@ -11,12 +11,12 @@
             form: 'frmHome',
             controller: 'home'
         },
-        
+
         '#/overview': {
             form: 'frmOverview',
             controller: 'overview'
         },
-        
+
         '#/gettingstarted': {
             form: 'frmGettingStarted',
             controller: 'gettingStarted'
