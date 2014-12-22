@@ -114,13 +114,12 @@
             userInfo.specialist2 = '';
             userInfo.time2 = '';
 
-            boardRepository.add(userInfo).then(function onComplete() {
+            boardRepository.add(userInfo).then(function () {
                 alertView.show({
                     title: 'Successfully saved!',
                     detail: 'You are still logged in',
                     className: 'alert-success'
                 });
-
             });
 
             $(this)[0].reset();
