@@ -60,13 +60,9 @@
             e.preventDefault();
 
             var userAndPass = $(this).serializeObject();
-
             userAndPass.password = '12345';
 
-            var loginPromise = authService.signUpAndSignIn(userAndPass);
-
-            router.afterAuth(loginPromise, 'gettingstarted');
-
+            router.afterAuth(authService.signUpAndSignIn(userAndPass), 'gettingstarted');
         });
 
         form.find('.bt-social').on('click', function (e) {
