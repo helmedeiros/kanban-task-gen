@@ -51,6 +51,11 @@ describe("Router", function() {
     expect(menu.find('.home').hasClass('active')).toBe(true);
   });
 
+  it("tolerates a route without a controller", function() {
+    routeMap['#/empty'] = { form: 'frmHome', controller: 'nope' };
+    expect(function() { router.transitionTo('#/empty'); }).not.toThrow();
+  });
+
   describe("afterAuth", function() {
     var alertView;
 
