@@ -49,6 +49,9 @@ Router.prototype = {
         this.menu.find('li').removeClass('active');
         this.menu.find('.' + formRoute.controller).addClass('active');
 
-        this.controllers[formRoute.controller](this.activeForm);
+        var controller = this.controllers[formRoute.controller];
+        if (controller) {
+            controller(this.activeForm);
+        }
     }
 };
