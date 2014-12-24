@@ -76,9 +76,6 @@
 
     };
 
-    controllers.overview = function () {
-    };
-
     controllers.gettingStarted = function (form) {
 
         var user = authService.currentUser();
