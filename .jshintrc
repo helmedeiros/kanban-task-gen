@@ -17,5 +17,8 @@
   "undef": true,
   "curly": true,
   "bitwise": true,
-  "noarg": true
+  "noarg": true,
+  "nonew": true,
+  "trailing": true,
+  "shadow": "inner"
 }
