@@ -14,5 +14,8 @@
   "noempty": true,
   "nonbsp": true,
   "freeze": true,
-  "undef": true
+  "undef": true,
+  "curly": true,
+  "bitwise": true,
+  "noarg": true
 }
