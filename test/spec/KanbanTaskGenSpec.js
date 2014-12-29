@@ -331,6 +331,10 @@ describe("Card", function() {
     expect(card.name).toBeUndefined();
   });
 
+  it("identifier returns the card id", function() {
+    expect(new Card({ id: "abc" }).identifier()).toEqual("abc");
+  });
+
 });
 
 describe("PostItRenderer", function() {
