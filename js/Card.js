@@ -10,3 +10,7 @@ function Card(rawCard) {
     this.time2 = data.time2;
     this.sprint = data.sprint;
 }
+
+Card.prototype.identifier = function() {
+    return this.id;
+};
