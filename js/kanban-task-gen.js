@@ -147,27 +147,23 @@
     Path.root("#/");
 
     $(function () {
-
         Path.listen();
 
-        authService.onChange(function globalOnAuth(authData) {
-
-            if (authData) {
-                $('#post-its').empty();
-
-                boardRepository = new BoardRepository(
-                    rootRef.child('users').child(authData.uid)
-                );
-
-                boardRepository.onCardAdded(function(data) {
-                    counter.observe(data.id);
-                    page.parseStories({'tasks' : [data]});
-                });
-
+        authService.onChange(function (authData) {
+            if (!authData) {
+                return;
             }
 
-        });
+            $('#post-its').empty();
+            boardRepository = new BoardRepository(
+                rootRef.child('users').child(authData.uid)
+            );
 
+            boardRepository.onCardAdded(function (data) {
+                counter.observe(data.id);
+                page.parseStories({ tasks: [data] });
+            });
+        });
     });
 
 }(window.jQuery, window.Firebase, window.Path));
