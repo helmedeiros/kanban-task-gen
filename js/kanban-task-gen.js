@@ -62,7 +62,11 @@
                     readJsonFile(files[i]);
                 }
             } else {
-                alert("Failed to load files");
+                alertView.show({
+                    title: '',
+                    detail: 'Failed to load files',
+                    className: 'alert-danger'
+                });
             }
         }, false);
     });
