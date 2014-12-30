@@ -53,6 +53,19 @@
         r.readAsText(file);
     }
 
+    $(function() {
+        $('#jsonFile')[0].addEventListener('change', function(evt) {
+            var files = evt.target.files;
+
+            if (files) {
+                for (var i = 0; i < files.length; i++) {
+                    readJsonFile(files[i]);
+                }
+            } else {
+                alert("Failed to load files");
+            }
+        }, false);
+    });
 
     controllers.home = function (form) {
 
@@ -89,19 +102,6 @@
                 className: 'alert-info'
             });
         }
-
-        $('#jsonFile')[0].addEventListener('change', function(evt) {
-            var files = evt.target.files;
-
-            if (files) {
-                for (var i = 0; i < files.length; i++) {
-                    readJsonFile(files[i]);
-                }
-
-            } else {
-                alert("Failed to load files");
-            }
-        }, false);
 
         form.on('submit', function (e) {
             e.preventDefault();
