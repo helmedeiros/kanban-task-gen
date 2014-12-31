@@ -3,7 +3,7 @@
 @font-face {
   font-family:'octicons';
   src:url("../fonts/octicons.eot");
-  src:url("../fonts/octicons.eot#iefix") format("embedded-opentype"), url("../fonts/octicons.woff") format("woff"), url("../fonts/octicons.ttf") format("truetype"), url("../fonts/octicons.svg#octicons") format("svg");
+  src:url("../fonts/octicons.eot?#iefix") format("embedded-opentype"), url("../fonts/octicons.woff") format("woff"), url("../fonts/octicons.ttf") format("truetype"), url("../fonts/octicons.svg#octicons") format("svg");
   font-weight:normal;
   font-style:normal;
 }
@@ -108,6 +108,7 @@ form {
 }
 
 .header {
+  background-color: #1f1f1f;
   background-color: rgba(31, 31, 31, 0.95);
   padding: 15px 0;
   position: fixed;
@@ -125,6 +126,7 @@ form {
 .logo a {
   display: block;
   text-align: center;
+  direction: ltr;
   text-indent: -9999px;
   overflow: hidden;
   background: url(../img/logo-header.png) no-repeat left;
