@@ -1,1 +1,1 @@
---ignore=compatible-vendor-prefixes,box-model,box-sizing,floats,font-sizes,gradients,regex-selectors,unique-headings
+--ignore=compatible-vendor-prefixes,box-model,box-sizing,floats,font-sizes,gradients,ids,qualified-headings,regex-selectors,unique-headings
