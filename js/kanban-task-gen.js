@@ -43,6 +43,13 @@
     var counter = new Counter();
     var page = new Page();
 
+    var gettingStartedController = new GettingStartedController({
+        authService: authService,
+        alertView: alertView,
+        counter: counter,
+        getBoardRepository: function () { return boardRepository; }
+    });
+
     function readJsonFile(file) {
         var r = new FileReader();
         r.onload = function(e) {
@@ -94,38 +101,7 @@
     };
 
     controllers.gettingStarted = function (form) {
-
-        var user = authService.currentUser();
-
-        if (!user) {
-            authService.signInAnonymously();
-
-            alertView.show({
-                title: '',
-                detail: 'Log in to store your post-its',
-                className: 'alert-info'
-            });
-        }
-
-        form.on('submit', function (e) {
-            e.preventDefault();
-            var userInfo = $(this).serializeObject();
-
-            userInfo.id = counter.next();
-            userInfo.specialist2 = '';
-            userInfo.time2 = '';
-
-            boardRepository.add(userInfo).then(function () {
-                alertView.show({
-                    title: 'Successfully saved!',
-                    detail: 'You are still logged in',
-                    className: 'alert-success'
-                });
-            });
-
-            $(this)[0].reset();
-        });
-
+        gettingStartedController.attach(form);
     };
 
 
