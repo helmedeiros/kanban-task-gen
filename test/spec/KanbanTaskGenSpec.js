@@ -268,6 +268,55 @@ describe("AuthService", function() {
 
 });
 
+describe("GettingStartedController", function() {
+  var controller;
+  var authService;
+  var alertView;
+  var counter;
+  var boardRepository;
+  var form;
+
+  beforeEach(function() {
+    authService = {
+      currentUser: jasmine.createSpy('currentUser').and.returnValue(null),
+      signInAnonymously: jasmine.createSpy('signInAnonymously')
+    };
+    alertView = { show: jasmine.createSpy('show') };
+    counter = { next: jasmine.createSpy('next').and.returnValue(7) };
+    boardRepository = { add: jasmine.createSpy('add').and.returnValue($.Deferred().promise()) };
+    form = $('<form></form>');
+    form.serializeObject = function() { return { name: 'A' }; };
+
+    controller = new GettingStartedController({
+      authService: authService,
+      alertView: alertView,
+      counter: counter,
+      getBoardRepository: function() { return boardRepository; }
+    });
+  });
+
+  it("signs in anonymously when no user is present", function() {
+    controller.attach(form);
+    expect(authService.signInAnonymously).toHaveBeenCalled();
+    expect(alertView.show).toHaveBeenCalled();
+  });
+
+  it("skips the anonymous sign-in when a user is already present", function() {
+    authService.currentUser.and.returnValue({ uid: 'u-1' });
+    controller.attach(form);
+    expect(authService.signInAnonymously).not.toHaveBeenCalled();
+  });
+
+  it("assigns counter.next() to userInfo.id on submit", function() {
+    spyOn($.fn, 'serializeObject').and.returnValue({ name: 'A' });
+    controller.attach(form);
+    form.trigger('submit');
+    expect(counter.next).toHaveBeenCalled();
+    expect(boardRepository.add.calls.mostRecent().args[0].id).toEqual(7);
+  });
+
+});
+
 describe("Counter", function() {
   var counter;
 
