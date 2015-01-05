@@ -268,6 +268,43 @@ describe("AuthService", function() {
 
 });
 
+describe("HomeController", function() {
+  var controller;
+  var authService;
+  var router;
+  var form;
+
+  beforeEach(function() {
+    authService = {
+      signUpAndSignIn: jasmine.createSpy('signUpAndSignIn').and.returnValue('signup-promise'),
+      signInWith: jasmine.createSpy('signInWith').and.returnValue('social-promise')
+    };
+    router = { afterAuth: jasmine.createSpy('afterAuth') };
+    form = $('<form><button class="bt-social" data-provider="github"></button></form>');
+    form.serializeObject = function() { return { email: 'a@b.com' }; };
+
+    controller = new HomeController({
+      authService: authService,
+      router: router
+    });
+    controller.attach(form);
+  });
+
+  it("signs up and routes after the e-mail submit", function() {
+    spyOn($.fn, 'serializeObject').and.returnValue({ email: 'a@b.com' });
+    form.trigger('submit');
+    expect(authService.signUpAndSignIn).toHaveBeenCalled();
+    expect(router.afterAuth).toHaveBeenCalledWith('signup-promise', 'gettingstarted');
+  });
+
+  it("signs in with the provider after a social click", function() {
+    form.find('.bt-social').trigger('click');
+    expect(authService.signInWith).toHaveBeenCalledWith('github');
+    expect(router.afterAuth).toHaveBeenCalledWith('social-promise', 'gettingstarted');
+  });
+
+});
+
 describe("GettingStartedController", function() {
   var controller;
   var authService;
