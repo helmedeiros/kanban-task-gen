@@ -43,6 +43,11 @@
     var counter = new Counter();
     var page = new Page();
 
+    var homeController = new HomeController({
+        authService: authService,
+        router: router
+    });
+
     var gettingStartedController = new GettingStartedController({
         authService: authService,
         alertView: alertView,
@@ -79,25 +84,7 @@
     });
 
     controllers.home = function (form) {
-
-        form.on('submit', function (e) {
-            e.preventDefault();
-
-            var userAndPass = $(this).serializeObject();
-            userAndPass.password = '12345';
-
-            router.afterAuth(authService.signUpAndSignIn(userAndPass), 'gettingstarted');
-        });
-
-        form.find('.bt-social').on('click', function (e) {
-            e.preventDefault();
-
-            var provider = $(this).data('provider');
-            var socialLoginPromise = authService.signInWith(provider);
-
-            router.afterAuth(socialLoginPromise, 'gettingstarted');
-        });
-
+        homeController.attach(form);
     };
 
     controllers.gettingStarted = function (form) {
