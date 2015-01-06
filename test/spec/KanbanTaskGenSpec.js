@@ -268,6 +268,38 @@ describe("AuthService", function() {
 
 });
 
+describe("JsonUpload", function() {
+  var upload;
+  var page;
+  var alertView;
+
+  beforeEach(function() {
+    page = { parseStories: jasmine.createSpy('parseStories') };
+    alertView = { show: jasmine.createSpy('show') };
+    upload = new JsonUpload({
+      page: page,
+      alertView: alertView,
+      fileInputSelector: '#nope-no-such-input'
+    });
+  });
+
+  it("attach is a no-op when the file input is absent", function() {
+    expect(function() { upload.attach(); }).not.toThrow();
+  });
+
+  it("readFile parses JSON contents and forwards to page.parseStories", function() {
+    var captured;
+    spyOn(window, 'FileReader').and.returnValue({
+      readAsText: function() { this.onload({ target: { result: '{"tasks":{"t1":{"id":"1"}}}' } }); },
+      onload: null
+    });
+    page.parseStories.and.callFake(function(data) { captured = data; });
+    upload.readFile({});
+    expect(captured.tasks.t1.id).toEqual('1');
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;
