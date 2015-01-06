@@ -55,32 +55,14 @@
         getBoardRepository: function () { return boardRepository; }
     });
 
-    function readJsonFile(file) {
-        var r = new FileReader();
-        r.onload = function(e) {
-            var contents = JSON.parse(e.target.result);
-            page.parseStories(contents);
-            $("body").scrollTop($('#post-its').position().top);
-        };
-        r.readAsText(file);
-    }
+    var jsonUpload = new JsonUpload({
+        page: page,
+        alertView: alertView,
+        fileInputSelector: '#jsonFile'
+    });
 
-    $(function() {
-        $('#jsonFile')[0].addEventListener('change', function(evt) {
-            var files = evt.target.files;
-
-            if (files) {
-                for (var i = 0; i < files.length; i++) {
-                    readJsonFile(files[i]);
-                }
-            } else {
-                alertView.show({
-                    title: '',
-                    detail: 'Failed to load files',
-                    className: 'alert-danger'
-                });
-            }
-        }, false);
+    $(function () {
+        jsonUpload.attach();
     });
 
     controllers.home = function (form) {
