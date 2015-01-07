@@ -4,8 +4,6 @@
     var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
     var authService = new AuthService(rootRef);
 
-    var boardRepository;
-
     var routeMap = {
         '#/': {
             form: 'frmHome',
@@ -43,6 +41,15 @@
     var counter = new Counter();
     var page = new Page();
 
+    var boardSession = new BoardSession({
+        userRefFor: function (authData) {
+            return rootRef.child('users').child(authData.uid);
+        },
+        page: page,
+        counter: counter,
+        target: $('#post-its')
+    });
+
     var homeController = new HomeController({
         authService: authService,
         router: router
@@ -52,7 +59,7 @@
         authService: authService,
         alertView: alertView,
         counter: counter,
-        getBoardRepository: function () { return boardRepository; }
+        getBoardRepository: function () { return boardSession.repository; }
     });
 
     var jsonUpload = new JsonUpload({
@@ -95,19 +102,9 @@
         Path.listen();
 
         authService.onChange(function (authData) {
-            if (!authData) {
-                return;
+            if (authData) {
+                boardSession.start(authData);
             }
-
-            $('#post-its').empty();
-            boardRepository = new BoardRepository(
-                rootRef.child('users').child(authData.uid)
-            );
-
-            boardRepository.onCardAdded(function (data) {
-                counter.observe(data.id);
-                page.parseStories({ tasks: [data] });
-            });
         });
     });
 
