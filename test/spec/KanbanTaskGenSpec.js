@@ -268,6 +268,56 @@ describe("AuthService", function() {
 
 });
 
+describe("BoardSession", function() {
+  var session;
+  var target;
+  var page;
+  var counter;
+  var userRef;
+  var userRefForCalls;
+
+  beforeEach(function() {
+    target = $('<div></div>');
+    page = { parseStories: jasmine.createSpy('parseStories') };
+    counter = { observe: jasmine.createSpy('observe') };
+    userRefForCalls = [];
+    userRef = {
+      push: jasmine.createSpy('push'),
+      on: jasmine.createSpy('on'),
+      once: jasmine.createSpy('once')
+    };
+    session = new BoardSession({
+      userRefFor: function(authData) { userRefForCalls.push(authData); return userRef; },
+      page: page,
+      counter: counter,
+      target: target
+    });
+  });
+
+  it("empties the target on start", function() {
+    target.append('<span></span>');
+    session.start({ uid: 'u-1' });
+    expect(target.children().length).toEqual(0);
+  });
+
+  it("constructs a repository from the user ref", function() {
+    session.start({ uid: 'u-1' });
+    expect(userRefForCalls.length).toEqual(1);
+    expect(userRefForCalls[0].uid).toEqual('u-1');
+    expect(session.repository).toBeDefined();
+  });
+
+  it("forwards onCardAdded data to counter.observe and page.parseStories", function() {
+    userRef.on.and.callFake(function(event, cb) {
+      cb({ val: function() { return { id: 5, name: 'X' }; } });
+    });
+    session.start({ uid: 'u-1' });
+    expect(counter.observe).toHaveBeenCalledWith(5);
+    expect(page.parseStories).toHaveBeenCalled();
+  });
+
+});
+
 describe("JsonUpload", function() {
   var upload;
   var page;
