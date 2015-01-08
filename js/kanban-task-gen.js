@@ -1,4 +1,4 @@
-(function (jQuery, Firebase, Path) {
+(function (Firebase, Path) {
     "use strict";
 
     var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
@@ -84,4 +84,4 @@
         });
     });
 
-}(window.jQuery, window.Firebase, window.Path));
+}(window.Firebase, window.Path));
