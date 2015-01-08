@@ -5,25 +5,10 @@
     var authService = new AuthService(rootRef);
 
     var routeMap = {
-        '#/': {
-            form: 'frmHome',
-            controller: 'home'
-        },
-
-        '#/overview': {
-            form: 'frmOverview',
-            controller: 'overview'
-        },
-
-        '#/gettingstarted': {
-            form: 'frmGettingStarted',
-            controller: 'gettingStarted'
-        },
-
-        '#/logout': {
-            form: 'frmHome',
-            controller: 'logout'
-        }
+        '#/':              { form: 'frmHome',           controller: 'home' },
+        '#/overview':      { form: 'frmOverview',       controller: 'overview' },
+        '#/gettingstarted':{ form: 'frmGettingStarted', controller: 'gettingStarted' },
+        '#/logout':        { form: 'frmHome',           controller: 'logout' }
     };
 
     var controllers = {};
