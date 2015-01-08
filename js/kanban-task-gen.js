@@ -72,18 +72,9 @@
         jsonUpload.attach();
     });
 
-    controllers.home = function (form) {
-        homeController.attach(form);
-    };
-
-    controllers.gettingStarted = function (form) {
-        gettingStartedController.attach(form);
-    };
-
-
-    controllers.logout = function () {
-        authService.signOut();
-    };
+    controllers.home = function (form) { homeController.attach(form); };
+    controllers.gettingStarted = function (form) { gettingStartedController.attach(form); };
+    controllers.logout = function () { authService.signOut(); };
 
 
     function prepRoute() {
