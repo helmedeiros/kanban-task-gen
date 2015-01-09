@@ -13,6 +13,6 @@ BoardSession.prototype.start = function(authData) {
     var counter = this.counter;
     this.repository.onCardAdded(function(data) {
         counter.observe(data.id);
-        page.parseStories({ tasks: [data] });
+        page.render({ tasks: [data] });
     });
 };

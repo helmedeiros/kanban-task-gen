@@ -278,7 +278,7 @@ describe("BoardSession", function() {
 
   beforeEach(function() {
     target = $('<div></div>');
-    page = { parseStories: jasmine.createSpy('parseStories') };
+    page = { render: jasmine.createSpy('render') };
     counter = { observe: jasmine.createSpy('observe') };
     userRefForCalls = [];
     userRef = {
@@ -307,13 +307,13 @@ describe("BoardSession", function() {
     expect(session.repository).toBeDefined();
   });
 
-  it("forwards onCardAdded data to counter.observe and page.parseStories", function() {
+  it("forwards onCardAdded data to counter.observe and page.render", function() {
     userRef.on.and.callFake(function(event, cb) {
       cb({ val: function() { return { id: 5, name: 'X' }; } });
     });
     session.start({ uid: 'u-1' });
     expect(counter.observe).toHaveBeenCalledWith(5);
-    expect(page.parseStories).toHaveBeenCalled();
+    expect(page.render).toHaveBeenCalled();
   });
 
 });
@@ -324,7 +324,7 @@ describe("JsonUpload", function() {
   var alertView;
 
   beforeEach(function() {
-    page = { parseStories: jasmine.createSpy('parseStories') };
+    page = { render: jasmine.createSpy('render') };
     alertView = { show: jasmine.createSpy('show') };
     upload = new JsonUpload({
       page: page,
@@ -337,13 +337,13 @@ describe("JsonUpload", function() {
     expect(function() { upload.attach(); }).not.toThrow();
   });
 
-  it("readFile parses JSON contents and forwards to page.parseStories", function() {
+  it("readFile parses JSON contents and forwards to page.render", function() {
     var captured;
     spyOn(window, 'FileReader').and.returnValue({
       readAsText: function() { this.onload({ target: { result: '{"tasks":{"t1":{"id":"1"}}}' } }); },
       onload: null
     });
-    page.parseStories.and.callFake(function(data) { captured = data; });
+    page.render.and.callFake(function(data) { captured = data; });
     upload.readFile({});
     expect(captured.tasks.t1.id).toEqual('1');
   });
@@ -578,7 +578,7 @@ describe("Page", function() {
 
   });
 
-  describe("parseStories", function() {
+  describe("render", function() {
     var target;
 
     beforeEach(function() {
@@ -588,7 +588,7 @@ describe("Page", function() {
 
     it("renders one post-it per card", function() {
       spyOn(page.renderer, "render").and.returnValue($('<div></div>'));
-      page.parseStories({
+      page.render({
         tasks: {
           a: { id: "1" },
           b: { id: "2" },
@@ -599,7 +599,7 @@ describe("Page", function() {
     });
 
     it("appends rendered post-its to its target", function() {
-      page.parseStories({
+      page.render({
         tasks: {
           a: { id: "1", name: "First" },
           b: { id: "2", name: "Second" }
@@ -610,7 +610,7 @@ describe("Page", function() {
 
     it("does nothing when there are no cards", function() {
       spyOn(page.renderer, "render");
-      page.parseStories({});
+      page.render({});
       expect(page.renderer.render).not.toHaveBeenCalled();
       expect(target.children().length).toEqual(0);
     });

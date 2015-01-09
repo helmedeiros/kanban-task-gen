@@ -30,7 +30,7 @@ JsonUpload.prototype.readFile = function(file) {
     var self = this;
     var reader = new FileReader();
     reader.onload = function(e) {
-        self.page.parseStories(JSON.parse(e.target.result));
+        self.page.render(JSON.parse(e.target.result));
         $("body").scrollTop($('#post-its').position().top);
     };
     reader.readAsText(file);

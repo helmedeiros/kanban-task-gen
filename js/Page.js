@@ -17,7 +17,7 @@ Page.prototype = {
         return cards;
     },
 
-    parseStories: function(_data) {
+    render: function(_data) {
         var CARDS_PER_PAGE = 8;
         var cards = this.parseCardSet(_data);
         var cont = 0;
