@@ -53,14 +53,9 @@
         fileInputSelector: '#jsonFile'
     });
 
-    $(function () {
-        jsonUpload.attach();
-    });
-
     controllers.home = function (form) { homeController.attach(form); };
     controllers.gettingStarted = function (form) { gettingStartedController.attach(form); };
     controllers.logout = function () { authService.signOut(); };
-
 
     function prepRoute() {
         router.transitionTo(this.path);
@@ -75,6 +70,7 @@
     Path.root("#/");
 
     $(function () {
+        jsonUpload.attach();
         Path.listen();
 
         authService.onChange(function (authData) {
