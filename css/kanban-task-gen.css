@@ -743,3 +743,29 @@ label {
   opacity: 0.95;
   width: 100%;
 }
+@media print {
+  .header,
+  .main-nav,
+  .promo,
+  .intro,
+  .tour,
+  .feature,
+  .holder,
+  #alert,
+  #frmHome,
+  #frmOverview {
+    display: none;
+  }
+  body, #frmGettingStarted, #post-its {
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+  #post-its {
+    width: 100%;
+  }
+  .post-it {
+    border: 1px solid #000;
+    page-break-inside: avoid;
+  }
+}
