@@ -615,6 +615,22 @@ describe("Page", function() {
       expect(target.children().length).toEqual(0);
     });
 
+    it("marks the 7th and 8th cards of every block of 8 as page-end", function() {
+      var tasks = {};
+      for (var i = 1; i <= 16; i++) {
+        tasks['k' + i] = { id: String(i) };
+      }
+      page.render({ tasks: tasks });
+      var postIts = target.children('.post-it');
+      expect(postIts.length).toEqual(16);
+      [0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 13].forEach(function(idx) {
+        expect($(postIts[idx]).hasClass('page-end')).toBe(false);
+      });
+      [6, 7, 14, 15].forEach(function(idx) {
+        expect($(postIts[idx]).hasClass('page-end')).toBe(true);
+      });
+    });
+
   });
 
 });
