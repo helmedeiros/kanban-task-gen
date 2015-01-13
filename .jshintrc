@@ -20,5 +20,7 @@
   "noarg": true,
   "nonew": true,
   "trailing": true,
-  "shadow": "inner"
+  "shadow": "inner",
+  "maxcomplexity": 10,
+  "maxparams": 5
 }
