@@ -9,6 +9,7 @@ function Card(rawCard) {
     this.specialist2 = data.specialist2;
     this.time2 = data.time2;
     this.sprint = data.sprint;
+    this.status = data.status || 'todo';
 }
 
 Card.prototype.identifier = function() {
