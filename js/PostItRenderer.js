@@ -4,6 +4,7 @@ PostItRenderer.prototype = {
 
     render: function(card) {
         var postIt = $('<div class="post-it"></div>');
+        postIt.addClass('status-' + card.status);
         postIt.attr('data-card-id', card.identifier());
         var column1 = $('<div class="col col1"></div>');
         var column2 = $('<div class="col col2"></div>');
