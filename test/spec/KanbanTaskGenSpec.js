@@ -503,6 +503,15 @@ describe("Card", function() {
     expect(new Card({ id: "abc" }).identifier()).toEqual("abc");
   });
 
+  it("status defaults to 'todo' when missing", function() {
+    expect(new Card().status).toEqual('todo');
+    expect(new Card({ id: '1' }).status).toEqual('todo');
+  });
+
+  it("status uses the input value when present", function() {
+    expect(new Card({ id: '1', status: 'doing' }).status).toEqual('doing');
+  });
+
 });
 
 describe("PostItRenderer", function() {
@@ -529,6 +538,11 @@ describe("PostItRenderer", function() {
 
   it("tags the root with data-card-id", function() {
     expect(renderer.render(sampleCard).attr("data-card-id")).toEqual(sampleCard.id);
+  });
+
+  it("adds a status- class derived from the card status", function() {
+    var doing = new Card({ id: '1', status: 'doing' });
+    expect(renderer.render(doing).hasClass('status-doing')).toBe(true);
   });
 
   it("places id, priority, name and sprint in the card", function() {
