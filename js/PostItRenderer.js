@@ -22,6 +22,7 @@ PostItRenderer.prototype = {
         column3.append($('<span class="time"><span class="time-number">' + card.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
 
         bottom.append($('<span class="sprint">' + card.sprint + '</span>'));
+        bottom.append($('<span class="status">' + card.status + '</span>'));
 
         postIt.append(column1);
         postIt.append(column2);

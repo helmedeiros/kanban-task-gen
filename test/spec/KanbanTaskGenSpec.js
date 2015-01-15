@@ -545,6 +545,11 @@ describe("PostItRenderer", function() {
     expect(renderer.render(doing).hasClass('status-doing')).toBe(true);
   });
 
+  it("renders a .status label with the card status text", function() {
+    var doing = new Card({ id: '1', status: 'doing' });
+    expect(renderer.render(doing).find('.status').text()).toEqual('doing');
+  });
+
   it("places id, priority, name and sprint in the card", function() {
     var postIt = renderer.render(sampleCard);
     expect(postIt.find(".id").text()).toEqual(sampleCard.id);
