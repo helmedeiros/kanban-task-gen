@@ -491,6 +491,16 @@ pre[class*="language-"] {
   float: left;
   width: 45%;
   border: 1px solid #000;
+  border-left-width: 6px;
+}
+.post-it.status-todo {
+  border-left-color: #999;
+}
+.post-it.status-doing {
+  border-left-color: #f0a500;
+}
+.post-it.status-done {
+  border-left-color: #4caf50;
 }
 .page-end {
   margin-bottom: 10px;
