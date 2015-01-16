@@ -502,6 +502,21 @@ pre[class*="language-"] {
 .post-it.status-done {
   border-left-color: #4caf50;
 }
+.post-it .status {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: #fff;
+  border-radius: 3px;
+  background: #999;
+}
+.post-it.status-doing .status {
+  background: #f0a500;
+}
+.post-it.status-done .status {
+  background: #4caf50;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;
