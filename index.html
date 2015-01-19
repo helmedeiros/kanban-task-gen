@@ -27,6 +27,7 @@
           <li class="home"><a href="#/" class="home-link">Home</a></li>
           <li class="overview"><a href="#/overview" class="overview-link">Overview</a></li>
           <li class="gettingStarted"><a href="#/gettingstarted" class="gettingstarted-link">Getting started</a></li>
+          <li class="board"><a href="#/board" class="board-link">Board</a></li>
           <li><a href="http://heliomedeiros.com/blog/" class="blog-link" target="_blank">Blog</a></li>
         </ul>
         <div class="login">
@@ -186,6 +187,31 @@
           </div>
         </div>
         <div id="post-its"></div>
+      </form>
+
+      <form id="frmBoard" role="form">
+        <header class="feature">
+          <div class="container container--wide">
+            <h1 class="feature__title">Board</h1>
+            <p class="feature__subtitle">Your kanban, by status.</p>
+          </div>
+        </header>
+        <div class="container--wide tour block main" role="main">
+          <div class="board-columns">
+            <section class="board-column" data-status="todo">
+              <h2 class="board-column-title">To do</h2>
+              <div class="board-column-cards"></div>
+            </section>
+            <section class="board-column" data-status="doing">
+              <h2 class="board-column-title">Doing</h2>
+              <div class="board-column-cards"></div>
+            </section>
+            <section class="board-column" data-status="done">
+              <h2 class="board-column-title">Done</h2>
+              <div class="board-column-cards"></div>
+            </section>
+          </div>
+        </div>
       </form>
 
     </article>

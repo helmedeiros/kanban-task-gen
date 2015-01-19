@@ -8,6 +8,7 @@
         '#/':              { form: 'frmHome',           controller: 'home' },
         '#/overview':      { form: 'frmOverview',       controller: 'overview' },
         '#/gettingstarted':{ form: 'frmGettingStarted', controller: 'gettingStarted' },
+        '#/board':         { form: 'frmBoard',          controller: 'board' },
         '#/logout':        { form: 'frmHome',           controller: 'logout' }
     };
 
