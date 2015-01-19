@@ -517,6 +517,34 @@ pre[class*="language-"] {
 .post-it.status-done .status {
   background: #4caf50;
 }
+.board-columns {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+.board-column {
+  flex: 1;
+  background: #f5f5f5;
+  border-radius: 4px;
+  padding: 12px;
+  min-height: 280px;
+}
+.board-column-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: #444;
+  text-transform: uppercase;
+}
+.board-column-cards {
+  min-height: 200px;
+}
+.board-column .post-it {
+  float: none;
+  width: auto;
+  margin: 0 0 10px 0;
+  background: #fff;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;
