@@ -434,6 +434,13 @@ describe("GettingStartedController", function() {
     expect(boardRepository.add.calls.mostRecent().args[0].id).toEqual(7);
   });
 
+  it("preserves status from the serialized form values", function() {
+    spyOn($.fn, 'serializeObject').and.returnValue({ name: 'A', status: 'doing' });
+    controller.attach(form);
+    form.trigger('submit');
+    expect(boardRepository.add.calls.mostRecent().args[0].status).toEqual('doing');
+  });
+
 });
 
 describe("Counter", function() {
