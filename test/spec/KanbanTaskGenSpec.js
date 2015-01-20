@@ -350,6 +350,58 @@ describe("JsonUpload", function() {
 
 });
 
+describe("BoardController", function() {
+  var controller;
+  var renderer;
+  var repository;
+  var form;
+
+  beforeEach(function() {
+    renderer = { render: function(card) { return $('<div class="post-it" data-card-id="' + card.id + '"></div>'); } };
+    repository = null;
+    form = $(
+      '<form>' +
+      '<section class="board-column" data-status="todo"><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="doing"><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="done"><div class="board-column-cards"></div></section>' +
+      '</form>'
+    );
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; }
+    });
+  });
+
+  it("empties the columns even when the repository is missing", function() {
+    form.find('.board-column[data-status="todo"] .board-column-cards').append('<div class="post-it"></div>');
+    controller.attach(form);
+    expect(form.find('.board-column-cards .post-it').length).toEqual(0);
+  });
+
+  it("distributes cards to columns by status", function(done) {
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({
+          a: { id: '1', status: 'todo' },
+          b: { id: '2', status: 'doing' },
+          c: { id: '3', status: 'done' },
+          d: { id: '4', status: 'doing' }
+        });
+        return deferred.promise();
+      }
+    };
+    controller.attach(form);
+    setTimeout(function() {
+      expect(form.find('.board-column[data-status="todo"] .post-it').length).toEqual(1);
+      expect(form.find('.board-column[data-status="doing"] .post-it').length).toEqual(2);
+      expect(form.find('.board-column[data-status="done"] .post-it').length).toEqual(1);
+      done();
+    }, 0);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;
