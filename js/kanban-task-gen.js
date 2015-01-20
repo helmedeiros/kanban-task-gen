@@ -48,6 +48,11 @@
         getBoardRepository: function () { return boardSession.repository; }
     });
 
+    var boardController = new BoardController({
+        renderer: new PostItRenderer(),
+        getBoardRepository: function () { return boardSession.repository; }
+    });
+
     var jsonUpload = new JsonUpload({
         page: page,
         alertView: alertView,
@@ -56,6 +61,7 @@
 
     controllers.home = function (form) { homeController.attach(form); };
     controllers.gettingStarted = function (form) { gettingStartedController.attach(form); };
+    controllers.board = function (form) { boardController.attach(form); };
     controllers.logout = function () { authService.signOut(); };
 
     function prepRoute() {
