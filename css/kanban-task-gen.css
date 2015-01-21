@@ -539,6 +539,14 @@ pre[class*="language-"] {
 .board-column-cards {
   min-height: 200px;
 }
+.board-column-cards:empty:before {
+  content: "No cards yet";
+  display: block;
+  text-align: center;
+  color: #aaa;
+  font-style: italic;
+  padding-top: 60px;
+}
 .board-column .post-it {
   float: none;
   width: auto;
