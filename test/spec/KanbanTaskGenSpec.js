@@ -361,9 +361,9 @@ describe("BoardController", function() {
     repository = null;
     form = $(
       '<form>' +
-      '<section class="board-column" data-status="todo"><div class="board-column-cards"></div></section>' +
-      '<section class="board-column" data-status="doing"><div class="board-column-cards"></div></section>' +
-      '<section class="board-column" data-status="done"><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="todo"><h2 class="board-column-title">To do</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="doing"><h2 class="board-column-title">Doing</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="done"><h2 class="board-column-title">Done</h2><div class="board-column-cards"></div></section>' +
       '</form>'
     );
     controller = new BoardController({
@@ -396,6 +396,27 @@ describe("BoardController", function() {
       expect(form.find('.board-column[data-status="todo"] .post-it').length).toEqual(1);
       expect(form.find('.board-column[data-status="doing"] .post-it').length).toEqual(2);
       expect(form.find('.board-column[data-status="done"] .post-it').length).toEqual(1);
+      done();
+    }, 0);
+  });
+
+  it("appends a card count to each column title", function(done) {
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({
+          a: { id: '1', status: 'todo' },
+          b: { id: '2', status: 'doing' },
+          c: { id: '3', status: 'doing' }
+        });
+        return deferred.promise();
+      }
+    };
+    controller.attach(form);
+    setTimeout(function() {
+      expect(form.find('.board-column[data-status="todo"] .board-column-title').text()).toEqual('To do (1)');
+      expect(form.find('.board-column[data-status="doing"] .board-column-title').text()).toEqual('Doing (2)');
+      expect(form.find('.board-column[data-status="done"] .board-column-title').text()).toEqual('Done (0)');
       done();
     }, 0);
   });
