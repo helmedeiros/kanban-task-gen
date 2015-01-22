@@ -15,11 +15,12 @@ BoardController.prototype.attach = function(form) {
 
     repo.getAll().then(function(rawCards) {
         if (rawCards) {
-            for (var key in rawCards) {
-                if (rawCards.hasOwnProperty(key)) {
-                    var card = new Card(rawCards[key]);
+            for (var fbKey in rawCards) {
+                if (rawCards.hasOwnProperty(fbKey)) {
+                    var card = new Card(rawCards[fbKey]);
                     var column = form.find('.board-column[data-status="' + card.status + '"] .board-column-cards');
-                    column.append(renderer.render(card));
+                    var postIt = renderer.render(card).attr('data-fb-key', fbKey);
+                    column.append(postIt);
                 }
             }
         }
