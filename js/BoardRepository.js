@@ -24,5 +24,13 @@ BoardRepository.prototype = {
             deferred.resolve(snap.val());
         });
         return deferred.promise();
+    },
+
+    update: function(fbKey, changes) {
+        var deferred = $.Deferred();
+        this.userRef.child(fbKey).update(changes, function() {
+            deferred.resolve();
+        });
+        return deferred.promise();
     }
 };

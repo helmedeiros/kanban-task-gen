@@ -144,7 +144,8 @@ describe("BoardRepository", function() {
     userRef = {
       push: jasmine.createSpy("push"),
       on: jasmine.createSpy("on"),
-      once: jasmine.createSpy("once")
+      once: jasmine.createSpy("once"),
+      child: jasmine.createSpy("child")
     };
     repo = new BoardRepository(userRef);
   });
@@ -175,6 +176,14 @@ describe("BoardRepository", function() {
     repo.getAll();
     expect(userRef.once).toHaveBeenCalled();
     expect(userRef.once.calls.mostRecent().args[0]).toEqual('value');
+  });
+
+  it("update merges changes into the child of fbKey", function() {
+    var childRef = { update: jasmine.createSpy('childUpdate') };
+    userRef.child.and.returnValue(childRef);
+    repo.update('fb-1', { status: 'doing' });
+    expect(userRef.child).toHaveBeenCalledWith('fb-1');
+    expect(childRef.update.calls.mostRecent().args[0]).toEqual({ status: 'doing' });
   });
 
 });
