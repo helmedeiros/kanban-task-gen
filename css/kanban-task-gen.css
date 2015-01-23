@@ -517,6 +517,20 @@ pre[class*="language-"] {
 .post-it.status-done .status {
   background: #4caf50;
 }
+.board-add-link {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 6px 14px;
+  background: #4E9ACD;
+  color: #fff;
+  border-radius: 15px;
+  font-size: 14px;
+}
+.board-add-link:hover {
+  background: #3a85b9;
+  color: #fff;
+  text-decoration: none;
+}
 .board-columns {
   display: flex;
   gap: 16px;
