@@ -430,6 +430,46 @@ describe("BoardController", function() {
     }, 0);
   });
 
+  it("changeStatus delegates to repository.update", function() {
+    repository = { update: jasmine.createSpy('update') };
+    controller.changeStatus('fb-1', 'done');
+    expect(repository.update).toHaveBeenCalledWith('fb-1', { status: 'done' });
+  });
+
+  it("dropping a card into a column moves it and persists the new status", function(done) {
+    var updates = [];
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({
+          'fb-1': { id: '1', status: 'todo' }
+        });
+        return deferred.promise();
+      },
+      update: function(key, changes) { updates.push({ key: key, changes: changes }); }
+    };
+    controller.attach(form);
+    setTimeout(function() {
+      var dataTransfer = {
+        _data: {},
+        setData: function(k, v) { this._data[k] = v; },
+        getData: function(k) { return this._data[k]; }
+      };
+      var dragstart = $.Event('dragstart');
+      dragstart.originalEvent = { dataTransfer: dataTransfer };
+      form.find('.post-it[data-fb-key="fb-1"]').trigger(dragstart);
+
+      var drop = $.Event('drop');
+      drop.originalEvent = { dataTransfer: dataTransfer };
+      form.find('.board-column[data-status="done"]').trigger(drop);
+
+      expect(form.find('.board-column[data-status="done"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
+      expect(form.find('.board-column[data-status="todo"] .post-it').length).toEqual(0);
+      expect(updates).toEqual([{ key: 'fb-1', changes: { status: 'done' } }]);
+      done();
+    }, 0);
+  });
+
 });
 
 describe("HomeController", function() {
