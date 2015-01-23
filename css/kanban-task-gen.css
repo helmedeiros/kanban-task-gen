@@ -553,6 +553,16 @@ pre[class*="language-"] {
   margin: 0 0 10px 0;
   background: #fff;
 }
+.board-column .post-it[draggable] {
+  cursor: grab;
+}
+.board-column .post-it.dragging {
+  opacity: 0.5;
+}
+.board-column.drag-over {
+  outline: 2px dashed #4E9ACD;
+  background: #e8f1f9;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;

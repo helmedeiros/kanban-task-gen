@@ -38,11 +38,28 @@ BoardController.prototype.changeStatus = function(fbKey, newStatus) {
 };
 
 function bindDragAndDrop(form, onMove) {
-    form.off('dragstart.board dragover.board drop.board');
+    form.off('dragstart.board dragend.board dragenter.board dragleave.board dragover.board drop.board');
 
     form.on('dragstart.board', '.post-it', function(e) {
         e.originalEvent.dataTransfer.setData('text/plain', $(this).attr('data-fb-key'));
         e.originalEvent.dataTransfer.effectAllowed = 'move';
+        $(this).addClass('dragging');
+    });
+
+    form.on('dragend.board', '.post-it', function() {
+        $(this).removeClass('dragging');
+        form.find('.board-column.drag-over').removeClass('drag-over');
+    });
+
+    form.on('dragenter.board', '.board-column', function(e) {
+        e.preventDefault();
+        $(this).addClass('drag-over');
+    });
+
+    form.on('dragleave.board', '.board-column', function(e) {
+        if (e.target === this) {
+            $(this).removeClass('drag-over');
+        }
     });
 
     form.on('dragover.board', '.board-column', function(e) {
@@ -52,8 +69,8 @@ function bindDragAndDrop(form, onMove) {
 
     form.on('drop.board', '.board-column', function(e) {
         e.preventDefault();
+        var col = $(this).removeClass('drag-over');
         var fbKey = e.originalEvent.dataTransfer.getData('text/plain');
-        var col = $(this);
         var newStatus = col.data('status');
         var postIt = form.find('.post-it[data-fb-key="' + fbKey + '"]');
         if (!postIt.length) {
