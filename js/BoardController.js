@@ -9,6 +9,7 @@ BoardController.prototype.attach = function(form) {
     form.find('.board-column-cards').empty();
     updateCounts(form);
     bindDragAndDrop(form, function(fbKey, newStatus) { self.changeStatus(fbKey, newStatus); });
+    bindCycleOnClick(form, function(fbKey, newStatus) { self.changeStatus(fbKey, newStatus); });
 
     var repo = this.getBoardRepository();
     if (!repo) {
@@ -81,6 +82,34 @@ function bindDragAndDrop(form, onMove) {
         postIt.find('.status').text(newStatus);
         updateCounts(form);
         onMove(fbKey, newStatus);
+    });
+}
+
+var STATUS_CYCLE = { todo: 'doing', doing: 'done', done: 'todo' };
+
+function bindCycleOnClick(form, onMove) {
+    form.off('click.board-cycle');
+    form.on('click.board-cycle', '.post-it', function(e) {
+        if ($(e.target).closest('a, button, input, select').length) {
+            return;
+        }
+        var postIt = $(this);
+        var fbKey = postIt.attr('data-fb-key');
+        if (!fbKey) {
+            return;
+        }
+        var col = postIt.closest('.board-column');
+        var current = col.data('status');
+        var next = STATUS_CYCLE[current];
+        if (!next) {
+            return;
+        }
+        var nextCol = form.find('.board-column[data-status="' + next + '"] .board-column-cards');
+        nextCol.append(postIt);
+        postIt.attr('class', postIt.attr('class').replace(/status-\S+/, 'status-' + next));
+        postIt.find('.status').text(next);
+        updateCounts(form);
+        onMove(fbKey, next);
     });
 }
 
