@@ -436,6 +436,29 @@ describe("BoardController", function() {
     expect(repository.update).toHaveBeenCalledWith('fb-1', { status: 'done' });
   });
 
+  it("clicking a board card cycles its status todo->doing->done->todo", function(done) {
+    var updates = [];
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({ 'fb-1': { id: '1', status: 'todo' } });
+        return deferred.promise();
+      },
+      update: function(key, changes) { updates.push(changes.status); }
+    };
+    controller.attach(form);
+    setTimeout(function() {
+      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="doing"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
+      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="done"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
+      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="todo"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
+      expect(updates).toEqual(['doing', 'done', 'todo']);
+      done();
+    }, 0);
+  });
+
   it("dropping a card into a column moves it and persists the new status", function(done) {
     var updates = [];
     repository = {
