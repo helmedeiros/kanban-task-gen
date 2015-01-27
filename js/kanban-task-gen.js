@@ -9,6 +9,7 @@
         '#/overview':      { form: 'frmOverview',       controller: 'overview' },
         '#/gettingstarted':{ form: 'frmGettingStarted', controller: 'gettingStarted' },
         '#/board':         { form: 'frmBoard',          controller: 'board' },
+        '#/print':         { form: 'frmPrint',          controller: 'print' },
         '#/logout':        { form: 'frmHome',           controller: 'logout' }
     };
 
