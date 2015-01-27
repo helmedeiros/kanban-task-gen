@@ -578,6 +578,11 @@ pre[class*="language-"] {
 }
 .board-column .post-it[draggable] {
   cursor: grab;
+  transition: box-shadow .12s ease-out, transform .12s ease-out;
+}
+.board-column .post-it[draggable]:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
 }
 .board-column .post-it.dragging {
   opacity: 0.5;
