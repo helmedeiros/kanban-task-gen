@@ -495,6 +495,50 @@ describe("BoardController", function() {
 
 });
 
+describe("PrintController", function() {
+  var controller;
+  var renderer;
+  var repository;
+  var form;
+
+  beforeEach(function() {
+    renderer = { render: function(card) { return $('<div class="post-it" data-card-id="' + card.id + '"></div>'); } };
+    repository = null;
+    form = $('<form><div id="print-cards"></div></form>');
+    controller = new PrintController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      targetSelector: '#print-cards'
+    });
+  });
+
+  it("empties the target even when the repository is missing", function() {
+    form.find('#print-cards').append('<div class="post-it"></div>');
+    controller.attach(form);
+    expect(form.find('#print-cards .post-it').length).toEqual(0);
+  });
+
+  it("renders every card into the target", function(done) {
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({
+          'fb-1': { id: '1', status: 'todo' },
+          'fb-2': { id: '2', status: 'doing' },
+          'fb-3': { id: '3', status: 'done' }
+        });
+        return deferred.promise();
+      }
+    };
+    controller.attach(form);
+    setTimeout(function() {
+      expect(form.find('#print-cards .post-it').length).toEqual(3);
+      done();
+    }, 0);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;
