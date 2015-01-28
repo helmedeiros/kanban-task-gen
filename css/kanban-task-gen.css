@@ -855,12 +855,13 @@ label {
   #frmOverview {
     display: none;
   }
-  body, #frmGettingStarted, #post-its {
+  body, #frmGettingStarted, #frmPrint, #post-its, #print-cards {
     margin: 0;
     padding: 0;
     background: #fff;
   }
-  #post-its {
+  #post-its,
+  #print-cards {
     width: 100%;
   }
   .post-it {
