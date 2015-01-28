@@ -54,6 +54,12 @@
         getBoardRepository: function () { return boardSession.repository; }
     });
 
+    var printController = new PrintController({
+        renderer: new PostItRenderer(),
+        getBoardRepository: function () { return boardSession.repository; },
+        targetSelector: '#print-cards'
+    });
+
     var jsonUpload = new JsonUpload({
         page: page,
         alertView: alertView,
@@ -63,6 +69,10 @@
     controllers.home = function (form) { homeController.attach(form); };
     controllers.gettingStarted = function (form) { gettingStartedController.attach(form); };
     controllers.board = function (form) { boardController.attach(form); };
+    controllers.print = function (form) {
+        printController.attach(form);
+        form.find('.print-trigger').off('click.print').on('click.print', function () { window.print(); });
+    };
     controllers.logout = function () { authService.signOut(); };
 
     function prepRoute() {
