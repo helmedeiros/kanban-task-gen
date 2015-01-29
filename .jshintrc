@@ -3,7 +3,7 @@
   "jquery": true,
   "devel": true,
   "jasmine": true,
-  "predef": ["Firebase", "Path", "Page", "PostItRenderer", "Card", "AuthService", "BoardRepository", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "JsonUpload"],
+  "predef": ["Firebase", "Path", "Page", "PostItRenderer", "Card", "AuthService", "BoardRepository", "LocalStorageBoardRepository", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "JsonUpload"],
   "smarttabs": true,
   "expr": true,
   "validthis": true,

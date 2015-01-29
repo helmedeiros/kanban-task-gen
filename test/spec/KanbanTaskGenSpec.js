@@ -277,6 +277,69 @@ describe("AuthService", function() {
 
 });
 
+describe("LocalStorageBoardRepository", function() {
+  var repo;
+  var store;
+
+  beforeEach(function() {
+    store = {};
+    spyOn(window.localStorage, 'getItem').and.callFake(function(k) { return store[k] || null; });
+    spyOn(window.localStorage, 'setItem').and.callFake(function(k, v) { store[k] = v; });
+    repo = new LocalStorageBoardRepository('spec-cards');
+  });
+
+  it("add persists a card readable by getAll", function(done) {
+    repo.add({ id: '1', name: 'A', status: 'todo' });
+    repo.getAll().then(function(rawCards) {
+      var keys = [];
+      for (var k in rawCards) {
+        if (rawCards.hasOwnProperty(k)) {
+          keys.push(k);
+        }
+      }
+      expect(keys.length).toEqual(1);
+      expect(rawCards[keys[0]].name).toEqual('A');
+      done();
+    });
+  });
+
+  it("onCardAdded fires for every card already stored", function() {
+    repo.add({ id: '1', name: 'A' });
+    repo.add({ id: '2', name: 'B' });
+    var seen = [];
+    repo.onCardAdded(function(card) { seen.push(card.id); });
+    expect(seen.sort()).toEqual(['1', '2']);
+  });
+
+  it("onCardAdded also fires for cards added after subscription", function() {
+    var seen = [];
+    repo.onCardAdded(function(card) { seen.push(card.id); });
+    repo.add({ id: '3', name: 'C' });
+    expect(seen).toEqual(['3']);
+  });
+
+  it("update merges changes into the stored card", function(done) {
+    repo.add({ id: '1', name: 'A', status: 'todo' });
+    repo.getAll().then(function(rawCards) {
+      var keys = Object.keys(rawCards);
+      repo.update(keys[0], { status: 'done' });
+      repo.getAll().then(function(updated) {
+        expect(updated[keys[0]].status).toEqual('done');
+        expect(updated[keys[0]].name).toEqual('A');
+        done();
+      });
+    });
+  });
+
+  it("getAll on an empty namespace returns an empty object", function(done) {
+    repo.getAll().then(function(rawCards) {
+      expect(Object.keys(rawCards).length).toEqual(0);
+      done();
+    });
+  });
+
+});
+
 describe("BoardSession", function() {
   var session;
   var target;
