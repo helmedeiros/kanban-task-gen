@@ -421,6 +421,21 @@ describe("BoardSession", function() {
     expect(page.render).toHaveBeenCalled();
   });
 
+  it("uses a repositoryFactory when supplied", function() {
+    var built = null;
+    var fakeRepo = { onCardAdded: jasmine.createSpy('onCardAdded') };
+    var withFactory = new BoardSession({
+      repositoryFactory: function(authData) { built = authData; return fakeRepo; },
+      page: page,
+      counter: counter,
+      target: target
+    });
+    withFactory.start({ uid: 'u-2' });
+    expect(built.uid).toEqual('u-2');
+    expect(withFactory.repository).toBe(fakeRepo);
+    expect(fakeRepo.onCardAdded).toHaveBeenCalled();
+  });
+
 });
 
 describe("JsonUpload", function() {
