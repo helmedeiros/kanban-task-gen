@@ -277,6 +277,39 @@ describe("AuthService", function() {
 
 });
 
+describe("LocalAuthService", function() {
+  var auth;
+
+  beforeEach(function() {
+    auth = new LocalAuthService();
+  });
+
+  it("currentUser returns a stable local user", function() {
+    expect(auth.currentUser().uid).toBeDefined();
+  });
+
+  it("signInAnonymously resolves with the local user", function(done) {
+    auth.signInAnonymously().then(function(user) {
+      expect(user.uid).toEqual(auth.currentUser().uid);
+      done();
+    });
+  });
+
+  it("onChange fires immediately with the current user", function() {
+    var seen = null;
+    auth.onChange(function(user) { seen = user; });
+    expect(seen.uid).toEqual(auth.currentUser().uid);
+  });
+
+  it("signUpAndSignIn resolves with the local user", function(done) {
+    auth.signUpAndSignIn().then(function(user) {
+      expect(user.uid).toEqual(auth.currentUser().uid);
+      done();
+    });
+  });
+
+});
+
 describe("LocalStorageBoardRepository", function() {
   var repo;
   var store;
