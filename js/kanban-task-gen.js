@@ -1,8 +1,8 @@
-(function (Firebase, Path) {
+(function (Path) {
     "use strict";
 
-    var rootRef = new Firebase('https://kanban-task-gen.firebaseio.com/web/uauth');
-    var authService = new AuthService(rootRef);
+    var authService = new LocalAuthService();
+    var localRepository = new LocalStorageBoardRepository();
 
     var routeMap = {
         '#/':              { form: 'frmHome',           controller: 'home' },
@@ -29,9 +29,7 @@
     var page = new Page();
 
     var boardSession = new BoardSession({
-        userRefFor: function (authData) {
-            return rootRef.child('users').child(authData.uid);
-        },
+        repositoryFactory: function () { return localRepository; },
         page: page,
         counter: counter,
         target: $('#post-its')
@@ -98,4 +96,4 @@
         });
     });
 
-}(window.Firebase, window.Path));
+}(window.Path));
