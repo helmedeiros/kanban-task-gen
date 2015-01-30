@@ -87,13 +87,14 @@
 
     $(function () {
         jsonUpload.attach();
-        Path.listen();
 
         authService.onChange(function (authData) {
             if (authData) {
                 boardSession.start(authData);
             }
         });
+
+        Path.listen();
     });
 
 }(window.Path));
