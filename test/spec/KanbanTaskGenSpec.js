@@ -874,6 +874,49 @@ describe("PostItRenderer", function() {
 
 });
 
+describe("BoardCardRenderer", function() {
+  var renderer;
+
+  beforeEach(function() {
+    renderer = new BoardCardRenderer();
+  });
+
+  it("renders a .board-card root", function() {
+    var el = renderer.render(new Card({ id: '1', name: 'A', status: 'todo' }));
+    expect(el.hasClass('board-card')).toBe(true);
+  });
+
+  it("adds the status-{value} class on the root", function() {
+    var el = renderer.render(new Card({ id: '1', name: 'A', status: 'doing' }));
+    expect(el.hasClass('status-doing')).toBe(true);
+  });
+
+  it("tags data-card-id from the card identifier", function() {
+    var el = renderer.render(new Card({ id: '42' }));
+    expect(el.attr('data-card-id')).toEqual('42');
+  });
+
+  it("renders id, title and status text", function() {
+    var el = renderer.render(new Card({ id: '7', name: 'Hello', status: 'todo' }));
+    expect(el.find('.board-card-id').text()).toEqual('#7');
+    expect(el.find('.board-card-title').text()).toEqual('Hello');
+    expect(el.find('.board-card-status').text()).toEqual('todo');
+  });
+
+  it("renders priority and sprint when present", function() {
+    var el = renderer.render(new Card({ id: '1', priority: '2', sprint: '5', status: 'todo' }));
+    expect(el.find('.board-card-priority').text()).toEqual('P2');
+    expect(el.find('.board-card-sprint').text()).toEqual('S5');
+  });
+
+  it("omits priority and sprint when missing", function() {
+    var el = renderer.render(new Card({ id: '1', status: 'todo' }));
+    expect(el.find('.board-card-priority').length).toEqual(0);
+    expect(el.find('.board-card-sprint').length).toEqual(0);
+  });
+
+});
+
 describe("Page", function() {
   var page;
 
