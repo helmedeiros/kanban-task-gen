@@ -477,7 +477,7 @@ describe("BoardController", function() {
   var form;
 
   beforeEach(function() {
-    renderer = { render: function(card) { return $('<div class="post-it" data-card-id="' + card.id + '"></div>'); } };
+    renderer = { render: function(card) { return $('<div class="board-card" data-card-id="' + card.id + '"><span class="board-card-status">' + card.status + '</span></div>'); } };
     repository = null;
     form = $(
       '<form>' +
@@ -493,9 +493,9 @@ describe("BoardController", function() {
   });
 
   it("empties the columns even when the repository is missing", function() {
-    form.find('.board-column[data-status="todo"] .board-column-cards').append('<div class="post-it"></div>');
+    form.find('.board-column[data-status="todo"] .board-column-cards').append('<div class="board-card"></div>');
     controller.attach(form);
-    expect(form.find('.board-column-cards .post-it').length).toEqual(0);
+    expect(form.find('.board-column-cards .board-card').length).toEqual(0);
   });
 
   it("distributes cards to columns by status", function(done) {
@@ -513,9 +513,9 @@ describe("BoardController", function() {
     };
     controller.attach(form);
     setTimeout(function() {
-      expect(form.find('.board-column[data-status="todo"] .post-it').length).toEqual(1);
-      expect(form.find('.board-column[data-status="doing"] .post-it').length).toEqual(2);
-      expect(form.find('.board-column[data-status="done"] .post-it').length).toEqual(1);
+      expect(form.find('.board-column[data-status="todo"] .board-card').length).toEqual(1);
+      expect(form.find('.board-column[data-status="doing"] .board-card').length).toEqual(2);
+      expect(form.find('.board-column[data-status="done"] .board-card').length).toEqual(1);
       done();
     }, 0);
   });
@@ -559,12 +559,12 @@ describe("BoardController", function() {
     };
     controller.attach(form);
     setTimeout(function() {
-      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
-      expect(form.find('.board-column[data-status="doing"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
-      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
-      expect(form.find('.board-column[data-status="done"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
-      form.find('.post-it[data-fb-key="fb-1"]').trigger('click');
-      expect(form.find('.board-column[data-status="todo"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
+      form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="doing"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
+      form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="done"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
+      form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
+      expect(form.find('.board-column[data-status="todo"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
       expect(updates).toEqual(['doing', 'done', 'todo']);
       done();
     }, 0);
@@ -591,14 +591,14 @@ describe("BoardController", function() {
       };
       var dragstart = $.Event('dragstart');
       dragstart.originalEvent = { dataTransfer: dataTransfer };
-      form.find('.post-it[data-fb-key="fb-1"]').trigger(dragstart);
+      form.find('.board-card[data-fb-key="fb-1"]').trigger(dragstart);
 
       var drop = $.Event('drop');
       drop.originalEvent = { dataTransfer: dataTransfer };
       form.find('.board-column[data-status="done"]').trigger(drop);
 
-      expect(form.find('.board-column[data-status="done"] .post-it[data-fb-key="fb-1"]').length).toEqual(1);
-      expect(form.find('.board-column[data-status="todo"] .post-it').length).toEqual(0);
+      expect(form.find('.board-column[data-status="done"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
+      expect(form.find('.board-column[data-status="todo"] .board-card').length).toEqual(0);
       expect(updates).toEqual([{ key: 'fb-1', changes: { status: 'done' } }]);
       done();
     }, 0);
@@ -613,7 +613,7 @@ describe("PrintController", function() {
   var form;
 
   beforeEach(function() {
-    renderer = { render: function(card) { return $('<div class="post-it" data-card-id="' + card.id + '"></div>'); } };
+    renderer = { render: function(card) { return $('<div class="board-card" data-card-id="' + card.id + '"><span class="board-card-status">' + card.status + '</span></div>'); } };
     repository = null;
     form = $('<form><div id="print-cards"></div></form>');
     controller = new PrintController({

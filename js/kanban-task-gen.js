@@ -48,7 +48,7 @@
     });
 
     var boardController = new BoardController({
-        renderer: new PostItRenderer(),
+        renderer: new BoardCardRenderer(),
         getBoardRepository: function () { return boardSession.repository; }
     });
 

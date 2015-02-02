@@ -22,8 +22,8 @@ BoardController.prototype.attach = function(form) {
                 if (rawCards.hasOwnProperty(fbKey)) {
                     var card = new Card(rawCards[fbKey]);
                     var column = form.find('.board-column[data-status="' + card.status + '"] .board-column-cards');
-                    var postIt = renderer.render(card).attr('data-fb-key', fbKey).attr('draggable', 'true');
-                    column.append(postIt);
+                    var el = renderer.render(card).attr('data-fb-key', fbKey).attr('draggable', 'true');
+                    column.append(el);
                 }
             }
         }
@@ -41,13 +41,13 @@ BoardController.prototype.changeStatus = function(fbKey, newStatus) {
 function bindDragAndDrop(form, onMove) {
     form.off('dragstart.board dragend.board dragenter.board dragleave.board dragover.board drop.board');
 
-    form.on('dragstart.board', '.post-it', function(e) {
+    form.on('dragstart.board', '.board-card', function(e) {
         e.originalEvent.dataTransfer.setData('text/plain', $(this).attr('data-fb-key'));
         e.originalEvent.dataTransfer.effectAllowed = 'move';
         $(this).addClass('dragging');
     });
 
-    form.on('dragend.board', '.post-it', function() {
+    form.on('dragend.board', '.board-card', function() {
         $(this).removeClass('dragging');
         form.find('.board-column.drag-over').removeClass('drag-over');
     });
@@ -73,13 +73,13 @@ function bindDragAndDrop(form, onMove) {
         var col = $(this).removeClass('drag-over');
         var fbKey = e.originalEvent.dataTransfer.getData('text/plain');
         var newStatus = col.data('status');
-        var postIt = form.find('.post-it[data-fb-key="' + fbKey + '"]');
-        if (!postIt.length) {
+        var card = form.find('.board-card[data-fb-key="' + fbKey + '"]');
+        if (!card.length) {
             return;
         }
-        col.find('.board-column-cards').append(postIt);
-        postIt.attr('class', postIt.attr('class').replace(/status-\S+/, 'status-' + newStatus));
-        postIt.find('.status').text(newStatus);
+        col.find('.board-column-cards').append(card);
+        card.attr('class', card.attr('class').replace(/status-\S+/, 'status-' + newStatus));
+        card.find('.board-card-status').text(newStatus);
         updateCounts(form);
         onMove(fbKey, newStatus);
     });
@@ -89,25 +89,25 @@ var STATUS_CYCLE = { todo: 'doing', doing: 'done', done: 'todo' };
 
 function bindCycleOnClick(form, onMove) {
     form.off('click.board-cycle');
-    form.on('click.board-cycle', '.post-it', function(e) {
+    form.on('click.board-cycle', '.board-card', function(e) {
         if ($(e.target).closest('a, button, input, select').length) {
             return;
         }
-        var postIt = $(this);
-        var fbKey = postIt.attr('data-fb-key');
+        var card = $(this);
+        var fbKey = card.attr('data-fb-key');
         if (!fbKey) {
             return;
         }
-        var col = postIt.closest('.board-column');
+        var col = card.closest('.board-column');
         var current = col.data('status');
         var next = STATUS_CYCLE[current];
         if (!next) {
             return;
         }
         var nextCol = form.find('.board-column[data-status="' + next + '"] .board-column-cards');
-        nextCol.append(postIt);
-        postIt.attr('class', postIt.attr('class').replace(/status-\S+/, 'status-' + next));
-        postIt.find('.status').text(next);
+        nextCol.append(card);
+        card.attr('class', card.attr('class').replace(/status-\S+/, 'status-' + next));
+        card.find('.board-card-status').text(next);
         updateCounts(form);
         onMove(fbKey, next);
     });
@@ -116,7 +116,7 @@ function bindCycleOnClick(form, onMove) {
 function updateCounts(form) {
     form.find('.board-column').each(function() {
         var col = $(this);
-        var count = col.find('.board-column-cards .post-it').length;
+        var count = col.find('.board-column-cards .board-card').length;
         var titleEl = col.find('.board-column-title');
         var base = titleEl.data('base');
         if (!base) {
