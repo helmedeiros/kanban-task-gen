@@ -47,9 +47,15 @@
         getBoardRepository: function () { return boardSession.repository; }
     });
 
+    var cardModal = new CardModal({
+        el: $('.card-modal'),
+        renderer: new PostItRenderer()
+    });
+
     var boardController = new BoardController({
         renderer: new BoardCardRenderer(),
-        getBoardRepository: function () { return boardSession.repository; }
+        getBoardRepository: function () { return boardSession.repository; },
+        modal: cardModal
     });
 
     var printController = new PrintController({

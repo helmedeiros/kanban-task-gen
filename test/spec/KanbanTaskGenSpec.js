@@ -547,25 +547,55 @@ describe("BoardController", function() {
     expect(repository.update).toHaveBeenCalledWith('fb-1', { status: 'done' });
   });
 
-  it("clicking a board card cycles its status todo->doing->done->todo", function(done) {
-    var updates = [];
+  it("clicking a board card opens the modal with that card", function(done) {
+    var openedCard = null;
+    var modal = { show: function(card) { openedCard = card; } };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      modal: modal
+    });
     repository = {
       getAll: function() {
         var deferred = $.Deferred();
-        deferred.resolve({ 'fb-1': { id: '1', status: 'todo' } });
+        deferred.resolve({ 'fb-1': { id: '1', name: 'X', status: 'todo' } });
         return deferred.promise();
-      },
-      update: function(key, changes) { updates.push(changes.status); }
+      }
     };
     controller.attach(form);
     setTimeout(function() {
       form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
-      expect(form.find('.board-column[data-status="doing"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
+      expect(openedCard).not.toBeNull();
+      expect(openedCard.id).toEqual('1');
+      done();
+    }, 0);
+  });
+
+  it("modal status change calls changeStatus and moves the card", function(done) {
+    var updates = [];
+    var lastShowOpts = null;
+    var modal = { show: function(card, options) { lastShowOpts = options; } };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      modal: modal
+    });
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({ 'fb-1': { id: '1', name: 'X', status: 'todo' } });
+        return deferred.promise();
+      },
+      update: function(key, changes) { updates.push({ key: key, changes: changes }); }
+    };
+    $('body').append(form);
+    controller.attach(form);
+    setTimeout(function() {
       form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
+      lastShowOpts.onStatusChange('done');
       expect(form.find('.board-column[data-status="done"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
-      form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
-      expect(form.find('.board-column[data-status="todo"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
-      expect(updates).toEqual(['doing', 'done', 'todo']);
+      expect(updates).toEqual([{ key: 'fb-1', changes: { status: 'done' } }]);
+      form.remove();
       done();
     }, 0);
   });

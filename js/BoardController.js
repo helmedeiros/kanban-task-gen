@@ -1,15 +1,18 @@
 function BoardController(deps) {
     this.renderer = deps.renderer;
     this.getBoardRepository = deps.getBoardRepository;
+    this.modal = deps.modal;
+    this.cardsByFbKey = {};
 }
 
 BoardController.prototype.attach = function(form) {
     var self = this;
     var renderer = this.renderer;
+    self.cardsByFbKey = {};
     form.find('.board-column-cards').empty();
     updateCounts(form);
     bindDragAndDrop(form, function(fbKey, newStatus) { self.changeStatus(fbKey, newStatus); });
-    bindCycleOnClick(form, function(fbKey, newStatus) { self.changeStatus(fbKey, newStatus); });
+    bindOpenOnClick(form, function(fbKey) { self.openCard(fbKey); });
 
     var repo = this.getBoardRepository();
     if (!repo) {
@@ -21,6 +24,7 @@ BoardController.prototype.attach = function(form) {
             for (var fbKey in rawCards) {
                 if (rawCards.hasOwnProperty(fbKey)) {
                     var card = new Card(rawCards[fbKey]);
+                    self.cardsByFbKey[fbKey] = card;
                     var column = form.find('.board-column[data-status="' + card.status + '"] .board-column-cards');
                     var el = renderer.render(card).attr('data-fb-key', fbKey).attr('draggable', 'true');
                     column.append(el);
@@ -28,6 +32,21 @@ BoardController.prototype.attach = function(form) {
             }
         }
         updateCounts(form);
+    });
+};
+
+BoardController.prototype.openCard = function(fbKey) {
+    var card = this.cardsByFbKey[fbKey];
+    if (!card || !this.modal) {
+        return;
+    }
+    var self = this;
+    this.modal.show(card, {
+        onStatusChange: function(newStatus) {
+            card.status = newStatus;
+            self.changeStatus(fbKey, newStatus);
+            moveCardToStatusColumn(fbKey, newStatus);
+        }
     });
 };
 
@@ -85,32 +104,30 @@ function bindDragAndDrop(form, onMove) {
     });
 }
 
-var STATUS_CYCLE = { todo: 'doing', doing: 'done', done: 'todo' };
-
-function bindCycleOnClick(form, onMove) {
-    form.off('click.board-cycle');
-    form.on('click.board-cycle', '.board-card', function(e) {
+function bindOpenOnClick(form, onOpen) {
+    form.off('click.board-open');
+    form.on('click.board-open', '.board-card', function(e) {
         if ($(e.target).closest('a, button, input, select').length) {
             return;
         }
-        var card = $(this);
-        var fbKey = card.attr('data-fb-key');
-        if (!fbKey) {
-            return;
+        var fbKey = $(this).attr('data-fb-key');
+        if (fbKey) {
+            onOpen(fbKey);
         }
-        var col = card.closest('.board-column');
-        var current = col.data('status');
-        var next = STATUS_CYCLE[current];
-        if (!next) {
-            return;
-        }
-        var nextCol = form.find('.board-column[data-status="' + next + '"] .board-column-cards');
-        nextCol.append(card);
-        card.attr('class', card.attr('class').replace(/status-\S+/, 'status-' + next));
-        card.find('.board-card-status').text(next);
-        updateCounts(form);
-        onMove(fbKey, next);
     });
+}
+
+function moveCardToStatusColumn(fbKey, newStatus) {
+    var card = $('.board-card[data-fb-key="' + fbKey + '"]');
+    if (!card.length) {
+        return;
+    }
+    var form = card.closest('form');
+    var nextCol = form.find('.board-column[data-status="' + newStatus + '"] .board-column-cards');
+    nextCol.append(card);
+    card.attr('class', card.attr('class').replace(/status-\S+/, 'status-' + newStatus));
+    card.find('.board-card-status').text(newStatus);
+    updateCounts(form);
 }
 
 function updateCounts(form) {
