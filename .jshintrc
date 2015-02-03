@@ -3,7 +3,7 @@
   "jquery": true,
   "devel": true,
   "jasmine": true,
-  "predef": ["Path", "Page", "PostItRenderer", "BoardCardRenderer", "Card", "AuthService", "LocalAuthService", "BoardRepository", "LocalStorageBoardRepository", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "JsonUpload"],
+  "predef": ["Path", "Page", "PostItRenderer", "BoardCardRenderer", "CardModal", "Card", "AuthService", "LocalAuthService", "BoardRepository", "LocalStorageBoardRepository", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "JsonUpload"],
   "smarttabs": true,
   "expr": true,
   "validthis": true,

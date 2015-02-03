@@ -638,6 +638,76 @@ pre[class*="language-"] {
   outline: 2px dashed #4E9ACD;
   background: #e8f1f9;
 }
+.card-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+.card-modal.is-open {
+  display: block;
+}
+.card-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.card-modal-dialog {
+  position: relative;
+  margin: 60px auto;
+  width: 60%;
+  max-width: 720px;
+  background: #fff;
+  border-radius: 6px;
+  padding: 24px 28px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.card-modal-close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: 0;
+  font-size: 28px;
+  line-height: 1;
+  color: #666;
+  cursor: pointer;
+}
+.card-modal-close:hover {
+  color: #000;
+}
+.card-modal-body {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+.card-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: center;
+}
+.card-modal-status {
+  background: #eef2f7;
+  color: #5a6470;
+  border: 1px solid #d6dde6;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.card-modal-status:hover {
+  background: #e0e6ee;
+}
+.card-modal-status.is-current {
+  background: #4E9ACD;
+  border-color: #4E9ACD;
+  color: #fff;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;

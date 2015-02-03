@@ -874,6 +874,70 @@ describe("PostItRenderer", function() {
 
 });
 
+describe("CardModal", function() {
+  var modal;
+  var rendererSpy;
+  var el;
+
+  beforeEach(function() {
+    rendererSpy = { render: jasmine.createSpy('render').and.callFake(function(card) {
+      return $('<div class="rendered-card" data-card-id="' + card.id + '"></div>');
+    }) };
+    el = $(
+      '<div class="card-modal" aria-hidden="true">' +
+      '<div class="card-modal-backdrop"></div>' +
+      '<div class="card-modal-dialog">' +
+      '<button class="card-modal-close"></button>' +
+      '<div class="card-modal-body"></div>' +
+      '<div class="card-modal-actions"></div>' +
+      '</div></div>'
+    );
+    modal = new CardModal({ el: el, renderer: rendererSpy });
+  });
+
+  it("show renders the card into the modal body and opens it", function() {
+    modal.show({ id: 'x', status: 'todo' });
+    expect(rendererSpy.render).toHaveBeenCalled();
+    expect(el.find('.card-modal-body .rendered-card').length).toEqual(1);
+    expect(el.hasClass('is-open')).toBe(true);
+  });
+
+  it("hide closes the modal and empties the body", function() {
+    modal.show({ id: 'x', status: 'todo' });
+    modal.hide();
+    expect(el.hasClass('is-open')).toBe(false);
+    expect(el.find('.card-modal-body').children().length).toEqual(0);
+  });
+
+  it("clicking the close button hides the modal", function() {
+    modal.show({ id: 'x', status: 'todo' });
+    el.find('.card-modal-close').trigger('click');
+    expect(el.hasClass('is-open')).toBe(false);
+  });
+
+  it("clicking the backdrop hides the modal", function() {
+    modal.show({ id: 'x', status: 'todo' });
+    el.find('.card-modal-backdrop').trigger('click');
+    expect(el.hasClass('is-open')).toBe(false);
+  });
+
+  it("renders status buttons with the current one marked when onStatusChange is provided", function() {
+    modal.show({ id: 'x', status: 'doing' }, { onStatusChange: function() {} });
+    var buttons = el.find('.card-modal-status');
+    expect(buttons.length).toEqual(3);
+    expect(buttons.filter('.is-current').attr('data-status')).toEqual('doing');
+  });
+
+  it("clicking a status button calls onStatusChange and hides the modal", function() {
+    var picked = null;
+    modal.show({ id: 'x', status: 'todo' }, { onStatusChange: function(s) { picked = s; } });
+    el.find('.card-modal-status[data-status="done"]').trigger('click');
+    expect(picked).toEqual('done');
+    expect(el.hasClass('is-open')).toBe(false);
+  });
+
+});
+
 describe("BoardCardRenderer", function() {
   var renderer;
 
