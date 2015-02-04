@@ -680,8 +680,19 @@ pre[class*="language-"] {
 }
 .card-modal-body {
   margin-top: 16px;
-  display: flex;
-  justify-content: center;
+  text-align: center;
+}
+.card-modal-body .post-it {
+  float: none;
+  display: inline-block;
+  text-align: left;
+  width: 600px;
+  max-width: 100%;
+}
+.card-modal-body .post-it::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 .card-modal-actions {
   display: flex;
