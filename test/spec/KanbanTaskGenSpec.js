@@ -802,6 +802,35 @@ describe("GettingStartedController", function() {
     expect(boardRepository.add.calls.mostRecent().args[0].status).toEqual('doing');
   });
 
+  it("fills blank fields with the input's placeholder text", function() {
+    form = $(
+      '<form>' +
+      '<input name="priority" placeholder="3">' +
+      '<input name="sprint" placeholder="9">' +
+      '<input name="specialist1" placeholder="DBA">' +
+      '<input name="time1" placeholder="1h">' +
+      '</form>'
+    );
+    form.serializeObject = function() {
+      return { name: 'A', priority: '', sprint: '', specialist1: '', time1: '' };
+    };
+    controller.attach(form);
+    form.trigger('submit');
+    var sent = boardRepository.add.calls.mostRecent().args[0];
+    expect(sent.priority).toEqual('3');
+    expect(sent.sprint).toEqual('9');
+    expect(sent.specialist1).toEqual('DBA');
+    expect(sent.time1).toEqual('1h');
+  });
+
+  it("keeps the user-supplied value when present and does not overwrite with placeholder", function() {
+    form = $('<form><input name="priority" placeholder="3"></form>');
+    form.serializeObject = function() { return { name: 'A', priority: '7' }; };
+    controller.attach(form);
+    form.trigger('submit');
+    expect(boardRepository.add.calls.mostRecent().args[0].priority).toEqual('7');
+  });
+
 });
 
 describe("Counter", function() {

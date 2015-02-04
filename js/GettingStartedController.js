@@ -19,8 +19,10 @@ GettingStartedController.prototype.attach = function(form) {
 
     form.on('submit', function(e) {
         e.preventDefault();
+        var theForm = $(this);
 
-        var userInfo = $(this).serializeObject();
+        var userInfo = theForm.serializeObject();
+        fillDefaultsFromPlaceholders(theForm, userInfo);
         userInfo.id = self.counter.next();
         userInfo.specialist2 = '';
         userInfo.time2 = '';
@@ -33,6 +35,21 @@ GettingStartedController.prototype.attach = function(form) {
             });
         });
 
-        $(this)[0].reset();
+        theForm[0].reset();
     });
 };
+
+function fillDefaultsFromPlaceholders(form, data) {
+    form.find('input[name], select[name]').each(function() {
+        var input = $(this);
+        var name = input.attr('name');
+        var current = data[name];
+        if (current !== undefined && current !== null && current !== '') {
+            return;
+        }
+        var placeholder = input.attr('placeholder');
+        if (placeholder) {
+            data[name] = placeholder;
+        }
+    });
+}
