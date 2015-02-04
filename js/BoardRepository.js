@@ -32,5 +32,13 @@ BoardRepository.prototype = {
             deferred.resolve();
         });
         return deferred.promise();
+    },
+
+    remove: function(fbKey) {
+        var deferred = $.Deferred();
+        this.userRef.child(fbKey).remove(function() {
+            deferred.resolve();
+        });
+        return deferred.promise();
     }
 };

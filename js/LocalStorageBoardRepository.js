@@ -72,5 +72,16 @@ LocalStorageBoardRepository.prototype = {
         }
         deferred.resolve();
         return deferred.promise();
+    },
+
+    remove: function(key) {
+        var deferred = $.Deferred();
+        var all = this.read();
+        if (all[key]) {
+            delete all[key];
+            this.write(all);
+        }
+        deferred.resolve();
+        return deferred.promise();
     }
 };

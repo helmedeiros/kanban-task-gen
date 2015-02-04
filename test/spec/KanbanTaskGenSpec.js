@@ -186,6 +186,14 @@ describe("BoardRepository", function() {
     expect(childRef.update.calls.mostRecent().args[0]).toEqual({ status: 'doing' });
   });
 
+  it("remove deletes the child of fbKey", function() {
+    var childRef = { remove: jasmine.createSpy('childRemove') };
+    userRef.child.and.returnValue(childRef);
+    repo.remove('fb-1');
+    expect(userRef.child).toHaveBeenCalledWith('fb-1');
+    expect(childRef.remove).toHaveBeenCalled();
+  });
+
 });
 
 describe("AuthService", function() {
@@ -368,6 +376,29 @@ describe("LocalStorageBoardRepository", function() {
     repo.getAll().then(function(rawCards) {
       expect(Object.keys(rawCards).length).toEqual(0);
       done();
+    });
+  });
+
+  it("remove drops the entry from the stored map", function(done) {
+    repo.add({ id: '1', name: 'A' });
+    repo.getAll().then(function(rawCards) {
+      var key = Object.keys(rawCards)[0];
+      repo.remove(key).then(function() {
+        repo.getAll().then(function(after) {
+          expect(Object.keys(after).length).toEqual(0);
+          done();
+        });
+      });
+    });
+  });
+
+  it("remove of an unknown key is a no-op", function(done) {
+    repo.add({ id: '1', name: 'A' });
+    repo.remove('does-not-exist').then(function() {
+      repo.getAll().then(function(after) {
+        expect(Object.keys(after).length).toEqual(1);
+        done();
+      });
     });
   });
 
