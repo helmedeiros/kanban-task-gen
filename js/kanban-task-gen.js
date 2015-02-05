@@ -2,7 +2,9 @@
     "use strict";
 
     var authService = new LocalAuthService();
-    var localRepository = new LocalStorageBoardRepository();
+    var boardsCatalog = new BoardsCatalog({});
+    var activeBoard = boardsCatalog.getActive();
+    var localRepository = new LocalStorageBoardRepository(boardsCatalog.cardNamespaceFor(activeBoard.id));
 
     var routeMap = {
         '#/':              { form: 'frmHome',           controller: 'home' },
