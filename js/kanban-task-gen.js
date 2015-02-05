@@ -95,6 +95,7 @@
 
     $(function () {
         jsonUpload.attach();
+        renderBoardSwitcher(boardsCatalog, activeBoard);
 
         authService.onChange(function (authData) {
             if (authData) {
@@ -104,5 +105,34 @@
 
         Path.listen();
     });
+
+    function renderBoardSwitcher(catalog, current) {
+        var select = $('#boardSwitcher');
+        if (!select.length) {
+            return;
+        }
+        select.empty();
+        var boards = catalog.list();
+        for (var i = 0; i < boards.length; i++) {
+            $('<option></option>').val(boards[i].id).text(boards[i].name).appendTo(select);
+        }
+        $('<option></option>').val('__new__').text('+ New board…').appendTo(select);
+        select.val(current.id);
+        select.on('change', function () {
+            var picked = select.val();
+            if (picked === '__new__') {
+                var name = window.prompt('Name your new board');
+                if (!name) {
+                    select.val(current.id);
+                    return;
+                }
+                var created = catalog.create(name);
+                catalog.setActiveId(created.id);
+            } else {
+                catalog.setActiveId(picked);
+            }
+            window.location.reload();
+        });
+    }
 
 }(window.Path));
