@@ -318,6 +318,72 @@ describe("LocalAuthService", function() {
 
 });
 
+describe("BoardsCatalog", function() {
+  var catalog;
+  var store;
+
+  beforeEach(function() {
+    store = {};
+    spyOn(window.localStorage, 'getItem').and.callFake(function(k) { return store[k] === undefined ? null : store[k]; });
+    spyOn(window.localStorage, 'setItem').and.callFake(function(k, v) { store[k] = v; });
+    spyOn(window.localStorage, 'removeItem').and.callFake(function(k) { delete store[k]; });
+    catalog = new BoardsCatalog({
+      namespace: 'spec-boards',
+      activeKey: 'spec-active',
+      legacyCardKey: 'spec-cards',
+      cardNamespacePrefix: 'spec-cards'
+    });
+  });
+
+  it("seeds a default board on first use", function() {
+    expect(catalog.list().length).toEqual(1);
+    expect(catalog.list()[0].name).toEqual('My board');
+  });
+
+  it("create appends a new board with a unique id", function() {
+    catalog.create('Personal');
+    catalog.create('Work');
+    var boards = catalog.list();
+    expect(boards.length).toEqual(3);
+    expect(boards[1].name).toEqual('Personal');
+    expect(boards[2].name).toEqual('Work');
+    expect(boards[1].id).not.toEqual(boards[2].id);
+  });
+
+  it("rename updates the board name in place", function() {
+    var created = catalog.create('Personal');
+    catalog.rename(created.id, 'Personal Tasks');
+    var found = null;
+    catalog.list().forEach(function(b) { if (b.id === created.id) { found = b; } });
+    expect(found.name).toEqual('Personal Tasks');
+  });
+
+  it("remove drops the board and clears its card namespace", function() {
+    var created = catalog.create('Personal');
+    store[catalog.cardNamespaceFor(created.id)] = '{"k":{}}';
+    catalog.remove(created.id);
+    expect(catalog.list().length).toEqual(1);
+    expect(store[catalog.cardNamespaceFor(created.id)]).toBeUndefined();
+  });
+
+  it("cardNamespaceFor maps default to the legacy key and new boards to prefixed keys", function() {
+    expect(catalog.cardNamespaceFor('default')).toEqual('spec-cards');
+    expect(catalog.cardNamespaceFor('b-123')).toEqual('spec-cards-b-123');
+  });
+
+  it("getActive returns the default board on first use", function() {
+    expect(catalog.getActive().id).toEqual('default');
+  });
+
+  it("setActiveId persists the selection", function() {
+    var created = catalog.create('Personal');
+    catalog.setActiveId(created.id);
+    expect(catalog.getActiveId()).toEqual(created.id);
+    expect(catalog.getActive().id).toEqual(created.id);
+  });
+
+});
+
 describe("LocalStorageBoardRepository", function() {
   var repo;
   var store;
