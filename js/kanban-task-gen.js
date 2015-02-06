@@ -47,7 +47,8 @@
         authService: authService,
         alertView: alertView,
         counter: counter,
-        getBoardRepository: function () { return boardSession.repository; }
+        getBoardRepository: function () { return boardSession.repository; },
+        analytics: analytics
     });
 
     var cardModal = new CardModal({
@@ -58,7 +59,8 @@
     var boardController = new BoardController({
         renderer: new BoardCardRenderer(),
         getBoardRepository: function () { return boardSession.repository; },
-        modal: cardModal
+        modal: cardModal,
+        analytics: analytics
     });
 
     var printController = new PrintController({

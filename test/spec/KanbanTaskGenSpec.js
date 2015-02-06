@@ -698,6 +698,22 @@ describe("BoardController", function() {
     expect(repository.update).toHaveBeenCalledWith('fb-1', { status: 'done' });
   });
 
+  it("tracks a card_moved analytics event on changeStatus", function() {
+    var tracked = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    repository = { update: jasmine.createSpy('update') };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      analytics: analytics
+    });
+    controller.cardsByFbKey['fb-1'] = { id: '1', status: 'todo' };
+    controller.changeStatus('fb-1', 'done');
+    expect(tracked[0].name).toEqual('card_moved');
+    expect(tracked[0].props.from).toEqual('todo');
+    expect(tracked[0].props.to).toEqual('done');
+  });
+
   it("clicking a board card opens the modal with that card", function(done) {
     var openedCard = null;
     var modal = { show: function(card) { openedCard = card; } };
@@ -949,6 +965,24 @@ describe("GettingStartedController", function() {
     controller.attach(form);
     form.trigger('submit');
     expect(boardRepository.add.calls.mostRecent().args[0].priority).toEqual('7');
+  });
+
+  it("tracks a card_created analytics event on submit", function() {
+    var tracked = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    spyOn($.fn, 'serializeObject').and.returnValue({ name: 'A', status: 'doing' });
+    controller = new GettingStartedController({
+      authService: authService,
+      alertView: alertView,
+      counter: counter,
+      getBoardRepository: function() { return boardRepository; },
+      analytics: analytics
+    });
+    controller.attach(form);
+    form.trigger('submit');
+    expect(tracked.length).toEqual(1);
+    expect(tracked[0].name).toEqual('card_created');
+    expect(tracked[0].props.status).toEqual('doing');
   });
 
 });

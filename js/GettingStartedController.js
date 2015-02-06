@@ -3,6 +3,7 @@ function GettingStartedController(deps) {
     this.alertView = deps.alertView;
     this.counter = deps.counter;
     this.getBoardRepository = deps.getBoardRepository;
+    this.analytics = deps.analytics || { track: function() {} };
 }
 
 GettingStartedController.prototype.attach = function(form) {
@@ -34,6 +35,7 @@ GettingStartedController.prototype.attach = function(form) {
                 className: 'alert-success'
             });
         });
+        self.analytics.track('card_created', { status: userInfo.status, id: userInfo.id });
 
         theForm[0].reset();
     });

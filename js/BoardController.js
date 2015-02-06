@@ -2,6 +2,7 @@ function BoardController(deps) {
     this.renderer = deps.renderer;
     this.getBoardRepository = deps.getBoardRepository;
     this.modal = deps.modal;
+    this.analytics = deps.analytics || { track: function() {} };
     this.cardsByFbKey = {};
 }
 
@@ -51,10 +52,16 @@ BoardController.prototype.openCard = function(fbKey) {
 };
 
 BoardController.prototype.changeStatus = function(fbKey, newStatus) {
+    var card = this.cardsByFbKey[fbKey];
+    var fromStatus = card ? card.status : null;
+    if (card) {
+        card.status = newStatus;
+    }
     var repo = this.getBoardRepository();
     if (repo) {
         repo.update(fbKey, { status: newStatus });
     }
+    this.analytics.track('card_moved', { fbKey: fbKey, from: fromStatus, to: newStatus });
 };
 
 function bindDragAndDrop(form, onMove) {
