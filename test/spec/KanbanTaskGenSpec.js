@@ -318,6 +318,60 @@ describe("LocalAuthService", function() {
 
 });
 
+describe("LocalAnalytics", function() {
+  var analytics;
+  var store;
+
+  beforeEach(function() {
+    store = {};
+    spyOn(window.localStorage, 'getItem').and.callFake(function(k) { return store[k] === undefined ? null : store[k]; });
+    spyOn(window.localStorage, 'setItem').and.callFake(function(k, v) { store[k] = v; });
+    spyOn(window.localStorage, 'removeItem').and.callFake(function(k) { delete store[k]; });
+    analytics = new LocalAnalytics({ namespace: 'spec-events', limit: 5 });
+  });
+
+  it("track appends an event with name and properties", function() {
+    analytics.track('card_created', { status: 'todo' });
+    var list = analytics.list();
+    expect(list.length).toEqual(1);
+    expect(list[0].name).toEqual('card_created');
+    expect(list[0].properties.status).toEqual('todo');
+  });
+
+  it("track stamps each event with a timestamp and unique id", function() {
+    analytics.track('a');
+    analytics.track('b');
+    var list = analytics.list();
+    expect(list[0].t).toBeDefined();
+    expect(list[1].t).toBeDefined();
+    expect(list[0].id).not.toEqual(list[1].id);
+  });
+
+  it("track preserves history across separate instances against the same namespace", function() {
+    analytics.track('one');
+    var other = new LocalAnalytics({ namespace: 'spec-events', limit: 5 });
+    other.track('two');
+    expect(other.list().map(function(e) { return e.name; })).toEqual(['one', 'two']);
+  });
+
+  it("track caps history at the limit", function() {
+    for (var i = 0; i < 8; i++) {
+      analytics.track('e', { i: i });
+    }
+    var list = analytics.list();
+    expect(list.length).toEqual(5);
+    expect(list[0].properties.i).toEqual(3);
+    expect(list[4].properties.i).toEqual(7);
+  });
+
+  it("clear removes the log", function() {
+    analytics.track('one');
+    analytics.clear();
+    expect(analytics.list()).toEqual([]);
+  });
+
+});
+
 describe("BoardsCatalog", function() {
   var catalog;
   var store;
