@@ -5,6 +5,7 @@
     var boardsCatalog = new BoardsCatalog({});
     var activeBoard = boardsCatalog.getActive();
     var localRepository = new LocalStorageBoardRepository(boardsCatalog.cardNamespaceFor(activeBoard.id));
+    var analytics = new LocalAnalytics({});
 
     var routeMap = {
         '#/':              { form: 'frmHome',           controller: 'home' },
@@ -97,6 +98,8 @@
         jsonUpload.attach();
         renderBoardSwitcher(boardsCatalog, activeBoard);
 
+        analytics.track('app_loaded', { boardId: activeBoard.id, boardCount: boardsCatalog.list().length });
+
         authService.onChange(function (authData) {
             if (authData) {
                 boardSession.start(authData);
@@ -128,8 +131,10 @@
                 }
                 var created = catalog.create(name);
                 catalog.setActiveId(created.id);
+                analytics.track('board_created', { boardId: created.id, name: created.name });
             } else {
                 catalog.setActiveId(picked);
+                analytics.track('board_switched', { fromBoardId: current.id, toBoardId: picked });
             }
             window.location.reload();
         });
