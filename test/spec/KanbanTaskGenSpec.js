@@ -742,10 +742,13 @@ describe("BoardController", function() {
     var updates = [];
     var lastShowOpts = null;
     var modal = { show: function(card, options) { lastShowOpts = options; } };
+    var tracked = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
     controller = new BoardController({
       renderer: renderer,
       getBoardRepository: function() { return repository; },
-      modal: modal
+      modal: modal,
+      analytics: analytics
     });
     repository = {
       getAll: function() {
@@ -762,6 +765,9 @@ describe("BoardController", function() {
       lastShowOpts.onStatusChange('done');
       expect(form.find('.board-column[data-status="done"] .board-card[data-fb-key="fb-1"]').length).toEqual(1);
       expect(updates).toEqual([{ key: 'fb-1', changes: { status: 'done' } }]);
+      var move = tracked.filter(function(e) { return e.name === 'card_moved'; })[0];
+      expect(move.props.from).toEqual('todo');
+      expect(move.props.to).toEqual('done');
       form.remove();
       done();
     }, 0);

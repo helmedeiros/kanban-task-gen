@@ -44,7 +44,6 @@ BoardController.prototype.openCard = function(fbKey) {
     var self = this;
     this.modal.show(card, {
         onStatusChange: function(newStatus) {
-            card.status = newStatus;
             self.changeStatus(fbKey, newStatus);
             moveCardToStatusColumn(fbKey, newStatus);
         }
