@@ -738,6 +738,40 @@ describe("BoardController", function() {
     }, 0);
   });
 
+  it("modal delete invokes repository.remove and fires card_deleted", function(done) {
+    var removed = [];
+    var tracked = [];
+    var lastShowOpts = null;
+    var modal = { show: function(card, options) { lastShowOpts = options; } };
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({ 'fb-1': { id: '1', name: 'X', status: 'doing' } });
+        return deferred.promise();
+      },
+      remove: function(key) { removed.push(key); }
+    };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      modal: modal,
+      analytics: analytics
+    });
+    $('body').append(form);
+    controller.attach(form);
+    setTimeout(function() {
+      form.find('.board-card[data-fb-key="fb-1"]').trigger('click');
+      lastShowOpts.onDelete();
+      expect(removed).toEqual(['fb-1']);
+      expect(form.find('.board-card[data-fb-key="fb-1"]').length).toEqual(0);
+      var del = tracked.filter(function(e) { return e.name === 'card_deleted'; })[0];
+      expect(del.props.status).toEqual('doing');
+      form.remove();
+      done();
+    }, 0);
+  });
+
   it("modal status change calls changeStatus and moves the card", function(done) {
     var updates = [];
     var lastShowOpts = null;

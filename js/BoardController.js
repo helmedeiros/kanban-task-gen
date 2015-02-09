@@ -46,8 +46,28 @@ BoardController.prototype.openCard = function(fbKey) {
         onStatusChange: function(newStatus) {
             self.changeStatus(fbKey, newStatus);
             moveCardToStatusColumn(fbKey, newStatus);
+        },
+        onDelete: function() {
+            self.deleteCard(fbKey);
         }
     });
+};
+
+BoardController.prototype.deleteCard = function(fbKey) {
+    var card = this.cardsByFbKey[fbKey];
+    var priorStatus = card ? card.status : null;
+    var repo = this.getBoardRepository();
+    if (repo) {
+        repo.remove(fbKey);
+    }
+    delete this.cardsByFbKey[fbKey];
+    var el = $('.board-card[data-fb-key="' + fbKey + '"]');
+    var form = el.closest('form');
+    el.remove();
+    if (form.length) {
+        updateCounts(form);
+    }
+    this.analytics.track('card_deleted', { fbKey: fbKey, status: priorStatus });
 };
 
 BoardController.prototype.changeStatus = function(fbKey, newStatus) {
