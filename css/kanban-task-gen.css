@@ -721,6 +721,22 @@ pre[class*="language-"] {
   border-color: #4E9ACD;
   color: #fff;
 }
+.card-modal-delete {
+  background: #fff;
+  color: #c0392b;
+  border: 1px solid #e6cdcd;
+  border-radius: 4px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-left: 16px;
+}
+.card-modal-delete:hover {
+  background: #fdecec;
+  border-color: #c0392b;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;

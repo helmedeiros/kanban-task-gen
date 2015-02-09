@@ -1186,6 +1186,35 @@ describe("CardModal", function() {
     expect(el.hasClass('is-open')).toBe(false);
   });
 
+  it("renders a delete button only when onDelete is provided", function() {
+    modal.show({ id: 'x', status: 'todo' });
+    expect(el.find('.card-modal-delete').length).toEqual(0);
+    modal.show({ id: 'x', status: 'todo' }, { onDelete: function() {}, confirmDelete: function() { return true; } });
+    expect(el.find('.card-modal-delete').length).toEqual(1);
+  });
+
+  it("clicking delete with a confirming prompt invokes onDelete and hides the modal", function() {
+    var calls = 0;
+    modal.show({ id: 'x', status: 'todo' }, {
+      onDelete: function() { calls += 1; },
+      confirmDelete: function() { return true; }
+    });
+    el.find('.card-modal-delete').trigger('click');
+    expect(calls).toEqual(1);
+    expect(el.hasClass('is-open')).toBe(false);
+  });
+
+  it("clicking delete with a cancelled prompt does nothing", function() {
+    var calls = 0;
+    modal.show({ id: 'x', status: 'todo' }, {
+      onDelete: function() { calls += 1; },
+      confirmDelete: function() { return false; }
+    });
+    el.find('.card-modal-delete').trigger('click');
+    expect(calls).toEqual(0);
+    expect(el.hasClass('is-open')).toBe(true);
+  });
+
 });
 
 describe("BoardCardRenderer", function() {
