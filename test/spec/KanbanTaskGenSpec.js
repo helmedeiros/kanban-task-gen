@@ -887,6 +887,62 @@ describe("PrintController", function() {
 
 });
 
+describe("EventsController", function() {
+  var controller;
+  var analytics;
+  var events;
+  var form;
+
+  beforeEach(function() {
+    events = [];
+    analytics = {
+      list: function() { return events.slice(); },
+      clear: function() { events = []; }
+    };
+    form = $(
+      '<form>' +
+      '<button class="events-clear"></button>' +
+      '<div class="events-list"></div>' +
+      '</form>'
+    );
+    controller = new EventsController({ analytics: analytics, confirmClear: function() { return true; } });
+  });
+
+  it("shows an empty state when there are no events", function() {
+    controller.attach(form);
+    expect(form.find('.events-empty').length).toEqual(1);
+    expect(form.find('.events-table').length).toEqual(0);
+  });
+
+  it("renders a row per event, most recent first", function() {
+    events = [
+      { t: 1, name: 'app_loaded', properties: { a: 1 } },
+      { t: 2, name: 'card_created', properties: { status: 'todo' } }
+    ];
+    controller.attach(form);
+    var names = form.find('.events-table tbody tr td:nth-child(2)').map(function() { return $(this).text(); }).toArray();
+    expect(names).toEqual(['card_created', 'app_loaded']);
+  });
+
+  it("Clear log button calls analytics.clear and re-renders to empty", function() {
+    events = [{ t: 1, name: 'app_loaded', properties: {} }];
+    controller.attach(form);
+    expect(form.find('.events-table').length).toEqual(1);
+    form.find('.events-clear').trigger('click');
+    expect(events.length).toEqual(0);
+    expect(form.find('.events-empty').length).toEqual(1);
+  });
+
+  it("Clear log skip when the confirm is cancelled", function() {
+    events = [{ t: 1, name: 'app_loaded', properties: {} }];
+    controller = new EventsController({ analytics: analytics, confirmClear: function() { return false; } });
+    controller.attach(form);
+    form.find('.events-clear').trigger('click');
+    expect(events.length).toEqual(1);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;

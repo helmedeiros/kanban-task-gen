@@ -70,6 +70,8 @@
         targetSelector: '#print-cards'
     });
 
+    var eventsController = new EventsController({ analytics: analytics });
+
     var jsonUpload = new JsonUpload({
         page: page,
         alertView: alertView,
@@ -83,6 +85,7 @@
         printController.attach(form);
         form.find('.print-trigger').off('click.print').on('click.print', function () { window.print(); });
     };
+    controllers.events = function (form) { eventsController.attach(form); };
     controllers.logout = function () { authService.signOut(); };
 
     function prepRoute() {
