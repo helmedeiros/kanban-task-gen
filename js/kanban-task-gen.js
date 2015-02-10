@@ -13,6 +13,7 @@
         '#/gettingstarted':{ form: 'frmGettingStarted', controller: 'gettingStarted' },
         '#/board':         { form: 'frmBoard',          controller: 'board' },
         '#/print':         { form: 'frmPrint',          controller: 'print' },
+        '#/events':        { form: 'frmEvents',         controller: 'events' },
         '#/logout':        { form: 'frmHome',           controller: 'logout' }
     };
 
