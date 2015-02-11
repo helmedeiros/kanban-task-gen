@@ -27,6 +27,10 @@ Router.prototype = {
     },
 
     transitionTo: function(path) {
+        if (this.alertView && this.alertView.dismiss) {
+            this.alertView.dismiss();
+        }
+
         var formRoute = this.routeMap[path];
         var currentUser = this.authService.currentUser();
 

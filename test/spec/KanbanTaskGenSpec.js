@@ -56,6 +56,19 @@ describe("Router", function() {
     expect(function() { router.transitionTo('#/empty'); }).not.toThrow();
   });
 
+  it("dismisses any active alert on transition", function() {
+    var alertView = { show: jasmine.createSpy('show'), dismiss: jasmine.createSpy('dismiss') };
+    router = new Router({
+      routeMap: routeMap,
+      menu: menu,
+      controllers: controllers,
+      authService: authService,
+      alertView: alertView
+    });
+    router.transitionTo('#/home');
+    expect(alertView.dismiss).toHaveBeenCalled();
+  });
+
   describe("afterAuth", function() {
     var alertView;
 
@@ -132,6 +145,14 @@ describe("AlertView", function() {
     view.show({ title: "T", detail: "D", className: "alert-info" });
     expect(box.fadeIn).toHaveBeenCalled();
     expect(box.fadeOut).toHaveBeenCalled();
+  });
+
+  it("dismiss stops any in-flight animation and hides the box", function() {
+    box.stop = jasmine.createSpy("stop").and.returnValue(box);
+    box.hide = jasmine.createSpy("hide");
+    view.dismiss();
+    expect(box.stop).toHaveBeenCalledWith(true, true);
+    expect(box.hide).toHaveBeenCalled();
   });
 
 });
