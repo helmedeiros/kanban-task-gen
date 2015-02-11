@@ -126,24 +126,47 @@
             $('<option></option>').val(boards[i].id).text(boards[i].name).appendTo(select);
         }
         $('<option></option>').val('__new__').text('+ New board…').appendTo(select);
+        $('<option></option>').val('__rename__').text('✎ Rename current board…').appendTo(select);
         select.val(current.id);
         select.on('change', function () {
             var picked = select.val();
             if (picked === '__new__') {
-                var name = window.prompt('Name your new board');
-                if (!name) {
-                    select.val(current.id);
-                    return;
-                }
-                var created = catalog.create(name);
-                catalog.setActiveId(created.id);
-                analytics.track('board_created', { boardId: created.id, name: created.name });
+                createNewBoard(catalog, current, select);
+            } else if (picked === '__rename__') {
+                renameCurrentBoard(catalog, current, select);
             } else {
-                catalog.setActiveId(picked);
-                analytics.track('board_switched', { fromBoardId: current.id, toBoardId: picked });
+                switchToBoard(catalog, current, picked);
             }
-            window.location.reload();
         });
+    }
+
+    function createNewBoard(catalog, current, select) {
+        var name = window.prompt('Name your new board');
+        if (!name) {
+            select.val(current.id);
+            return;
+        }
+        var created = catalog.create(name);
+        catalog.setActiveId(created.id);
+        analytics.track('board_created', { boardId: created.id, name: created.name });
+        window.location.reload();
+    }
+
+    function renameCurrentBoard(catalog, current, select) {
+        var name = window.prompt('Rename "' + current.name + '" to:', current.name);
+        if (!name || name === current.name) {
+            select.val(current.id);
+            return;
+        }
+        catalog.rename(current.id, name);
+        analytics.track('board_renamed', { boardId: current.id, name: name });
+        window.location.reload();
+    }
+
+    function switchToBoard(catalog, current, picked) {
+        catalog.setActiveId(picked);
+        analytics.track('board_switched', { fromBoardId: current.id, toBoardId: picked });
+        window.location.reload();
     }
 
 }(window.Path));
