@@ -127,6 +127,7 @@
         }
         $('<option></option>').val('__new__').text('+ New board…').appendTo(select);
         $('<option></option>').val('__rename__').text('✎ Rename current board…').appendTo(select);
+        $('<option></option>').val('__delete__').text('× Delete current board…').appendTo(select);
         select.val(current.id);
         select.on('change', function () {
             var picked = select.val();
@@ -134,6 +135,8 @@
                 createNewBoard(catalog, current, select);
             } else if (picked === '__rename__') {
                 renameCurrentBoard(catalog, current, select);
+            } else if (picked === '__delete__') {
+                deleteCurrentBoard(catalog, current, select);
             } else {
                 switchToBoard(catalog, current, picked);
             }
@@ -166,6 +169,25 @@
     function switchToBoard(catalog, current, picked) {
         catalog.setActiveId(picked);
         analytics.track('board_switched', { fromBoardId: current.id, toBoardId: picked });
+        window.location.reload();
+    }
+
+    function deleteCurrentBoard(catalog, current, select) {
+        if (catalog.list().length <= 1) {
+            window.alert('You need at least one board.');
+            select.val(current.id);
+            return;
+        }
+        if (!window.confirm('Delete "' + current.name + '"? All its cards will be removed.')) {
+            select.val(current.id);
+            return;
+        }
+        catalog.remove(current.id);
+        analytics.track('board_deleted', { boardId: current.id, name: current.name });
+        var remaining = catalog.list();
+        if (remaining.length) {
+            catalog.setActiveId(remaining[0].id);
+        }
         window.location.reload();
     }
 
