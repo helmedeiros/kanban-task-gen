@@ -964,6 +964,80 @@ describe("EventsController", function() {
 
 });
 
+describe("FunnelAnalyzer", function() {
+  var analyzer;
+
+  beforeEach(function() {
+    analyzer = new FunnelAnalyzer();
+  });
+
+  function at(year, month, day, name, properties) {
+    return { t: new Date(year, month - 1, day, 12, 0, 0).getTime(), name: name, properties: properties || {} };
+  }
+
+  it("returns zeroed counts for an empty event log", function() {
+    expect(analyzer.compute([])).toEqual({ acquisition: 0, activation: 0, retention: 0, referral: 0, revenue: 0 });
+  });
+
+  it("counts acquisition from app_loaded events", function() {
+    var counts = analyzer.compute([at(2015, 2, 12, 'app_loaded'), at(2015, 2, 12, 'app_loaded')]);
+    expect(counts.acquisition).toEqual(2);
+  });
+
+  it("counts activation from card_created events", function() {
+    var counts = analyzer.compute([
+      at(2015, 2, 12, 'card_created'),
+      at(2015, 2, 12, 'card_moved'),
+      at(2015, 2, 12, 'card_created')
+    ]);
+    expect(counts.activation).toEqual(2);
+  });
+
+  it("counts referral from board_shared and share_clicked", function() {
+    var counts = analyzer.compute([
+      at(2015, 2, 12, 'board_shared'),
+      at(2015, 2, 12, 'share_clicked')
+    ]);
+    expect(counts.referral).toEqual(2);
+  });
+
+  it("counts retention as distinct session days minus one", function() {
+    var counts = analyzer.compute([
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 13, 'app_loaded'),
+      at(2015, 2, 16, 'app_loaded')
+    ]);
+    expect(counts.retention).toEqual(2);
+  });
+
+  it("returns zero retention when only one session day exists", function() {
+    var counts = analyzer.compute([
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 12, 'app_loaded')
+    ]);
+    expect(counts.retention).toEqual(0);
+  });
+
+  it("computes per-stage conversion rates as percentages", function() {
+    var counts = { acquisition: 10, activation: 5, retention: 2, referral: 1, revenue: 0 };
+    var rates = analyzer.conversion(counts);
+    expect(rates.activation).toEqual(50);
+    expect(rates.retention).toEqual(40);
+    expect(rates.referral).toEqual(50);
+    expect(rates.revenue).toEqual(0);
+  });
+
+  it("guards against divide-by-zero in conversion rates", function() {
+    var rates = analyzer.conversion({ acquisition: 0, activation: 0, retention: 0, referral: 0, revenue: 0 });
+    expect(rates.activation).toEqual(0);
+    expect(rates.retention).toEqual(0);
+    expect(rates.referral).toEqual(0);
+    expect(rates.revenue).toEqual(0);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;
