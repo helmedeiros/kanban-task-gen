@@ -45,10 +45,10 @@ FunnelAnalyzer.prototype = {
     conversion: function(counts) {
         var rates = {};
         var keys = ['acquisition', 'activation', 'retention', 'referral', 'revenue'];
+        var base = counts.acquisition;
         for (var i = 1; i < keys.length; i++) {
-            var prev = counts[keys[i - 1]];
             var curr = counts[keys[i]];
-            rates[keys[i]] = prev > 0 ? Math.round((curr / prev) * 1000) / 10 : 0;
+            rates[keys[i]] = base > 0 ? Math.round((curr / base) * 1000) / 10 : 0;
         }
         return rates;
     }

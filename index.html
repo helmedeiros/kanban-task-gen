@@ -194,13 +194,22 @@
           <div class="container container--wide board-header">
             <div class="board-header-titles">
               <h1 class="feature__title">Events</h1>
-              <p class="feature__subtitle">Local analytics log.</p>
+              <p class="feature__subtitle">AARRR funnel from the local analytics log.</p>
             </div>
             <button type="button" class="board-add-link events-clear">Clear log</button>
           </div>
         </header>
         <div class="container--wide tour block main" role="main">
-          <div class="events-list"></div>
+          <section class="funnel">
+            <div class="funnel-stages"></div>
+            <div class="funnel-chart-wrap">
+              <canvas class="funnel-chart" width="700" height="260"></canvas>
+            </div>
+          </section>
+          <section class="events-log">
+            <div class="events-log-title">Raw event log</div>
+            <div class="events-list"></div>
+          </section>
         </div>
       </form>
 

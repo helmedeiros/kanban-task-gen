@@ -913,9 +913,16 @@ describe("EventsController", function() {
   var analytics;
   var events;
   var form;
+  var chartCalls;
+  var chartFactory;
 
   beforeEach(function() {
     events = [];
+    chartCalls = [];
+    chartFactory = function(canvas, data) {
+      chartCalls.push({ canvas: canvas, data: data });
+      return { destroy: function() {} };
+    };
     analytics = {
       list: function() { return events.slice(); },
       clear: function() { events = []; }
@@ -923,10 +930,16 @@ describe("EventsController", function() {
     form = $(
       '<form>' +
       '<button class="events-clear"></button>' +
+      '<div class="funnel-stages"></div>' +
+      '<canvas class="funnel-chart"></canvas>' +
       '<div class="events-list"></div>' +
       '</form>'
     );
-    controller = new EventsController({ analytics: analytics, confirmClear: function() { return true; } });
+    controller = new EventsController({
+      analytics: analytics,
+      chartFactory: chartFactory,
+      confirmClear: function() { return true; }
+    });
   });
 
   it("shows an empty state when there are no events", function() {
@@ -945,6 +958,33 @@ describe("EventsController", function() {
     expect(names).toEqual(['card_created', 'app_loaded']);
   });
 
+  it("renders one stage card per AARRR stage", function() {
+    controller.attach(form);
+    expect(form.find('.funnel-stage').length).toEqual(5);
+    expect(form.find('.funnel-stage--acquisition').length).toEqual(1);
+    expect(form.find('.funnel-stage--revenue').length).toEqual(1);
+  });
+
+  it("populates stage counts from the funnel analyzer", function() {
+    events = [
+      { t: 1, name: 'app_loaded', properties: {} },
+      { t: 2, name: 'card_created', properties: {} },
+      { t: 3, name: 'card_created', properties: {} }
+    ];
+    controller.attach(form);
+    expect(form.find('.funnel-stage--acquisition .funnel-stage-count').text()).toEqual('1');
+    expect(form.find('.funnel-stage--activation .funnel-stage-count').text()).toEqual('2');
+  });
+
+  it("calls the chart factory with the canvas and a Bar dataset", function() {
+    events = [{ t: 1, name: 'app_loaded', properties: {} }];
+    controller.attach(form);
+    expect(chartCalls.length).toEqual(1);
+    expect(chartCalls[0].canvas).toBe(form.find('.funnel-chart')[0]);
+    expect(chartCalls[0].data.labels.length).toEqual(5);
+    expect(chartCalls[0].data.datasets[0].data[0]).toEqual(1);
+  });
+
   it("Clear log button calls analytics.clear and re-renders to empty", function() {
     events = [{ t: 1, name: 'app_loaded', properties: {} }];
     controller.attach(form);
@@ -956,7 +996,11 @@ describe("EventsController", function() {
 
   it("Clear log skip when the confirm is cancelled", function() {
     events = [{ t: 1, name: 'app_loaded', properties: {} }];
-    controller = new EventsController({ analytics: analytics, confirmClear: function() { return false; } });
+    controller = new EventsController({
+      analytics: analytics,
+      chartFactory: chartFactory,
+      confirmClear: function() { return false; }
+    });
     controller.attach(form);
     form.find('.events-clear').trigger('click');
     expect(events.length).toEqual(1);
@@ -1019,12 +1063,12 @@ describe("FunnelAnalyzer", function() {
     expect(counts.retention).toEqual(0);
   });
 
-  it("computes per-stage conversion rates as percentages", function() {
+  it("computes conversion rates as a percentage of acquisition", function() {
     var counts = { acquisition: 10, activation: 5, retention: 2, referral: 1, revenue: 0 };
     var rates = analyzer.conversion(counts);
     expect(rates.activation).toEqual(50);
-    expect(rates.retention).toEqual(40);
-    expect(rates.referral).toEqual(50);
+    expect(rates.retention).toEqual(20);
+    expect(rates.referral).toEqual(10);
     expect(rates.revenue).toEqual(0);
   });
 
