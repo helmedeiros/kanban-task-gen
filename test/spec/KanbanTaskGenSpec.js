@@ -1091,19 +1091,27 @@ describe("FunnelAnalyzer", function() {
     expect(analyzer.distribution([])).toEqual([]);
   });
 
-  it("groups sessions by day in ascending order", function() {
+  it("groups sessions and card-creation activity by day, ascending", function() {
     var series = analyzer.sessionsByDay([
       at(2015, 2, 13, 'app_loaded'),
       at(2015, 2, 12, 'app_loaded'),
       at(2015, 2, 12, 'app_loaded'),
       at(2015, 2, 12, 'card_created'),
+      at(2015, 2, 12, 'card_created'),
       at(2015, 2, 13, 'app_loaded'),
       at(2015, 2, 11, 'app_loaded')
     ]);
     expect(series.length).toEqual(3);
-    expect(series[0]).toEqual({ day: '2015-02-11', count: 1 });
-    expect(series[1]).toEqual({ day: '2015-02-12', count: 2 });
-    expect(series[2]).toEqual({ day: '2015-02-13', count: 2 });
+    expect(series[0]).toEqual({ day: '2015-02-11', sessions: 1, cards: 0 });
+    expect(series[1]).toEqual({ day: '2015-02-12', sessions: 2, cards: 2 });
+    expect(series[2]).toEqual({ day: '2015-02-13', sessions: 2, cards: 0 });
+  });
+
+  it("includes days with only card activity but no sessions", function() {
+    var series = analyzer.sessionsByDay([
+      at(2015, 2, 12, 'card_created')
+    ]);
+    expect(series).toEqual([{ day: '2015-02-12', sessions: 0, cards: 1 }]);
   });
 
   it("returns an empty series when no sessions exist", function() {

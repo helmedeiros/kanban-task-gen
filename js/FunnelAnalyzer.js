@@ -62,23 +62,32 @@ FunnelAnalyzer.prototype = {
     },
 
     sessionsByDay: function(events) {
-        var counts = {};
+        var byDay = {};
         for (var i = 0; i < events.length; i++) {
-            if (events[i].name === 'app_loaded') {
-                var day = dayBucket(events[i].t);
-                counts[day] = (counts[day] || 0) + 1;
+            var e = events[i];
+            if (e.name !== 'app_loaded' && e.name !== 'card_created') {
+                continue;
+            }
+            var day = dayBucket(e.t);
+            if (!byDay[day]) {
+                byDay[day] = { day: day, sessions: 0, cards: 0 };
+            }
+            if (e.name === 'app_loaded') {
+                byDay[day].sessions++;
+            } else {
+                byDay[day].cards++;
             }
         }
         var days = [];
-        for (var d in counts) {
-            if (counts.hasOwnProperty(d)) {
+        for (var d in byDay) {
+            if (byDay.hasOwnProperty(d)) {
                 days.push(d);
             }
         }
         days.sort();
         var series = [];
         for (var j = 0; j < days.length; j++) {
-            series.push({ day: days[j], count: counts[days[j]] });
+            series.push(byDay[days[j]]);
         }
         return series;
     },

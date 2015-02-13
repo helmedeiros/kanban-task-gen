@@ -119,21 +119,33 @@ function renderSessionsChart(form, sessions, factory, previous) {
     canvas.show();
     empty.hide();
     var labels = [];
-    var values = [];
+    var sessionValues = [];
+    var cardValues = [];
     for (var i = 0; i < sessions.length; i++) {
         labels.push(shortDay(sessions[i].day));
-        values.push(sessions[i].count);
+        sessionValues.push(sessions[i].sessions);
+        cardValues.push(sessions[i].cards);
     }
     var data = {
         labels: labels,
-        datasets: [{
-            label: 'Sessions',
-            fillColor: 'rgba(78,154,205,0.18)',
-            strokeColor: 'rgba(78,154,205,1)',
-            pointColor: 'rgba(78,154,205,1)',
-            pointStrokeColor: '#fff',
-            data: values
-        }]
+        datasets: [
+            {
+                label: 'Sessions',
+                fillColor: 'rgba(78,154,205,0.18)',
+                strokeColor: 'rgba(78,154,205,1)',
+                pointColor: 'rgba(78,154,205,1)',
+                pointStrokeColor: '#fff',
+                data: sessionValues
+            },
+            {
+                label: 'Cards created',
+                fillColor: 'rgba(111,183,111,0.18)',
+                strokeColor: 'rgba(111,183,111,1)',
+                pointColor: 'rgba(111,183,111,1)',
+                pointStrokeColor: '#fff',
+                data: cardValues
+            }
+        ]
     };
     return factory(canvas[0], data);
 }

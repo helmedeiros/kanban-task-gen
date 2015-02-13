@@ -874,6 +874,28 @@ pre[class*="language-"] {
   padding: 40px 10px;
   margin: 0;
 }
+.sessions-legend {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 11px;
+  color: #666;
+}
+.sessions-legend li {
+  display: inline-block;
+  margin: 0 10px;
+}
+.sessions-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.sessions-swatch--blue  { background: #4E9ACD; }
+.sessions-swatch--green { background: #6FB76F; }
 .distribution-wrap {
   margin-top: 4px;
   font-size: 0;
