@@ -1072,6 +1072,25 @@ describe("FunnelAnalyzer", function() {
     expect(rates.revenue).toEqual(0);
   });
 
+  it("returns event counts sorted by frequency desc then name asc", function() {
+    var dist = analyzer.distribution([
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 12, 'card_created'),
+      at(2015, 2, 12, 'card_moved'),
+      at(2015, 2, 12, 'card_created'),
+      at(2015, 2, 12, 'card_created')
+    ]);
+    expect(dist).toEqual([
+      { name: 'card_created', count: 3 },
+      { name: 'app_loaded', count: 1 },
+      { name: 'card_moved', count: 1 }
+    ]);
+  });
+
+  it("returns an empty distribution for no events", function() {
+    expect(analyzer.distribution([])).toEqual([]);
+  });
+
   it("groups sessions by day in ascending order", function() {
     var series = analyzer.sessionsByDay([
       at(2015, 2, 13, 'app_loaded'),

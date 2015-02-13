@@ -874,6 +874,50 @@ pre[class*="language-"] {
   padding: 40px 10px;
   margin: 0;
 }
+.distribution-wrap {
+  margin-top: 4px;
+  font-size: 0;
+}
+.distribution-wrap > canvas {
+  display: inline-block;
+  vertical-align: middle;
+  width: 180px;
+  height: 180px;
+}
+.distribution-legend {
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0 0 0 16px;
+  list-style: none;
+  text-align: left;
+  font-size: 12px;
+}
+.distribution-legend li {
+  font-size: 12px;
+  color: #555;
+  margin: 0 0 4px;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.distribution-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.distribution-name {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 11px;
+  color: #444;
+}
+.distribution-count {
+  color: #999;
+  margin-left: 4px;
+}
 .events-log {
   margin-top: 28px;
 }

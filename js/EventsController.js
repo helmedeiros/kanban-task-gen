@@ -3,9 +3,11 @@ function EventsController(deps) {
     this.funnel = deps.funnel || new FunnelAnalyzer();
     this.chartFactory = deps.chartFactory || defaultChartFactory;
     this.sessionsChartFactory = deps.sessionsChartFactory || defaultSessionsFactory;
+    this.distributionChartFactory = deps.distributionChartFactory || defaultDistributionFactory;
     this.confirmClear = deps.confirmClear || function() { return window.confirm('Clear local analytics log?'); };
     this.chart = null;
     this.sessionsChart = null;
+    this.distributionChart = null;
 }
 
 EventsController.prototype.attach = function(form) {
@@ -15,10 +17,12 @@ EventsController.prototype.attach = function(form) {
     var counts = this.funnel.compute(events);
     var rates = this.funnel.conversion(counts);
     var sessions = this.funnel.sessionsByDay(events);
+    var distribution = this.funnel.distribution(events);
 
     renderFunnelStages(form.find('.funnel-stages'), counts, rates);
     this.chart = renderFunnelChart(form.find('.funnel-chart'), counts, this.chartFactory, this.chart);
     this.sessionsChart = renderSessionsChart(form, sessions, this.sessionsChartFactory, this.sessionsChart);
+    this.distributionChart = renderDistributionChart(form, distribution, this.distributionChartFactory, this.distributionChart);
 
     var list = form.find('.events-list').empty();
     if (!events.length) {
@@ -145,6 +149,58 @@ function defaultSessionsFactory(canvasElement, data) {
 function shortDay(yyyymmdd) {
     var parts = yyyymmdd.split('-');
     return parts[1] + '-' + parts[2];
+}
+
+var DISTRIBUTION_PALETTE = [
+    '#4E9ACD', '#6FB76F', '#E0A33A', '#C673BE', '#D26B6B',
+    '#5DB7B7', '#8C8C8C', '#A4D26B', '#D2A06B', '#6B8CD2'
+];
+
+function renderDistributionChart(form, distribution, factory, previous) {
+    var canvas = form.find('.distribution-chart');
+    var legend = form.find('.distribution-legend');
+    var empty = form.find('.distribution-empty');
+    if (!canvas.length) {
+        return null;
+    }
+    if (previous && previous.destroy) {
+        previous.destroy();
+    }
+    legend.empty();
+    if (!distribution.length) {
+        canvas.hide();
+        legend.hide();
+        empty.show();
+        return null;
+    }
+    canvas.show();
+    legend.show();
+    empty.hide();
+    var slices = [];
+    for (var i = 0; i < distribution.length; i++) {
+        var color = DISTRIBUTION_PALETTE[i % DISTRIBUTION_PALETTE.length];
+        slices.push({
+            value: distribution[i].count,
+            color: color,
+            highlight: color,
+            label: distribution[i].name
+        });
+        legend.append(
+            $('<li></li>')
+                .append($('<span class="distribution-swatch"></span>').css('background', color))
+                .append($('<span class="distribution-name"></span>').text(distribution[i].name))
+                .append($('<span class="distribution-count"></span>').text(distribution[i].count))
+        );
+    }
+    return factory(canvas[0], slices);
+}
+
+function defaultDistributionFactory(canvasElement, slices) {
+    if (typeof Chart === 'undefined') {
+        return null;
+    }
+    var ctx = canvasElement.getContext('2d');
+    return new Chart(ctx).Doughnut(slices, { responsive: false, animateRotate: true, percentageInnerCutout: 55 });
 }
 
 function buildEventsTable(events) {

@@ -42,6 +42,25 @@ FunnelAnalyzer.prototype = {
         return counts;
     },
 
+    distribution: function(events) {
+        var counts = {};
+        for (var i = 0; i < events.length; i++) {
+            var name = events[i].name;
+            counts[name] = (counts[name] || 0) + 1;
+        }
+        var list = [];
+        for (var n in counts) {
+            if (counts.hasOwnProperty(n)) {
+                list.push({ name: n, count: counts[n] });
+            }
+        }
+        list.sort(function(a, b) {
+            if (b.count !== a.count) { return b.count - a.count; }
+            return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0);
+        });
+        return list;
+    },
+
     sessionsByDay: function(events) {
         var counts = {};
         for (var i = 0; i < events.length; i++) {
