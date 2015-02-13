@@ -837,6 +837,43 @@ pre[class*="language-"] {
   display: inline-block;
   max-width: 100%;
 }
+.funnel-secondary {
+  margin: 20px auto 0;
+  max-width: 820px;
+  display: table;
+  width: 100%;
+  border-spacing: 12px 0;
+  table-layout: fixed;
+}
+.funnel-secondary-card {
+  display: table-cell;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  padding: 14px 16px 18px;
+  text-align: center;
+  vertical-align: top;
+}
+.funnel-secondary-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #777;
+  text-align: left;
+  margin-bottom: 8px;
+}
+.funnel-secondary-card canvas {
+  display: inline-block;
+  max-width: 100%;
+}
+.funnel-secondary-empty {
+  display: none;
+  color: #bbb;
+  font-style: italic;
+  font-size: 12px;
+  padding: 40px 10px;
+  margin: 0;
+}
 .events-log {
   margin-top: 28px;
 }

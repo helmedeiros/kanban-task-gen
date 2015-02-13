@@ -2,8 +2,10 @@ function EventsController(deps) {
     this.analytics = deps.analytics;
     this.funnel = deps.funnel || new FunnelAnalyzer();
     this.chartFactory = deps.chartFactory || defaultChartFactory;
+    this.sessionsChartFactory = deps.sessionsChartFactory || defaultSessionsFactory;
     this.confirmClear = deps.confirmClear || function() { return window.confirm('Clear local analytics log?'); };
     this.chart = null;
+    this.sessionsChart = null;
 }
 
 EventsController.prototype.attach = function(form) {
@@ -12,9 +14,11 @@ EventsController.prototype.attach = function(form) {
 
     var counts = this.funnel.compute(events);
     var rates = this.funnel.conversion(counts);
+    var sessions = this.funnel.sessionsByDay(events);
 
     renderFunnelStages(form.find('.funnel-stages'), counts, rates);
     this.chart = renderFunnelChart(form.find('.funnel-chart'), counts, this.chartFactory, this.chart);
+    this.sessionsChart = renderSessionsChart(form, sessions, this.sessionsChartFactory, this.sessionsChart);
 
     var list = form.find('.events-list').empty();
     if (!events.length) {
@@ -92,6 +96,55 @@ function defaultChartFactory(canvasElement, data) {
     }
     var ctx = canvasElement.getContext('2d');
     return new Chart(ctx).Bar(data, { responsive: false, scaleBeginAtZero: true });
+}
+
+function renderSessionsChart(form, sessions, factory, previous) {
+    var canvas = form.find('.sessions-chart');
+    var empty = form.find('.sessions-empty');
+    if (!canvas.length) {
+        return null;
+    }
+    if (previous && previous.destroy) {
+        previous.destroy();
+    }
+    if (!sessions.length) {
+        canvas.hide();
+        empty.show();
+        return null;
+    }
+    canvas.show();
+    empty.hide();
+    var labels = [];
+    var values = [];
+    for (var i = 0; i < sessions.length; i++) {
+        labels.push(shortDay(sessions[i].day));
+        values.push(sessions[i].count);
+    }
+    var data = {
+        labels: labels,
+        datasets: [{
+            label: 'Sessions',
+            fillColor: 'rgba(78,154,205,0.18)',
+            strokeColor: 'rgba(78,154,205,1)',
+            pointColor: 'rgba(78,154,205,1)',
+            pointStrokeColor: '#fff',
+            data: values
+        }]
+    };
+    return factory(canvas[0], data);
+}
+
+function defaultSessionsFactory(canvasElement, data) {
+    if (typeof Chart === 'undefined') {
+        return null;
+    }
+    var ctx = canvasElement.getContext('2d');
+    return new Chart(ctx).Line(data, { responsive: false, scaleBeginAtZero: true, pointDot: true });
+}
+
+function shortDay(yyyymmdd) {
+    var parts = yyyymmdd.split('-');
+    return parts[1] + '-' + parts[2];
 }
 
 function buildEventsTable(events) {

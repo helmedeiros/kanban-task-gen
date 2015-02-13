@@ -42,6 +42,28 @@ FunnelAnalyzer.prototype = {
         return counts;
     },
 
+    sessionsByDay: function(events) {
+        var counts = {};
+        for (var i = 0; i < events.length; i++) {
+            if (events[i].name === 'app_loaded') {
+                var day = dayBucket(events[i].t);
+                counts[day] = (counts[day] || 0) + 1;
+            }
+        }
+        var days = [];
+        for (var d in counts) {
+            if (counts.hasOwnProperty(d)) {
+                days.push(d);
+            }
+        }
+        days.sort();
+        var series = [];
+        for (var j = 0; j < days.length; j++) {
+            series.push({ day: days[j], count: counts[days[j]] });
+        }
+        return series;
+    },
+
     conversion: function(counts) {
         var rates = {};
         var keys = ['acquisition', 'activation', 'retention', 'referral', 'revenue'];

@@ -1072,6 +1072,25 @@ describe("FunnelAnalyzer", function() {
     expect(rates.revenue).toEqual(0);
   });
 
+  it("groups sessions by day in ascending order", function() {
+    var series = analyzer.sessionsByDay([
+      at(2015, 2, 13, 'app_loaded'),
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 12, 'app_loaded'),
+      at(2015, 2, 12, 'card_created'),
+      at(2015, 2, 13, 'app_loaded'),
+      at(2015, 2, 11, 'app_loaded')
+    ]);
+    expect(series.length).toEqual(3);
+    expect(series[0]).toEqual({ day: '2015-02-11', count: 1 });
+    expect(series[1]).toEqual({ day: '2015-02-12', count: 2 });
+    expect(series[2]).toEqual({ day: '2015-02-13', count: 2 });
+  });
+
+  it("returns an empty series when no sessions exist", function() {
+    expect(analyzer.sessionsByDay([])).toEqual([]);
+  });
+
   it("guards against divide-by-zero in conversion rates", function() {
     var rates = analyzer.conversion({ acquisition: 0, activation: 0, retention: 0, referral: 0, revenue: 0 });
     expect(rates.activation).toEqual(0);
