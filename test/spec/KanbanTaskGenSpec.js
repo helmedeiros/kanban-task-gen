@@ -828,6 +828,49 @@ describe("BoardController", function() {
     }, 0);
   });
 
+  it("clicking Share board downloads a snapshot and fires board_shared", function(done) {
+    var downloads = [];
+    var tracked = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({ 'fb-1': { id: '1', status: 'todo' }, 'fb-2': { id: '2', status: 'done' } });
+        return deferred.promise();
+      }
+    };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      getActiveBoard: function() { return { id: 'b-1', name: 'Personal' }; },
+      analytics: analytics,
+      download: function(filename, payload, mimeType) { downloads.push({ filename: filename, payload: payload, mimeType: mimeType }); }
+    });
+    form = $(
+      '<form>' +
+      '<button class="board-share"></button>' +
+      '<section class="board-column" data-status="todo"><h2 class="board-column-title">To do</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="doing"><h2 class="board-column-title">Doing</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="done"><h2 class="board-column-title">Done</h2><div class="board-column-cards"></div></section>' +
+      '</form>'
+    );
+    controller.attach(form);
+    setTimeout(function() {
+      form.find('.board-share').trigger('click');
+      setTimeout(function() {
+        expect(downloads.length).toEqual(1);
+        expect(downloads[0].mimeType).toEqual('application/json');
+        expect(downloads[0].filename).toMatch(/^kanban-personal-\d{4}-\d{2}-\d{2}\.json$/);
+        var parsed = JSON.parse(downloads[0].payload);
+        expect(parsed.board).toEqual({ id: 'b-1', name: 'Personal' });
+        expect(Object.keys(parsed.tasks).length).toEqual(2);
+        var shared = tracked.filter(function(e) { return e.name === 'board_shared'; })[0];
+        expect(shared.props).toEqual({ boardId: 'b-1', name: 'Personal', cardCount: 2 });
+        done();
+      }, 0);
+    }, 0);
+  });
+
   it("dropping a card into a column moves it and persists the new status", function(done) {
     var updates = [];
     repository = {

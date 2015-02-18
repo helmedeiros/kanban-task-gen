@@ -528,6 +528,14 @@ pre[class*="language-"] {
 .board-header-titles {
   text-align: left;
 }
+.board-header-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.board-header-actions > .board-add-link {
+  margin-left: 10px;
+}
 .board-add-link {
   flex-shrink: 0;
   padding: 8px 18px;
@@ -541,6 +549,16 @@ pre[class*="language-"] {
   background: #f0f0f0;
   color: #3a85b9;
   text-decoration: none;
+}
+.board-share {
+  border: 1px solid #d4ecf7;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+.board-share:hover {
+  background: #4287b3;
+  color: #fff;
 }
 .board-columns {
   display: flex;

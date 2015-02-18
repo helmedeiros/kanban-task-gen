@@ -60,6 +60,7 @@
     var boardController = new BoardController({
         renderer: new BoardCardRenderer(),
         getBoardRepository: function () { return boardSession.repository; },
+        getActiveBoard: function () { return boardsCatalog.getActive(); },
         modal: cardModal,
         analytics: analytics
     });

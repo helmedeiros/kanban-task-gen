@@ -3,6 +3,9 @@ function BoardController(deps) {
     this.getBoardRepository = deps.getBoardRepository;
     this.modal = deps.modal;
     this.analytics = deps.analytics || { track: function() {} };
+    this.snapshot = deps.snapshot || new BoardSnapshot();
+    this.getActiveBoard = deps.getActiveBoard || function() { return { id: 'default', name: 'Board' }; };
+    this.download = deps.download || defaultDownload;
     this.cardsByFbKey = {};
 }
 
@@ -14,6 +17,7 @@ BoardController.prototype.attach = function(form) {
     updateCounts(form);
     bindDragAndDrop(form, function(fbKey, newStatus) { self.changeStatus(fbKey, newStatus); });
     bindOpenOnClick(form, function(fbKey) { self.openCard(fbKey); });
+    bindShare(form, function() { self.shareBoard(); });
 
     var repo = this.getBoardRepository();
     if (!repo) {
@@ -33,6 +37,27 @@ BoardController.prototype.attach = function(form) {
             }
         }
         updateCounts(form);
+    });
+};
+
+BoardController.prototype.shareBoard = function() {
+    var self = this;
+    var repo = this.getBoardRepository();
+    if (!repo) {
+        return;
+    }
+    repo.getAll().then(function(rawCards) {
+        var cards = rawCards || {};
+        var board = self.getActiveBoard();
+        var now = new Date();
+        var payload = self.snapshot.serialize(board, cards, now);
+        var filename = self.snapshot.filename(board, now);
+        self.download(filename, payload, 'application/json');
+        self.analytics.track('board_shared', {
+            boardId: board.id,
+            name: board.name,
+            cardCount: self.snapshot.cardCount(cards)
+        });
     });
 };
 
@@ -141,6 +166,25 @@ function bindOpenOnClick(form, onOpen) {
             onOpen(fbKey);
         }
     });
+}
+
+function bindShare(form, onShare) {
+    form.find('.board-share').off('click.share').on('click.share', function(e) {
+        e.preventDefault();
+        onShare();
+    });
+}
+
+function defaultDownload(filename, payload, mimeType) {
+    var blob = new Blob([payload], { type: mimeType });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 0);
 }
 
 function moveCardToStatusColumn(fbKey, newStatus) {
