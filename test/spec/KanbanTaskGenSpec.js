@@ -831,7 +831,9 @@ describe("BoardController", function() {
   it("clicking Share board downloads a snapshot and fires board_shared", function(done) {
     var downloads = [];
     var tracked = [];
+    var alerts = [];
     var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    var alertView = { show: function(opts) { alerts.push(opts); } };
     repository = {
       getAll: function() {
         var deferred = $.Deferred();
@@ -844,6 +846,7 @@ describe("BoardController", function() {
       getBoardRepository: function() { return repository; },
       getActiveBoard: function() { return { id: 'b-1', name: 'Personal' }; },
       analytics: analytics,
+      alertView: alertView,
       download: function(filename, payload, mimeType) { downloads.push({ filename: filename, payload: payload, mimeType: mimeType }); }
     });
     form = $(
@@ -866,6 +869,50 @@ describe("BoardController", function() {
         expect(Object.keys(parsed.tasks).length).toEqual(2);
         var shared = tracked.filter(function(e) { return e.name === 'board_shared'; })[0];
         expect(shared.props).toEqual({ boardId: 'b-1', name: 'Personal', cardCount: 2 });
+        var success = alerts.filter(function(a) { return a.className === 'alert-success'; })[0];
+        expect(success.title).toEqual('Snapshot downloaded');
+        done();
+      }, 0);
+    }, 0);
+  });
+
+  it("Share board on an empty board shows an info alert and skips download", function(done) {
+    var downloads = [];
+    var tracked = [];
+    var alerts = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    var alertView = { show: function(opts) { alerts.push(opts); } };
+    repository = {
+      getAll: function() {
+        var deferred = $.Deferred();
+        deferred.resolve({});
+        return deferred.promise();
+      }
+    };
+    controller = new BoardController({
+      renderer: renderer,
+      getBoardRepository: function() { return repository; },
+      getActiveBoard: function() { return { id: 'b-1', name: 'Personal' }; },
+      analytics: analytics,
+      alertView: alertView,
+      download: function(f, p, m) { downloads.push({ f: f, p: p, m: m }); }
+    });
+    form = $(
+      '<form>' +
+      '<button class="board-share"></button>' +
+      '<section class="board-column" data-status="todo"><h2 class="board-column-title">To do</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="doing"><h2 class="board-column-title">Doing</h2><div class="board-column-cards"></div></section>' +
+      '<section class="board-column" data-status="done"><h2 class="board-column-title">Done</h2><div class="board-column-cards"></div></section>' +
+      '</form>'
+    );
+    controller.attach(form);
+    setTimeout(function() {
+      form.find('.board-share').trigger('click');
+      setTimeout(function() {
+        expect(downloads.length).toEqual(0);
+        expect(tracked.filter(function(e) { return e.name === 'board_shared'; }).length).toEqual(0);
+        var info = alerts.filter(function(a) { return a.className === 'alert-info'; })[0];
+        expect(info.title).toEqual('Nothing to share');
         done();
       }, 0);
     }, 0);

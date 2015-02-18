@@ -62,7 +62,8 @@
         getBoardRepository: function () { return boardSession.repository; },
         getActiveBoard: function () { return boardsCatalog.getActive(); },
         modal: cardModal,
-        analytics: analytics
+        analytics: analytics,
+        alertView: alertView
     });
 
     var printController = new PrintController({

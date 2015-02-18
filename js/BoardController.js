@@ -6,6 +6,7 @@ function BoardController(deps) {
     this.snapshot = deps.snapshot || new BoardSnapshot();
     this.getActiveBoard = deps.getActiveBoard || function() { return { id: 'default', name: 'Board' }; };
     this.download = deps.download || defaultDownload;
+    this.alertView = deps.alertView || { show: function() {} };
     this.cardsByFbKey = {};
 }
 
@@ -49,6 +50,15 @@ BoardController.prototype.shareBoard = function() {
     repo.getAll().then(function(rawCards) {
         var cards = rawCards || {};
         var board = self.getActiveBoard();
+        var count = self.snapshot.cardCount(cards);
+        if (count === 0) {
+            self.alertView.show({
+                title: 'Nothing to share',
+                detail: 'Add at least one card to ' + board.name + ' before sharing.',
+                className: 'alert-info'
+            });
+            return;
+        }
         var now = new Date();
         var payload = self.snapshot.serialize(board, cards, now);
         var filename = self.snapshot.filename(board, now);
@@ -56,7 +66,12 @@ BoardController.prototype.shareBoard = function() {
         self.analytics.track('board_shared', {
             boardId: board.id,
             name: board.name,
-            cardCount: self.snapshot.cardCount(cards)
+            cardCount: count
+        });
+        self.alertView.show({
+            title: 'Snapshot downloaded',
+            detail: count + ' card' + (count === 1 ? '' : 's') + ' from ' + board.name + ' saved to ' + filename,
+            className: 'alert-success'
         });
     });
 };
