@@ -1128,6 +1128,44 @@ describe("FunnelAnalyzer", function() {
 
 });
 
+describe("BoardSnapshot", function() {
+  var snapshot;
+  var fixedNow;
+
+  beforeEach(function() {
+    snapshot = new BoardSnapshot();
+    fixedNow = new Date(Date.UTC(2015, 1, 18, 22, 15, 0));
+  });
+
+  it("builds a snapshot containing board info, exported_at and tasks", function() {
+    var built = snapshot.build({ id: 'b-1', name: 'Personal' }, { 'k1': { title: 'A', status: 'todo' } }, fixedNow);
+    expect(built.board).toEqual({ id: 'b-1', name: 'Personal' });
+    expect(built.exported_at).toEqual('2015-02-18T22:15:00.000Z');
+    expect(built.tasks).toEqual({ 'k1': { title: 'A', status: 'todo' } });
+  });
+
+  it("serializes to pretty-printed JSON", function() {
+    var text = snapshot.serialize({ id: 'b-1', name: 'P' }, { 'k': { title: 't' } }, fixedNow);
+    expect(text.indexOf('\n')).toBeGreaterThan(0);
+    expect(JSON.parse(text).board.name).toEqual('P');
+  });
+
+  it("produces a kebab-case filename with the export date", function() {
+    expect(snapshot.filename({ name: 'My Personal Board!' }, fixedNow)).toEqual('kanban-my-personal-board-2015-02-18.json');
+  });
+
+  it("falls back to a default slug when the name is empty", function() {
+    expect(snapshot.filename({ name: '' }, fixedNow)).toEqual('kanban-board-2015-02-18.json');
+    expect(snapshot.filename({ name: '!!!' }, fixedNow)).toEqual('kanban-board-2015-02-18.json');
+  });
+
+  it("counts cards in the snapshot", function() {
+    expect(snapshot.cardCount({})).toEqual(0);
+    expect(snapshot.cardCount({ a: {}, b: {}, c: {} })).toEqual(3);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;
