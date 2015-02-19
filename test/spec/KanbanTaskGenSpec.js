@@ -393,6 +393,44 @@ describe("LocalAnalytics", function() {
 
 });
 
+describe("CompositeAnalytics", function() {
+
+  it("fans every track call out to each adapter", function() {
+    var a = []; var b = [];
+    var composite = new CompositeAnalytics([
+      { track: function(n, p) { a.push({ n: n, p: p }); } },
+      { track: function(n, p) { b.push({ n: n, p: p }); } }
+    ]);
+    composite.track('card_created', { status: 'todo' });
+    expect(a).toEqual([{ n: 'card_created', p: { status: 'todo' } }]);
+    expect(b).toEqual([{ n: 'card_created', p: { status: 'todo' } }]);
+  });
+
+  it("keeps calling adapters when one throws", function() {
+    var calls = [];
+    var composite = new CompositeAnalytics([
+      { track: function() { throw new Error('boom'); } },
+      { track: function(n) { calls.push(n); } }
+    ]);
+    composite.track('event_a');
+    expect(calls).toEqual(['event_a']);
+  });
+
+  it("starts empty when no adapters are supplied", function() {
+    var composite = new CompositeAnalytics();
+    expect(function() { composite.track('x'); }).not.toThrow();
+  });
+
+  it("add registers another adapter at runtime", function() {
+    var seen = [];
+    var composite = new CompositeAnalytics();
+    composite.add({ track: function(n) { seen.push(n); } });
+    composite.track('later');
+    expect(seen).toEqual(['later']);
+  });
+
+});
+
 describe("BoardsCatalog", function() {
   var catalog;
   var store;
