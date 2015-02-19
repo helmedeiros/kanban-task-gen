@@ -431,6 +431,50 @@ describe("CompositeAnalytics", function() {
 
 });
 
+describe("KissmetricsAnalytics", function() {
+  var fakeGlobal;
+  var analytics;
+
+  beforeEach(function() {
+    fakeGlobal = {};
+    analytics = new KissmetricsAnalytics({ global: fakeGlobal });
+  });
+
+  it("track pushes a record tuple to _kmq", function() {
+    analytics.track('card_created', { status: 'todo' });
+    expect(fakeGlobal._kmq).toEqual([['record', 'card_created', { status: 'todo' }]]);
+  });
+
+  it("track lazily initialises _kmq when missing", function() {
+    expect(fakeGlobal._kmq).toBeUndefined();
+    analytics.track('seen');
+    expect(fakeGlobal._kmq.length).toEqual(1);
+  });
+
+  it("track preserves an existing _kmq queue from the snippet", function() {
+    fakeGlobal._kmq = [['record', 'already_here']];
+    analytics.track('next');
+    expect(fakeGlobal._kmq.length).toEqual(2);
+    expect(fakeGlobal._kmq[1][1]).toEqual('next');
+  });
+
+  it("identify pushes an identify tuple", function() {
+    analytics.identify('helio@example.com');
+    expect(fakeGlobal._kmq).toEqual([['identify', 'helio@example.com']]);
+  });
+
+  it("set pushes a set tuple with traits", function() {
+    analytics.set({ plan: 'free' });
+    expect(fakeGlobal._kmq).toEqual([['set', { plan: 'free' }]]);
+  });
+
+  it("track normalises a missing properties argument to {}", function() {
+    analytics.track('plain');
+    expect(fakeGlobal._kmq[0]).toEqual(['record', 'plain', {}]);
+  });
+
+});
+
 describe("BoardsCatalog", function() {
   var catalog;
   var store;
