@@ -1,11 +1,16 @@
 (function (Path) {
     "use strict";
 
+    var config = window.KANBAN_CONFIG || {};
     var authService = new LocalAuthService();
     var boardsCatalog = new BoardsCatalog({});
     var activeBoard = boardsCatalog.getActive();
     var localRepository = new LocalStorageBoardRepository(boardsCatalog.cardNamespaceFor(activeBoard.id));
-    var analytics = new LocalAnalytics({});
+    var localAnalytics = new LocalAnalytics({});
+    var analytics = new CompositeAnalytics([localAnalytics]);
+    if (config.kissmetricsKey) {
+        analytics.add(new KissmetricsAnalytics());
+    }
 
     var routeMap = {
         '#/':              { form: 'frmHome',           controller: 'home' },
@@ -72,7 +77,7 @@
         targetSelector: '#print-cards'
     });
 
-    var eventsController = new EventsController({ analytics: analytics });
+    var eventsController = new EventsController({ analytics: localAnalytics });
 
     var jsonUpload = new JsonUpload({
         page: page,
