@@ -722,6 +722,51 @@ describe("JsonUpload", function() {
     expect(captured.tasks.t1.id).toEqual('1');
   });
 
+  it("readFile imports a snapshot into the active repository and tracks board_imported", function(done) {
+    var added = [];
+    var repo = { add: function(c) { added.push(c); var d = $.Deferred(); d.resolve(); return d.promise(); } };
+    var tracked = [];
+    var routed = [];
+    upload = new JsonUpload({
+      page: page,
+      alertView: alertView,
+      fileInputSelector: '#nope-no-such-input',
+      getBoardRepository: function() { return repo; },
+      analytics: { track: function(n, p) { tracked.push({ n: n, p: p }); } },
+      router: { routeTo: function(r) { routed.push(r); } }
+    });
+    var snapshotJson = JSON.stringify({
+      board: { id: 'b-9', name: 'Visiting' },
+      exported_at: '2015-02-20T22:00:00.000Z',
+      tasks: { k1: { id: '1', name: 'A', status: 'todo' }, k2: { id: '2', name: 'B', status: 'doing' } }
+    });
+    spyOn(window, 'FileReader').and.returnValue({
+      readAsText: function() { this.onload({ target: { result: snapshotJson } }); },
+      onload: null
+    });
+    upload.readFile({});
+    setTimeout(function() {
+      expect(page.render).not.toHaveBeenCalled();
+      expect(added.length).toEqual(2);
+      var imported = tracked.filter(function(e) { return e.n === 'board_imported'; })[0];
+      expect(imported.p).toEqual({ boardId: 'b-9', name: 'Visiting', cardCount: 2 });
+      expect(routed).toEqual(['board']);
+      expect(alertView.show).toHaveBeenCalled();
+      done();
+    }, 0);
+  });
+
+  it("readFile warns on invalid JSON instead of throwing", function() {
+    spyOn(window, 'FileReader').and.returnValue({
+      readAsText: function() { this.onload({ target: { result: 'not-json' } }); },
+      onload: null
+    });
+    expect(function() { upload.readFile({}); }).not.toThrow();
+    expect(alertView.show).toHaveBeenCalled();
+    var arg = alertView.show.calls.mostRecent().args[0];
+    expect(arg.className).toEqual('alert-danger');
+  });
+
 });
 
 describe("BoardController", function() {

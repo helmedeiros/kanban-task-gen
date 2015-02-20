@@ -82,7 +82,10 @@
     var jsonUpload = new JsonUpload({
         page: page,
         alertView: alertView,
-        fileInputSelector: '#jsonFile'
+        fileInputSelector: '#jsonFile',
+        getBoardRepository: function () { return boardSession.repository; },
+        analytics: analytics,
+        router: router
     });
 
     controllers.home = function (form) { homeController.attach(form); };
