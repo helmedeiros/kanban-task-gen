@@ -1338,6 +1338,74 @@ describe("BoardSnapshot", function() {
 
 });
 
+describe("BoardImporter", function() {
+  var importer;
+
+  beforeEach(function() {
+    importer = new BoardImporter();
+  });
+
+  function fakeRepo() {
+    return {
+      added: [],
+      add: function(card) {
+        this.added.push(card);
+        var d = $.Deferred();
+        d.resolve();
+        return d.promise();
+      }
+    };
+  }
+
+  it("isSnapshot recognises payloads with board and tasks", function() {
+    expect(importer.isSnapshot({ board: {}, tasks: {} })).toBe(true);
+    expect(importer.isSnapshot({ tasks: {} })).toBe(false);
+    expect(importer.isSnapshot({ board: {} })).toBe(false);
+    expect(importer.isSnapshot(null)).toBe(false);
+    expect(importer.isSnapshot(undefined)).toBe(false);
+  });
+
+  it("importInto resolves with 0 when payload is not a snapshot", function(done) {
+    importer.importInto({ tasks: { a: {} } }, fakeRepo()).then(function(n) {
+      expect(n).toEqual(0);
+      done();
+    });
+  });
+
+  it("importInto resolves with 0 when tasks is empty", function(done) {
+    importer.importInto({ board: { id: 'b-1' }, tasks: {} }, fakeRepo()).then(function(n) {
+      expect(n).toEqual(0);
+      done();
+    });
+  });
+
+  it("importInto calls repo.add for each task", function(done) {
+    var repo = fakeRepo();
+    var snapshot = {
+      board: { id: 'b-1', name: 'P' },
+      tasks: {
+        k1: { id: '1', name: 'A', status: 'todo' },
+        k2: { id: '2', name: 'B', status: 'doing' }
+      }
+    };
+    importer.importInto(snapshot, repo).then(function(n) {
+      expect(n).toEqual(2);
+      expect(repo.added.length).toEqual(2);
+      var names = repo.added.map(function(c) { return c.name; }).sort();
+      expect(names).toEqual(['A', 'B']);
+      done();
+    });
+  });
+
+  it("importInto resolves with 0 when repository is missing", function(done) {
+    importer.importInto({ board: { id: 'b-1' }, tasks: { a: {} } }, null).then(function(n) {
+      expect(n).toEqual(0);
+      done();
+    });
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var authService;

@@ -3,7 +3,7 @@
   "jquery": true,
   "devel": true,
   "jasmine": true,
-  "predef": ["Path", "Page", "PostItRenderer", "BoardCardRenderer", "CardModal", "Card", "AuthService", "LocalAuthService", "BoardRepository", "LocalStorageBoardRepository", "BoardsCatalog", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "EventsController", "JsonUpload", "LocalAnalytics", "FunnelAnalyzer", "Chart", "BoardSnapshot", "CompositeAnalytics", "KissmetricsAnalytics"],
+  "predef": ["Path", "Page", "PostItRenderer", "BoardCardRenderer", "CardModal", "Card", "AuthService", "LocalAuthService", "BoardRepository", "LocalStorageBoardRepository", "BoardsCatalog", "BoardSession", "AlertView", "Router", "Counter", "HomeController", "GettingStartedController", "BoardController", "PrintController", "EventsController", "JsonUpload", "LocalAnalytics", "FunnelAnalyzer", "Chart", "BoardSnapshot", "CompositeAnalytics", "KissmetricsAnalytics", "BoardImporter"],
   "smarttabs": true,
   "expr": true,
   "validthis": true,
