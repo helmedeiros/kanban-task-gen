@@ -968,6 +968,11 @@ pre[class*="language-"] {
   color: #777;
   margin: 0 0 8px;
 }
+.upload-hint {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 8px;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;
