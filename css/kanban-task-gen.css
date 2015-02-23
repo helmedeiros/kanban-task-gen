@@ -275,6 +275,21 @@ min-height: 30px;
 line-height: 30px;
 position: relative;
 }
+.home-cta {
+  display: inline-block;
+  padding: 14px 28px;
+  background: #53B313;
+  color: #fff;
+  border-radius: 6px;
+  font: 600 18px/1 'Open Sans', Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.home-cta:hover {
+  background: #469912;
+  color: #fff;
+  text-decoration: none;
+}
 
 .form-frame .btn-log {
 background: #53B313;

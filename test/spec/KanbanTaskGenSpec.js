@@ -1453,37 +1453,27 @@ describe("BoardImporter", function() {
 
 describe("HomeController", function() {
   var controller;
-  var authService;
   var router;
   var form;
 
   beforeEach(function() {
-    authService = {
-      signUpAndSignIn: jasmine.createSpy('signUpAndSignIn').and.returnValue('signup-promise'),
-      signInWith: jasmine.createSpy('signInWith').and.returnValue('social-promise')
-    };
-    router = { afterAuth: jasmine.createSpy('afterAuth') };
-    form = $('<form><button class="bt-social" data-provider="github"></button></form>');
-    form.serializeObject = function() { return { email: 'a@b.com' }; };
-
-    controller = new HomeController({
-      authService: authService,
-      router: router
-    });
+    router = { routeTo: jasmine.createSpy('routeTo') };
+    form = $('<form><a class="home-cta" href="#/board">Open your board</a></form>');
+    controller = new HomeController({ router: router });
     controller.attach(form);
   });
 
-  it("signs up and routes after the e-mail submit", function() {
-    spyOn($.fn, 'serializeObject').and.returnValue({ email: 'a@b.com' });
-    form.trigger('submit');
-    expect(authService.signUpAndSignIn).toHaveBeenCalled();
-    expect(router.afterAuth).toHaveBeenCalledWith('signup-promise', 'gettingstarted');
+  it("clicking the CTA routes to the board", function() {
+    form.find('.home-cta').trigger('click');
+    expect(router.routeTo).toHaveBeenCalledWith('board');
   });
 
-  it("signs in with the provider after a social click", function() {
-    form.find('.bt-social').trigger('click');
-    expect(authService.signInWith).toHaveBeenCalledWith('github');
-    expect(router.afterAuth).toHaveBeenCalledWith('social-promise', 'gettingstarted');
+  it("modified-click on the CTA does not hijack the browser", function() {
+    var ev = $.Event('click');
+    ev.metaKey = true;
+    form.find('.home-cta').trigger(ev);
+    expect(router.routeTo).not.toHaveBeenCalled();
+    expect(ev.isDefaultPrevented()).toBe(false);
   });
 
 });

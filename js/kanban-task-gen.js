@@ -45,7 +45,6 @@
     });
 
     var homeController = new HomeController({
-        authService: authService,
         router: router
     });
 
