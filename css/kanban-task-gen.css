@@ -428,6 +428,53 @@ margin: auto;
   display: inline-block;
   vertical-align: middle;
 }
+.preview-board {
+  display: flex;
+  padding: 14px;
+  background: #f5f7fa;
+  border: 1px solid #e3e8ee;
+  border-radius: 6px;
+}
+.preview-column {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 4px;
+  padding: 10px 8px;
+  margin: 0 4px;
+  text-align: left;
+  min-height: 160px;
+}
+.preview-column:first-child { margin-left: 0; }
+.preview-column:last-child { margin-right: 0; }
+.preview-column-title {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+  margin-bottom: 8px;
+}
+.preview-card {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-left: 3px solid #999;
+  border-radius: 3px;
+  padding: 6px 8px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: #333;
+}
+.preview-card-id {
+  font-size: 9px;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+.preview-card-title {
+  font-weight: 600;
+  line-height: 1.2;
+}
+.preview-card--doing { border-left-color: #f0a500; }
+.preview-card--done  { border-left-color: #4caf50; }
 
 .tour .action-holder {
   width: 400px;
