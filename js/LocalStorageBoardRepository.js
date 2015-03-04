@@ -38,11 +38,14 @@ LocalStorageBoardRepository.prototype = {
         var all = this.read();
         var key = 'lc-' + (new Date()).getTime() + '-' + Math.floor(Math.random() * 100000);
         all[key] = card;
-        this.write(all);
+        if (!this.write(all)) {
+            deferred.reject({ reason: 'storage' });
+            return deferred.promise();
+        }
         for (var i = 0; i < this.callbacks.length; i++) {
             this.callbacks[i](card);
         }
-        deferred.resolve();
+        deferred.resolve(key);
         return deferred.promise();
     },
 
@@ -71,7 +74,10 @@ LocalStorageBoardRepository.prototype = {
                     all[key][field] = changes[field];
                 }
             }
-            this.write(all);
+            if (!this.write(all)) {
+                deferred.reject({ reason: 'storage' });
+                return deferred.promise();
+            }
         }
         deferred.resolve();
         return deferred.promise();
@@ -82,7 +88,10 @@ LocalStorageBoardRepository.prototype = {
         var all = this.read();
         if (all[key]) {
             delete all[key];
-            this.write(all);
+            if (!this.write(all)) {
+                deferred.reject({ reason: 'storage' });
+                return deferred.promise();
+            }
         }
         deferred.resolve();
         return deferred.promise();

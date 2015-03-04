@@ -2,11 +2,28 @@
     "use strict";
 
     var config = window.KANBAN_CONFIG || {};
+    var alertView = new AlertView($('#alert'));
+    var storageErrorReported = false;
+    function reportStorageError(info) {
+        if (storageErrorReported) {
+            return;
+        }
+        storageErrorReported = true;
+        alertView.show({
+            title: 'Local storage is full',
+            detail: 'Your latest changes could not be saved. Use Share board to download a snapshot, then clear old cards before adding more.',
+            className: 'alert-danger'
+        });
+        if (window.console && window.console.warn) {
+            window.console.warn('Storage write failed', info);
+        }
+    }
+
     var authService = new LocalAuthService();
-    var boardsCatalog = new BoardsCatalog({});
+    var boardsCatalog = new BoardsCatalog({ errorReporter: reportStorageError });
     var activeBoard = boardsCatalog.getActive();
-    var localRepository = new LocalStorageBoardRepository(boardsCatalog.cardNamespaceFor(activeBoard.id));
-    var localAnalytics = new LocalAnalytics({});
+    var localRepository = new LocalStorageBoardRepository(boardsCatalog.cardNamespaceFor(activeBoard.id), reportStorageError);
+    var localAnalytics = new LocalAnalytics({ errorReporter: reportStorageError });
     var analytics = new CompositeAnalytics([localAnalytics]);
     if (config.kissmetricsKey) {
         analytics.add(new KissmetricsAnalytics());
@@ -23,8 +40,6 @@
     };
 
     var controllers = {};
-
-    var alertView = new AlertView($('#alert'));
 
     var router = new Router({
         routeMap: routeMap,

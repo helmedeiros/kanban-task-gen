@@ -2,6 +2,7 @@ function LocalAnalytics(opts) {
     opts = opts || {};
     this.namespace = opts.namespace || 'kanban-task-gen-events';
     this.limit = opts.limit || 500;
+    this.errorReporter = opts.errorReporter || function() {};
 }
 
 LocalAnalytics.prototype = {
@@ -27,8 +28,10 @@ LocalAnalytics.prototype = {
     write: function(events) {
         try {
             localStorage.setItem(this.namespace, JSON.stringify(events));
+            return true;
         } catch (e) {
-            return;
+            this.errorReporter({ source: 'events', namespace: this.namespace, error: e });
+            return false;
         }
     },
 

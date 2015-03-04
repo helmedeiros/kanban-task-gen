@@ -34,10 +34,11 @@ GettingStartedController.prototype.attach = function(form) {
                 detail: 'You are still logged in',
                 className: 'alert-success'
             });
+            self.analytics.track('card_created', { status: userInfo.status, id: userInfo.id });
+            theForm[0].reset();
+        }, function() {
+            // Storage write failed; the storage error reporter already showed an alert.
         });
-        self.analytics.track('card_created', { status: userInfo.status, id: userInfo.id });
-
-        theForm[0].reset();
     });
 };
 

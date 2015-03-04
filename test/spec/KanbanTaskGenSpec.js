@@ -1505,7 +1505,7 @@ describe("GettingStartedController", function() {
     };
     alertView = { show: jasmine.createSpy('show') };
     counter = { next: jasmine.createSpy('next').and.returnValue(7) };
-    boardRepository = { add: jasmine.createSpy('add').and.returnValue($.Deferred().promise()) };
+    boardRepository = { add: jasmine.createSpy('add').and.callFake(function() { return $.Deferred().resolve('fb-1').promise(); }) };
     form = $('<form></form>');
     form.serializeObject = function() { return { name: 'A' }; };
 
@@ -1573,7 +1573,7 @@ describe("GettingStartedController", function() {
     expect(boardRepository.add.calls.mostRecent().args[0].priority).toEqual('7');
   });
 
-  it("tracks a card_created analytics event on submit", function() {
+  it("tracks a card_created analytics event after the save succeeds", function() {
     var tracked = [];
     var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
     spyOn($.fn, 'serializeObject').and.returnValue({ name: 'A', status: 'doing' });
@@ -1589,6 +1589,23 @@ describe("GettingStartedController", function() {
     expect(tracked.length).toEqual(1);
     expect(tracked[0].name).toEqual('card_created');
     expect(tracked[0].props.status).toEqual('doing');
+  });
+
+  it("does not track card_created when the storage write fails", function() {
+    var tracked = [];
+    var analytics = { track: function(name, props) { tracked.push({ name: name, props: props }); } };
+    boardRepository = { add: jasmine.createSpy('add').and.callFake(function() { return $.Deferred().reject({ reason: 'storage' }).promise(); }) };
+    spyOn($.fn, 'serializeObject').and.returnValue({ name: 'A', status: 'doing' });
+    controller = new GettingStartedController({
+      authService: authService,
+      alertView: alertView,
+      counter: counter,
+      getBoardRepository: function() { return boardRepository; },
+      analytics: analytics
+    });
+    controller.attach(form);
+    form.trigger('submit');
+    expect(tracked.length).toEqual(0);
   });
 
 });
