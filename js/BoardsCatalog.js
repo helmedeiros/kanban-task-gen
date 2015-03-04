@@ -4,6 +4,7 @@ function BoardsCatalog(opts) {
     this.activeKey = opts.activeKey || 'kanban-task-gen-active-board';
     this.legacyCardKey = opts.legacyCardKey || 'kanban-task-gen-cards';
     this.cardNamespacePrefix = opts.cardNamespacePrefix || 'kanban-task-gen-cards';
+    this.errorReporter = opts.errorReporter || function() {};
     this.ensureSeed();
 }
 
@@ -43,8 +44,10 @@ BoardsCatalog.prototype = {
     writeBoards: function(boards) {
         try {
             localStorage.setItem(this.namespace, JSON.stringify(boards));
+            return true;
         } catch (e) {
-            return;
+            this.errorReporter({ source: 'boards', namespace: this.namespace, error: e });
+            return false;
         }
     },
 
@@ -113,8 +116,10 @@ BoardsCatalog.prototype = {
     setActiveId: function(id) {
         try {
             localStorage.setItem(this.activeKey, id);
+            return true;
         } catch (e) {
-            return;
+            this.errorReporter({ source: 'active-board', namespace: this.activeKey, error: e });
+            return false;
         }
     },
 

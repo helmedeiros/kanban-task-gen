@@ -625,6 +625,18 @@ describe("LocalStorageBoardRepository", function() {
     });
   });
 
+  it("notifies the error reporter when localStorage.setItem throws", function() {
+    var reports = [];
+    window.localStorage.setItem.and.callFake(function() { throw new Error('QuotaExceededError'); });
+    repo = new LocalStorageBoardRepository('spec-cards', function(info) { reports.push(info); });
+    var ok = repo.write({ k: {} });
+    expect(ok).toBe(false);
+    expect(reports.length).toEqual(1);
+    expect(reports[0].source).toEqual('cards');
+    expect(reports[0].namespace).toEqual('spec-cards');
+    expect(reports[0].error).toBeDefined();
+  });
+
 });
 
 describe("BoardSession", function() {

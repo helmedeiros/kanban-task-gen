@@ -1,5 +1,6 @@
-function LocalStorageBoardRepository(namespace) {
+function LocalStorageBoardRepository(namespace, errorReporter) {
     this.namespace = namespace || 'kanban-task-gen-cards';
+    this.errorReporter = errorReporter || function() {};
     this.callbacks = [];
 }
 
@@ -25,8 +26,10 @@ LocalStorageBoardRepository.prototype = {
     write: function(data) {
         try {
             localStorage.setItem(this.namespace, JSON.stringify(data));
+            return true;
         } catch (e) {
-            return;
+            this.errorReporter({ source: 'cards', namespace: this.namespace, error: e });
+            return false;
         }
     },
 
