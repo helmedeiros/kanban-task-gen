@@ -1,5 +1,15 @@
 function PostItRenderer() {}
 
+function clean(value) {
+    return (value === undefined || value === null) ? '' : value;
+}
+
+function timeColumn(value) {
+    var wrap = $('<span class="time"><span class="time-number"></span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>');
+    wrap.find('.time-number').text(clean(value));
+    return wrap;
+}
+
 PostItRenderer.prototype = {
 
     render: function(card) {
@@ -11,18 +21,18 @@ PostItRenderer.prototype = {
         var column3 = $('<div class="col col3"></div>');
         var bottom = $('<div class="bottom"><span class="bug"></span><span class="extra"></span></div>');
 
-        column1.append($('<span class="id">' + card.id + '</span>'));
-        column1.append($('<span class="priority">' + card.priority + '</span>'));
-        column1.append($('<span class="name">' + card.name + '</span>'));
+        column1.append($('<span class="id"></span>').text(clean(card.id)));
+        column1.append($('<span class="priority"></span>').text(clean(card.priority)));
+        column1.append($('<span class="name"></span>').text(clean(card.name)));
 
-        column2.append($('<span class="speciality">' + card.specialist1 + '</span>'));
-        column2.append($('<span class="time"><span class="time-number">' + card.time1 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+        column2.append($('<span class="speciality"></span>').text(clean(card.specialist1)));
+        column2.append(timeColumn(card.time1));
 
-        column3.append($('<span class="speciality">' + card.specialist2 + '</span>'));
-        column3.append($('<span class="time"><span class="time-number">' + card.time2 + '</span><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/><hr/></span>'));
+        column3.append($('<span class="speciality"></span>').text(clean(card.specialist2)));
+        column3.append(timeColumn(card.time2));
 
-        bottom.append($('<span class="sprint">' + card.sprint + '</span>'));
-        bottom.append($('<span class="status">' + card.status + '</span>'));
+        bottom.append($('<span class="sprint"></span>').text(clean(card.sprint)));
+        bottom.append($('<span class="status"></span>').text(clean(card.status)));
 
         postIt.append(column1);
         postIt.append(column2);
