@@ -58,20 +58,57 @@ JsonUpload.prototype.readFile = function(file) {
 JsonUpload.prototype.importSnapshot = function(parsed) {
     var self = this;
     var repo = this.getBoardRepository();
-    this.importer.importInto(parsed, repo).then(function(count) {
+    this.importer.importInto(parsed, repo).then(function(result) {
         var board = parsed.board || {};
         self.analytics.track('board_imported', {
             boardId: board.id,
             name: board.name,
-            cardCount: count
+            imported: result.imported,
+            skipped: result.skipped,
+            failed: result.failed
         });
-        self.alertView.show({
-            title: 'Snapshot imported',
-            detail: count + ' card' + (count === 1 ? '' : 's') + ' added to your active board.',
-            className: 'alert-success'
-        });
-        if (self.router) {
+        self.alertView.show(buildImportAlert(result, board));
+        if (result.imported > 0 && self.router) {
             self.router.routeTo('board');
         }
     });
 };
+
+function buildImportAlert(result, board) {
+    var name = board && board.name ? '"' + board.name + '"' : 'this board';
+    if (result.failed > 0 && result.imported === 0) {
+        return {
+            title: 'Import failed',
+            detail: 'Could not save any cards from ' + name + '. Your local storage may be full.',
+            className: 'alert-danger'
+        };
+    }
+    if (result.imported === 0 && result.skipped > 0) {
+        return {
+            title: 'Already up to date',
+            detail: 'All ' + result.skipped + ' card' + plural(result.skipped) + ' from ' + name + ' were already on your board.',
+            className: 'alert-info'
+        };
+    }
+    if (result.imported === 0) {
+        return {
+            title: 'Nothing to import',
+            detail: 'The selected file did not contain any cards.',
+            className: 'alert-info'
+        };
+    }
+    var parts = [result.imported + ' card' + plural(result.imported) + ' added'];
+    if (result.skipped > 0) {
+        parts.push(result.skipped + ' skipped as duplicate' + plural(result.skipped));
+    }
+    if (result.failed > 0) {
+        parts.push(result.failed + ' failed');
+    }
+    return {
+        title: 'Snapshot imported',
+        detail: parts.join(', ') + ' from ' + name + '.',
+        className: 'alert-success'
+    };
+}
+
+function plural(n) { return n === 1 ? '' : 's'; }

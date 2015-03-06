@@ -736,7 +736,10 @@ describe("JsonUpload", function() {
 
   it("readFile imports a snapshot into the active repository and tracks board_imported", function(done) {
     var added = [];
-    var repo = { add: function(c) { added.push(c); var d = $.Deferred(); d.resolve(); return d.promise(); } };
+    var repo = {
+      add: function(c) { added.push(c); var d = $.Deferred(); d.resolve('lc-' + added.length); return d.promise(); },
+      getAll: function() { var d = $.Deferred(); d.resolve({}); return d.promise(); }
+    };
     var tracked = [];
     var routed = [];
     upload = new JsonUpload({
@@ -761,9 +764,42 @@ describe("JsonUpload", function() {
       expect(page.render).not.toHaveBeenCalled();
       expect(added.length).toEqual(2);
       var imported = tracked.filter(function(e) { return e.n === 'board_imported'; })[0];
-      expect(imported.p).toEqual({ boardId: 'b-9', name: 'Visiting', cardCount: 2 });
+      expect(imported.p).toEqual({ boardId: 'b-9', name: 'Visiting', imported: 2, skipped: 0, failed: 0 });
       expect(routed).toEqual(['board']);
-      expect(alertView.show).toHaveBeenCalled();
+      var arg = alertView.show.calls.mostRecent().args[0];
+      expect(arg.className).toEqual('alert-success');
+      done();
+    }, 0);
+  });
+
+  it("readFile alerts already up to date when every task is a duplicate", function(done) {
+    var existing = { lc1: { id: '1', name: 'A' } };
+    var repo = {
+      add: function() { var d = $.Deferred(); d.resolve('lc-x'); return d.promise(); },
+      getAll: function() { var d = $.Deferred(); d.resolve(existing); return d.promise(); }
+    };
+    var routed = [];
+    upload = new JsonUpload({
+      page: page,
+      alertView: alertView,
+      fileInputSelector: '#nope-no-such-input',
+      getBoardRepository: function() { return repo; },
+      router: { routeTo: function(r) { routed.push(r); } }
+    });
+    var snapshotJson = JSON.stringify({
+      board: { id: 'b-9', name: 'Visiting' },
+      tasks: { k1: { id: '1', name: 'A' } }
+    });
+    spyOn(window, 'FileReader').and.returnValue({
+      readAsText: function() { this.onload({ target: { result: snapshotJson } }); },
+      onload: null
+    });
+    upload.readFile({});
+    setTimeout(function() {
+      var arg = alertView.show.calls.mostRecent().args[0];
+      expect(arg.className).toEqual('alert-info');
+      expect(arg.title).toEqual('Already up to date');
+      expect(routed).toEqual([]);
       done();
     }, 0);
   });
