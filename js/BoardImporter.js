@@ -1,12 +1,34 @@
 function BoardImporter() {}
 
 function scheduleAdd(repository, card, state) {
-    repository.add(card).then(function() {
-        state.remaining--;
-        if (state.remaining === 0) {
-            state.deferred.resolve(state.total);
+    repository.add(card).then(
+        function() { tally(state, 'imported'); },
+        function() { tally(state, 'failed'); }
+    );
+}
+
+function tally(state, bucket) {
+    state[bucket]++;
+    state.remaining--;
+    if (state.remaining === 0) {
+        state.deferred.resolve({
+            imported: state.imported,
+            skipped: state.skipped,
+            failed: state.failed
+        });
+    }
+}
+
+function findMatch(existing, candidate) {
+    for (var k in existing) {
+        if (existing.hasOwnProperty(k)) {
+            var c = existing[k];
+            if (c.id === candidate.id && c.name === candidate.name) {
+                return k;
+            }
         }
-    });
+    }
+    return null;
 }
 
 BoardImporter.prototype = {
@@ -17,8 +39,9 @@ BoardImporter.prototype = {
 
     importInto: function(parsed, repository) {
         var deferred = $.Deferred();
+        var empty = { imported: 0, skipped: 0, failed: 0 };
         if (!this.isSnapshot(parsed) || !repository) {
-            deferred.resolve(0);
+            deferred.resolve(empty);
             return deferred.promise();
         }
         var tasks = parsed.tasks;
@@ -29,13 +52,36 @@ BoardImporter.prototype = {
             }
         }
         if (!keys.length) {
-            deferred.resolve(0);
+            deferred.resolve(empty);
             return deferred.promise();
         }
-        var state = { remaining: keys.length, total: keys.length, deferred: deferred };
-        for (var i = 0; i < keys.length; i++) {
-            scheduleAdd(repository, tasks[keys[i]], state);
-        }
+        repository.getAll().then(function(existing) {
+            existing = existing || {};
+            var fresh = [];
+            var skipped = 0;
+            for (var i = 0; i < keys.length; i++) {
+                var task = tasks[keys[i]];
+                if (findMatch(existing, task)) {
+                    skipped++;
+                } else {
+                    fresh.push(task);
+                }
+            }
+            if (!fresh.length) {
+                deferred.resolve({ imported: 0, skipped: skipped, failed: 0 });
+                return;
+            }
+            var state = {
+                remaining: fresh.length,
+                imported: 0,
+                skipped: skipped,
+                failed: 0,
+                deferred: deferred
+            };
+            for (var j = 0; j < fresh.length; j++) {
+                scheduleAdd(repository, fresh[j], state);
+            }
+        });
         return deferred.promise();
     }
 };

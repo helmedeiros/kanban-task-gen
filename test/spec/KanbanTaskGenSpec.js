@@ -1402,13 +1402,28 @@ describe("BoardImporter", function() {
     importer = new BoardImporter();
   });
 
-  function fakeRepo() {
+  function fakeRepo(initial) {
+    var stored = {};
+    if (initial) {
+      for (var k in initial) {
+        if (initial.hasOwnProperty(k)) {
+          stored[k] = initial[k];
+        }
+      }
+    }
     return {
       added: [],
       add: function(card) {
         this.added.push(card);
+        var key = 'lc-' + this.added.length;
+        stored[key] = card;
         var d = $.Deferred();
-        d.resolve();
+        d.resolve(key);
+        return d.promise();
+      },
+      getAll: function() {
+        var d = $.Deferred();
+        d.resolve(stored);
         return d.promise();
       }
     };
@@ -1422,21 +1437,21 @@ describe("BoardImporter", function() {
     expect(importer.isSnapshot(undefined)).toBe(false);
   });
 
-  it("importInto resolves with 0 when payload is not a snapshot", function(done) {
-    importer.importInto({ tasks: { a: {} } }, fakeRepo()).then(function(n) {
-      expect(n).toEqual(0);
+  it("importInto resolves with zero counts when payload is not a snapshot", function(done) {
+    importer.importInto({ tasks: { a: {} } }, fakeRepo()).then(function(r) {
+      expect(r).toEqual({ imported: 0, skipped: 0, failed: 0 });
       done();
     });
   });
 
-  it("importInto resolves with 0 when tasks is empty", function(done) {
-    importer.importInto({ board: { id: 'b-1' }, tasks: {} }, fakeRepo()).then(function(n) {
-      expect(n).toEqual(0);
+  it("importInto resolves with zero counts when tasks is empty", function(done) {
+    importer.importInto({ board: { id: 'b-1' }, tasks: {} }, fakeRepo()).then(function(r) {
+      expect(r).toEqual({ imported: 0, skipped: 0, failed: 0 });
       done();
     });
   });
 
-  it("importInto calls repo.add for each task", function(done) {
+  it("importInto calls repo.add for each task and counts them as imported", function(done) {
     var repo = fakeRepo();
     var snapshot = {
       board: { id: 'b-1', name: 'P' },
@@ -1445,18 +1460,45 @@ describe("BoardImporter", function() {
         k2: { id: '2', name: 'B', status: 'doing' }
       }
     };
-    importer.importInto(snapshot, repo).then(function(n) {
-      expect(n).toEqual(2);
+    importer.importInto(snapshot, repo).then(function(r) {
+      expect(r).toEqual({ imported: 2, skipped: 0, failed: 0 });
       expect(repo.added.length).toEqual(2);
-      var names = repo.added.map(function(c) { return c.name; }).sort();
-      expect(names).toEqual(['A', 'B']);
       done();
     });
   });
 
-  it("importInto resolves with 0 when repository is missing", function(done) {
-    importer.importInto({ board: { id: 'b-1' }, tasks: { a: {} } }, null).then(function(n) {
-      expect(n).toEqual(0);
+  it("importInto skips a task whose id and name already exist in the repo", function(done) {
+    var repo = fakeRepo({ existing: { id: '1', name: 'A', status: 'todo' } });
+    var snapshot = {
+      board: { id: 'b-1', name: 'P' },
+      tasks: {
+        k1: { id: '1', name: 'A', status: 'todo' },
+        k2: { id: '2', name: 'B', status: 'doing' }
+      }
+    };
+    importer.importInto(snapshot, repo).then(function(r) {
+      expect(r).toEqual({ imported: 1, skipped: 1, failed: 0 });
+      expect(repo.added.length).toEqual(1);
+      expect(repo.added[0].name).toEqual('B');
+      done();
+    });
+  });
+
+  it("importInto counts a rejected add as failed", function(done) {
+    var repo = {
+      add: function() { var d = $.Deferred(); d.reject({ reason: 'storage' }); return d.promise(); },
+      getAll: function() { var d = $.Deferred(); d.resolve({}); return d.promise(); }
+    };
+    var snapshot = { board: { id: 'b-1' }, tasks: { k1: { id: '1', name: 'A' } } };
+    importer.importInto(snapshot, repo).then(function(r) {
+      expect(r).toEqual({ imported: 0, skipped: 0, failed: 1 });
+      done();
+    });
+  });
+
+  it("importInto resolves with zero counts when repository is missing", function(done) {
+    importer.importInto({ board: { id: 'b-1' }, tasks: { a: {} } }, null).then(function(r) {
+      expect(r).toEqual({ imported: 0, skipped: 0, failed: 0 });
       done();
     });
   });
