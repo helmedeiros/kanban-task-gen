@@ -1541,6 +1541,49 @@ describe("BoardImporter", function() {
 
 });
 
+describe("StorageProbe", function() {
+
+  function fakeStorage(opts) {
+    opts = opts || {};
+    var store = {};
+    return {
+      _store: store,
+      getItem: function(k) { return store[k] === undefined ? null : store[k]; },
+      setItem: function(k, v) {
+        if (opts.throwOnSet) { throw new Error('quota'); }
+        store[k] = String(v);
+      },
+      removeItem: function(k) { delete store[k]; }
+    };
+  }
+
+  it("returns true when localStorage can write, read and delete a sentinel", function() {
+    var storage = fakeStorage();
+    var probe = new StorageProbe({ global: { localStorage: storage } });
+    expect(probe.probe()).toBe(true);
+  });
+
+  it("removes the sentinel key after a successful probe", function() {
+    var storage = fakeStorage();
+    var probe = new StorageProbe({ global: { localStorage: storage }, key: '__probe' });
+    probe.probe();
+    expect(storage._store.__probe).toBeUndefined();
+  });
+
+  it("returns false when setItem throws", function() {
+    var probe = new StorageProbe({ global: { localStorage: fakeStorage({ throwOnSet: true }) } });
+    expect(probe.probe()).toBe(false);
+  });
+
+  it("returns false when the read-back does not match the written sentinel", function() {
+    var liar = fakeStorage();
+    liar.getItem = function() { return 'something-else'; };
+    var probe = new StorageProbe({ global: { localStorage: liar } });
+    expect(probe.probe()).toBe(false);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var router;
