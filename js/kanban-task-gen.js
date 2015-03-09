@@ -3,6 +3,12 @@
 
     var config = window.KANBAN_CONFIG || {};
     var alertView = new AlertView($('#alert'));
+    var storageProbe = new StorageProbe({});
+    var storageWritable = storageProbe.probe();
+    if (!storageWritable) {
+        $('#storageBanner').removeAttr('hidden');
+        $(document.body).addClass('has-storage-banner');
+    }
     var storageErrorReported = false;
     function reportStorageError(info) {
         if (storageErrorReported) {

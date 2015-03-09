@@ -1035,6 +1035,25 @@ pre[class*="language-"] {
   color: #666;
   margin: 0 0 8px;
 }
+.storage-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  background: #fff4e5;
+  color: #663c00;
+  border-bottom: 1px solid #ffb74d;
+  padding: 12px 20px;
+  font-size: 14px;
+  text-align: center;
+}
+.storage-banner strong {
+  margin-right: 8px;
+}
+.has-storage-banner .header {
+  top: 44px;
+}
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;

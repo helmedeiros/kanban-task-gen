@@ -131,7 +131,10 @@ BoardsCatalog.prototype = {
                 return boards[i];
             }
         }
-        return boards[0] || null;
+        if (boards[0]) {
+            return boards[0];
+        }
+        return { id: 'default', name: 'My board' };
     }
 };
 
