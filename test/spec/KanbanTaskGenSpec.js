@@ -1584,6 +1584,48 @@ describe("StorageProbe", function() {
 
 });
 
+describe("BackupNudge", function() {
+  var nudge;
+  var now;
+
+  beforeEach(function() {
+    nudge = new BackupNudge({ minCards: 5, staleDays: 7 });
+    now = new Date(2015, 2, 12, 19, 0, 0);
+  });
+
+  function ev(name, t) { return { name: name, t: t.getTime() }; }
+
+  it("does not show when card count is below the threshold", function() {
+    expect(nudge.shouldShow([], 4, now)).toBe(false);
+  });
+
+  it("shows when at threshold and the user has never shared", function() {
+    expect(nudge.shouldShow([], 5, now)).toBe(true);
+  });
+
+  it("does not show when a board_shared event exists within the stale window", function() {
+    var recent = new Date(2015, 2, 10, 19, 0, 0);
+    expect(nudge.shouldShow([ev('board_shared', recent)], 10, now)).toBe(false);
+  });
+
+  it("shows when the last board_shared event is older than staleDays", function() {
+    var old = new Date(2015, 2, 1, 19, 0, 0);
+    expect(nudge.shouldShow([ev('board_shared', old)], 10, now)).toBe(true);
+  });
+
+  it("ignores non-share events when computing last share time", function() {
+    var recent = new Date(2015, 2, 11, 19, 0, 0);
+    expect(nudge.shouldShow([ev('card_created', recent)], 10, now)).toBe(true);
+  });
+
+  it("stops showing after dismiss is called this session", function() {
+    expect(nudge.shouldShow([], 10, now)).toBe(true);
+    nudge.dismiss();
+    expect(nudge.shouldShow([], 10, now)).toBe(false);
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var router;
