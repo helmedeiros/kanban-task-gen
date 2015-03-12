@@ -1054,6 +1054,38 @@ pre[class*="language-"] {
 .has-storage-banner .header {
   top: 44px;
 }
+.backup-nudge {
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  background: #eef6fb;
+  border: 1px solid #b8d8ec;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #234a63;
+  text-align: left;
+}
+.backup-nudge-message {
+  display: inline-block;
+  margin-right: 12px;
+}
+.backup-nudge-share,
+.backup-nudge-dismiss {
+  margin-left: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  border-radius: 3px;
+  border: 1px solid #b8d8ec;
+  background: #fff;
+  color: #234a63;
+  cursor: pointer;
+}
+.backup-nudge-share {
+  background: #4E9ACD;
+  color: #fff;
+  border-color: #4E9ACD;
+}
+.backup-nudge-share:hover { background: #3a85b9; }
+.backup-nudge-dismiss:hover { background: #f4f4f4; }
 .page-end {
   margin-bottom: 10px;
   page-break-after: always;

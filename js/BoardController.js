@@ -7,6 +7,8 @@ function BoardController(deps) {
     this.getActiveBoard = deps.getActiveBoard || function() { return { id: 'default', name: 'Board' }; };
     this.download = deps.download || defaultDownload;
     this.alertView = deps.alertView || { show: function() {} };
+    this.nudge = deps.nudge || new BackupNudge({});
+    this.getEvents = deps.getEvents || function() { return []; };
     this.cardsByFbKey = {};
 }
 
@@ -26,9 +28,11 @@ BoardController.prototype.attach = function(form) {
     }
 
     repo.getAll().then(function(rawCards) {
+        var count = 0;
         if (rawCards) {
             for (var fbKey in rawCards) {
                 if (rawCards.hasOwnProperty(fbKey)) {
+                    count++;
                     var card = new Card(rawCards[fbKey]);
                     self.cardsByFbKey[fbKey] = card;
                     var column = form.find('.board-column[data-status="' + card.status + '"] .board-column-cards');
@@ -38,6 +42,34 @@ BoardController.prototype.attach = function(form) {
             }
         }
         updateCounts(form);
+        self.maybeShowNudge(form, count);
+    });
+};
+
+BoardController.prototype.maybeShowNudge = function(form, cardCount) {
+    var self = this;
+    var nudgeEl = form.find('.backup-nudge');
+    if (!nudgeEl.length) {
+        return;
+    }
+    var events = this.getEvents();
+    if (!this.nudge.shouldShow(events, cardCount, new Date())) {
+        nudgeEl.attr('hidden', 'hidden');
+        return;
+    }
+    nudgeEl.find('.backup-nudge-message').text(
+        'You have ' + cardCount + ' card' + (cardCount === 1 ? '' : 's') +
+        ' saved locally. Share a snapshot to back them up.'
+    );
+    nudgeEl.removeAttr('hidden');
+    nudgeEl.find('.backup-nudge-share').off('click.nudge').on('click.nudge', function() {
+        self.shareBoard();
+        self.nudge.dismiss();
+        nudgeEl.attr('hidden', 'hidden');
+    });
+    nudgeEl.find('.backup-nudge-dismiss').off('click.nudge').on('click.nudge', function() {
+        self.nudge.dismiss();
+        nudgeEl.attr('hidden', 'hidden');
     });
 };
 

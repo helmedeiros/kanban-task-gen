@@ -82,13 +82,17 @@
         renderer: new PostItRenderer()
     });
 
+    var backupNudge = new BackupNudge({});
+
     var boardController = new BoardController({
         renderer: new BoardCardRenderer(),
         getBoardRepository: function () { return boardSession.repository; },
         getActiveBoard: function () { return boardsCatalog.getActive(); },
         modal: cardModal,
         analytics: analytics,
-        alertView: alertView
+        alertView: alertView,
+        nudge: backupNudge,
+        getEvents: function () { return localAnalytics.list(); }
     });
 
     var printController = new PrintController({
