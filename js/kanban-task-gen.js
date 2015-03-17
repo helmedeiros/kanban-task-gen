@@ -1,6 +1,8 @@
 (function (Path) {
     "use strict";
 
+    var DEMO_BOARD_NAME = '★ Demo board';
+
     var config = window.KANBAN_CONFIG || {};
     var alertView = new AlertView($('#alert'));
     var storageProbe = new StorageProbe({});
@@ -159,6 +161,7 @@
         for (var i = 0; i < boards.length; i++) {
             $('<option></option>').val(boards[i].id).text(boards[i].name).appendTo(select);
         }
+        $('<option></option>').val('__demo__').text('★ Demo board (sample cards)').appendTo(select);
         $('<option></option>').val('__new__').text('+ New board…').appendTo(select);
         $('<option></option>').val('__rename__').text('✎ Rename current board…').appendTo(select);
         $('<option></option>').val('__delete__').text('× Delete current board…').appendTo(select);
@@ -171,9 +174,40 @@
                 renameCurrentBoard(catalog, current, select);
             } else if (picked === '__delete__') {
                 deleteCurrentBoard(catalog, current, select);
+            } else if (picked === '__demo__') {
+                openDemoBoard(catalog, current, select);
             } else {
                 switchToBoard(catalog, current, picked);
             }
+        });
+    }
+
+    function findDemoBoard(catalog) {
+        var boards = catalog.list();
+        for (var i = 0; i < boards.length; i++) {
+            if (boards[i].name === DEMO_BOARD_NAME) {
+                return boards[i];
+            }
+        }
+        return null;
+    }
+
+    function openDemoBoard(catalog, current, select) {
+        var existing = findDemoBoard(catalog);
+        if (existing) {
+            catalog.setActiveId(existing.id);
+            analytics.track('demo_board_opened', { boardId: existing.id, seeded: false });
+            window.location.reload();
+            return;
+        }
+        var created = catalog.create(DEMO_BOARD_NAME);
+        catalog.setActiveId(created.id);
+        var demoRepo = new LocalStorageBoardRepository(catalog.cardNamespaceFor(created.id), reportStorageError);
+        new DemoBoardSeed().seedInto(demoRepo).then(function (count) {
+            analytics.track('demo_board_opened', { boardId: created.id, seeded: true, cardCount: count });
+            window.location.reload();
+        }, function () {
+            select.val(current.id);
         });
     }
 
