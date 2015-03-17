@@ -1626,6 +1626,64 @@ describe("BackupNudge", function() {
 
 });
 
+describe("DemoBoardSeed", function() {
+  var seed;
+
+  beforeEach(function() { seed = new DemoBoardSeed(); });
+
+  it("provides at least 8 varied sample cards", function() {
+    var cards = seed.cards();
+    expect(cards.length).toBeGreaterThan(7);
+    var statuses = {};
+    var priorities = {};
+    var specialists = {};
+    for (var i = 0; i < cards.length; i++) {
+      statuses[cards[i].status] = true;
+      priorities[cards[i].priority] = true;
+      specialists[cards[i].specialist1] = true;
+    }
+    expect(Object.keys(statuses).sort()).toEqual(['doing', 'done', 'todo']);
+    expect(Object.keys(priorities).length).toBeGreaterThan(1);
+    expect(Object.keys(specialists).length).toBeGreaterThan(1);
+  });
+
+  it("seedInto calls repository.add for each card and resolves with the count", function(done) {
+    var added = [];
+    var repo = {
+      add: function(c) { added.push(c); var d = $.Deferred(); d.resolve('k-' + added.length); return d.promise(); }
+    };
+    seed.seedInto(repo).then(function(count) {
+      expect(count).toEqual(seed.cards().length);
+      expect(added.length).toEqual(seed.cards().length);
+      done();
+    });
+  });
+
+  it("seedInto resolves with 0 when no repository is provided", function(done) {
+    seed.seedInto(null).then(function(count) {
+      expect(count).toEqual(0);
+      done();
+    });
+  });
+
+  it("seedInto still resolves when some adds reject", function(done) {
+    var calls = 0;
+    var repo = {
+      add: function() {
+        calls++;
+        var d = $.Deferred();
+        if (calls % 2 === 0) { d.reject({ reason: 'storage' }); } else { d.resolve('k'); }
+        return d.promise();
+      }
+    };
+    seed.seedInto(repo).then(function(count) {
+      expect(count).toEqual(seed.cards().length);
+      done();
+    });
+  });
+
+});
+
 describe("HomeController", function() {
   var controller;
   var router;
